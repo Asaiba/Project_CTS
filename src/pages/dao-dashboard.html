@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CTS DAO Governance | Scholarship Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#285185",
+                        secondary: "#D67940",
+                        accent: "#6F4849",
+                        "background-light": "#CCD9E2",
+                        "background-dark": "#0F172A",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1E293B",
+                        "light-blue": "#CCD9E2"
+                    },
+                    fontFamily: {
+                        display: ["Outfit", "sans-serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+
+        function applyTheme(isDark) {
+            document.documentElement.classList.toggle("dark", isDark);
+        }
+
+        function toggleDarkMode() {
+            const isDark = !document.documentElement.classList.contains("dark");
+            applyTheme(isDark);
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(savedTheme ? savedTheme === "dark" : prefersDark);
+        });
+    </script>
+<style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .progress-bar-glow { box-shadow: 0 0 10px rgba(40, 81, 133, 0.2); }
+    </style>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<div class="flex">
+<aside class="w-64 min-h-screen bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 sticky top-0 flex flex-col">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-icons-round">account_balance</span>
+</div>
+<span class="text-xl font-display font-bold tracking-tight text-primary dark:text-light-blue"><a aria-label="Go to landing page" href="../../Index.html">CTS</a> DAO</span>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-100 dark:bg-slate-800 text-primary dark:text-white font-medium" href="#">
+<span class="material-icons-round">gavel</span> Governance
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-icons-round">dashboard</span> Dashboard
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-icons-round">school</span> Scholarships
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-icons-round">group</span> Members
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-icons-round">settings</span> Settings
+                </a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold mb-2">My Voting Power</p>
+<p class="text-lg font-bold text-primary dark:text-light-blue">1,250 CTS</p>
+<div class="mt-2 w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[65%]"></div>
+</div>
+</div>
+<button class="mt-4 w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" onclick="toggleDarkMode()">
+<span class="material-icons-round dark:hidden">dark_mode</span>
+<span class="material-icons-round hidden dark:block">light_mode</span>
+<span>Appearance</span>
+                </button>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<header class="flex justify-between items-center mb-10">
+<div>
+<h1 class="text-3xl font-display font-bold dark:text-white">DAO Governance</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Review, vote, and monitor active scholarship funding proposals.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all shadow-md shadow-primary/20">
+<span class="material-icons-round text-lg">add</span> Create Proposal
+                    </button>
+<div class="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 shadow-sm">
+<span class="material-icons-round text-slate-400">wallet</span>
+<span class="text-sm font-mono">0x4F...a9E2</span>
+</div>
+</div>
+</header>
+<div class="grid grid-cols-4 gap-6 mb-10">
+<div class="bg-card-light dark:bg-card-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Proposals</p>
+<p class="text-2xl font-bold mt-1">142</p>
+</div>
+<div class="bg-card-light dark:bg-card-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Voting</p>
+<p class="text-2xl font-bold mt-1 text-primary dark:text-blue-400">8</p>
+</div>
+<div class="bg-card-light dark:bg-card-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Treasury Balance</p>
+<p class="text-2xl font-bold mt-1">14,250 ETH</p>
+</div>
+<div class="bg-card-light dark:bg-card-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Quorum Reached</p>
+<p class="text-2xl font-bold mt-1 text-green-500">92%</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<h2 class="text-xl font-bold flex items-center gap-2">
+                        Active Proposals
+                        <span class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Live</span>
+</h2>
+<div class="flex bg-slate-200 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-4 py-1.5 text-sm font-medium rounded-md bg-white dark:bg-slate-700 shadow-sm">Grid View</button>
+<button class="px-4 py-1.5 text-sm font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">List View</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<div class="bg-card-light dark:bg-card-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-300 text-xs font-bold px-2 py-1 rounded">#PROP-128</span>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-icons-round text-sm">schedule</span>
+<span>Ends in 2d 4h</span>
+</div>
+</div>
+<h3 class="text-lg font-bold mb-2 line-clamp-1">STEM Scholarship Fund 2024</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2">Funding request for 50 international students pursuing computer science and engineering degrees in Q3 2024.</p>
+<div class="space-y-4 mb-6">
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span class="text-slate-700 dark:text-slate-300">For (72%)</span>
+<span class="text-slate-500">Against (28%)</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full flex overflow-hidden">
+<div class="bg-primary h-full" style="width: 72%"></div>
+<div class="bg-accent h-full opacity-60" style="width: 28%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<a class="text-xs text-primary dark:text-light-blue flex items-center gap-1 hover:underline" href="#">
+<span class="material-icons-round text-sm">launch</span> View on Etherscan
+                                </a>
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                    Cast Vote
+                                </button>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-300 text-xs font-bold px-2 py-1 rounded">#PROP-129</span>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-icons-round text-sm">schedule</span>
+<span>Ends in 18h 12m</span>
+</div>
+</div>
+<h3 class="text-lg font-bold mb-2 line-clamp-1">Arts &amp; Humanities Grant</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2">Allocation of 120 ETH for merit-based scholarships in creative arts and digital design faculties.</p>
+<div class="space-y-4 mb-6">
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span class="text-slate-700 dark:text-slate-300">For (91%)</span>
+<span class="text-slate-500">Against (9%)</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full flex overflow-hidden">
+<div class="bg-primary h-full" style="width: 91%"></div>
+<div class="bg-accent h-full opacity-60" style="width: 9%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<a class="text-xs text-primary dark:text-light-blue flex items-center gap-1 hover:underline" href="#">
+<span class="material-icons-round text-sm">launch</span> View on Etherscan
+                                </a>
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                    Cast Vote
+                                </button>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-300 text-xs font-bold px-2 py-1 rounded">#PROP-130</span>
+<div class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-icons-round text-sm">schedule</span>
+<span>Ends in 5d 2h</span>
+</div>
+</div>
+<h3 class="text-lg font-bold mb-2 line-clamp-1">Infrastructure Upgrade v2.1</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2">Migration to a more gas-efficient governance contract and integration with Layer 2 scaling.</p>
+<div class="space-y-4 mb-6">
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span class="text-slate-700 dark:text-slate-300">For (45%)</span>
+<span class="text-slate-500">Against (55%)</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full flex overflow-hidden">
+<div class="bg-primary h-full" style="width: 45%"></div>
+<div class="bg-accent h-full opacity-60" style="width: 55%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<a class="text-xs text-primary dark:text-light-blue flex items-center gap-1 hover:underline" href="#">
+<span class="material-icons-round text-sm">launch</span> View on Etherscan
+                                </a>
+<button class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                    Cast Vote
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 space-y-6">
+<h2 class="text-xl font-bold flex items-center gap-2">
+                    Recently Completed
+                    <span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Closed</span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<div class="bg-card-light dark:bg-card-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden opacity-80 grayscale-[0.3] hover:grayscale-0 transition-all">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold px-2 py-1 rounded">#PROP-127</span>
+<div class="flex items-center gap-1 text-green-600 dark:text-green-500 text-xs font-bold">
+<span class="material-icons-round text-sm">check_circle</span>
+<span>Passed</span>
+</div>
+</div>
+<h3 class="text-lg font-bold mb-2 line-clamp-1">Sustainability Research Grant</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2">Funding for PhD candidates researching blockchain impact on renewable energy grids.</p>
+<div class="space-y-4 mb-6">
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span class="text-slate-700 dark:text-slate-300">For (88%)</span>
+<span class="text-slate-500">Against (12%)</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full flex overflow-hidden">
+<div class="bg-green-500 h-full" style="width: 88%"></div>
+<div class="bg-slate-300 dark:bg-slate-600 h-full" style="width: 12%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<a class="text-xs text-primary dark:text-light-blue flex items-center gap-1 hover:underline" href="#">
+<span class="material-icons-round text-sm">launch</span> View on Etherscan
+                                </a>
+<span class="text-xs text-slate-400 font-medium">Closed Jul 12, 2024</span>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden opacity-80 grayscale-[0.3] hover:grayscale-0 transition-all">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold px-2 py-1 rounded">#PROP-126</span>
+<div class="flex items-center gap-1 text-red-600 dark:text-red-400 text-xs font-bold">
+<span class="material-icons-round text-sm">cancel</span>
+<span>Defeated</span>
+</div>
+</div>
+<h3 class="text-lg font-bold mb-2 line-clamp-1">Community Token Airdrop</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2">Proposal to airdrop 500,000 CTS tokens to active forum participants.</p>
+<div class="space-y-4 mb-6">
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span class="text-slate-700 dark:text-slate-300">For (34%)</span>
+<span class="text-slate-500">Against (66%)</span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-700 rounded-full flex overflow-hidden">
+<div class="bg-primary opacity-40 h-full" style="width: 34%"></div>
+<div class="bg-accent h-full" style="width: 66%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+<a class="text-xs text-primary dark:text-light-blue flex items-center gap-1 hover:underline" href="#">
+<span class="material-icons-round text-sm">launch</span> View on Etherscan
+                                </a>
+<span class="text-xs text-slate-400 font-medium">Closed Jul 08, 2024</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

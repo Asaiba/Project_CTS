@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CTS Donor Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#285185",
+                        secondary: "#D67940",
+                        accent: "#6F4849",
+                        "background-light": "#CCD9E2",
+                        "background-dark": "#0F172A",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                        "muted-blue": "#CCD9E2",
+                        "deep-brown": "#6F4849",
+                    },
+                    fontFamily: {
+                        display: ["Outfit", "sans-serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+
+        function applyTheme(isDark) {
+            document.documentElement.classList.toggle("dark", isDark);
+        }
+
+        function toggleDarkMode() {
+            const isDark = !document.documentElement.classList.contains("dark");
+            applyTheme(isDark);
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(savedTheme ? savedTheme === "dark" : prefersDark);
+        });
+    </script>
+<style>
+        .glass-card {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen">
+<aside class="fixed left-0 top-0 h-full w-64 bg-primary text-white p-6 hidden lg:flex flex-col z-50">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+<span class="material-icons-round text-primary text-2xl">account_balance</span>
+</div>
+<h1 class="text-xl font-display font-bold tracking-tight"><a aria-label="Go to landing page" href="../../Index.html">CTS</a> Donor</h1>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 p-3 bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-icons-round">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 hover:bg-white/10 rounded-xl transition-all opacity-80 hover:opacity-100" href="#">
+<span class="material-icons-round">school</span>
+<span class="font-medium">Scholarships</span>
+</a>
+<a class="flex items-center gap-3 p-3 hover:bg-white/10 rounded-xl transition-all opacity-80 hover:opacity-100" href="#">
+<span class="material-icons-round">history_edu</span>
+<span class="font-medium">Transparency</span>
+</a>
+<a class="flex items-center gap-3 p-3 hover:bg-white/10 rounded-xl transition-all opacity-80 hover:opacity-100" href="#">
+<span class="material-icons-round">how_to_vote</span>
+<span class="font-medium">DAO Governance</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/10">
+<div class="flex items-center gap-3 p-2 bg-white/5 rounded-2xl">
+<div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-white font-bold">JD</div>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-semibold truncate">James D. (Donor)</p>
+<p class="text-xs opacity-60 truncate">0x71C...49a2</p>
+</div>
+</div>
+<button class="mt-3 w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-white/70 hover:text-white" onclick="toggleDarkMode()">
+<span class="material-icons-round dark:hidden">dark_mode</span>
+<span class="material-icons-round hidden dark:block">light_mode</span>
+<span class="font-medium">Appearance</span>
+</button>
+</div>
+</aside>
+<main class="lg:ml-64 p-4 lg:p-8">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-display font-bold">Welcome back, James</h2>
+<p class="text-slate-500 dark:text-slate-400">Managing $124,500.00 across 12 blockchain scholarship funds.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full font-semibold flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+<span class="material-icons-round text-sm">add</span>
+                    Fund New Scholarship
+                </button>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-primary">
+<span class="material-icons-round">groups</span>
+</div>
+<span class="text-green-500 text-xs font-bold">+4 this month</span>
+</div>
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Students Supported</h3>
+<p class="text-3xl font-bold mt-1">482</p>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-secondary">
+<span class="material-icons-round">account_balance_wallet</span>
+</div>
+<span class="text-green-500 text-xs font-bold">Verified</span>
+</div>
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Contributed</h3>
+<p class="text-3xl font-bold mt-1">$1.2M</p>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-purple-600">
+<span class="material-icons-round">domain</span>
+</div>
+<span class="text-slate-400 text-xs font-medium">8 Countries</span>
+</div>
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Partner Colleges</h3>
+<p class="text-3xl font-bold mt-1">24</p>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg text-red-600">
+<span class="material-icons-round">insights</span>
+</div>
+<span class="text-red-500 text-xs font-bold">Live Feed</span>
+</div>
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Funded Ratio</h3>
+<p class="text-3xl font-bold mt-1">94%</p>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<div class="xl:col-span-2 space-y-8">
+<section class="bg-surface-light dark:bg-surface-dark rounded-3xl p-6 border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold flex items-center gap-2">
+<span class="material-icons-round text-primary">analytics</span>
+                            Transparency Dashboard
+                        </h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800">Weekly</button>
+<button class="px-3 py-1 text-xs font-semibold rounded-lg bg-primary text-white">Monthly</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+<div class="md:col-span-2 relative h-64 bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 overflow-hidden">
+<div class="absolute inset-0 flex items-end justify-around px-4 pb-4">
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 40%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 60%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 55%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 80%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 90%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 70%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 85%;"></div>
+<div class="w-8 bg-primary/20 rounded-t-md transition-all hover:bg-primary" style="height: 65%;"></div>
+</div>
+<div class="absolute top-4 left-4">
+<p class="text-xs font-bold uppercase text-slate-400">Funds Disbursed Over Time (USDC)</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="p-4 bg-primary text-white rounded-2xl">
+<p class="text-xs opacity-80 uppercase tracking-tighter">Tuition Coverage</p>
+<p class="text-xl font-bold">65.4%</p>
+</div>
+<div class="p-4 bg-muted-blue dark:bg-slate-700 rounded-2xl">
+<p class="text-xs text-primary dark:text-blue-300 font-bold uppercase tracking-tighter">Books &amp; Supplies</p>
+<p class="text-xl font-bold">22.1%</p>
+</div>
+<div class="p-4 bg-deep-brown text-white rounded-2xl">
+<p class="text-xs opacity-80 uppercase tracking-tighter">Student Stipends</p>
+<p class="text-xl font-bold">12.5%</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-icons-round text-primary">favorite</span>
+                        Funded Programs
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="group relative overflow-hidden bg-surface-light dark:bg-surface-dark rounded-3xl border border-slate-200/50 dark:border-slate-700/50 hover:shadow-xl transition-all">
+<div class="h-40 bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+<img alt="University Campus" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBSrPxvo-YpviYmHNsTLxHlVumkXJYOVUpZare8c0cpEz2PpHA3de7aw3W7WkgBzyhkuhy0-tBNcPTTyxjN98jcBEbnt-LPaODx8EnkZhQXTQs7r3_iHxOz1ngeTiDS52wSx10H8Pge-Ck45VOowdFQlECyIN5WQaHq_GT54Z04LRNv3a8cIjjcwSAUxYWPRSIJ4a44kFxwH8CU64sMUMcPz5Lh0A0C1DHbPpbvJl9Lfwn2qfFdp3TVQg4eKyUqRJwndqGgZK92xsN"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<h4 class="font-bold">STEM Global Scholars</h4>
+<p class="text-xs opacity-80">Stanford University Chapter</p>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-center mb-4">
+<span class="px-3 py-1 bg-blue-100 text-primary dark:bg-primary/20 dark:text-blue-300 text-xs font-bold rounded-full">ACTIVE</span>
+<span class="text-xs font-medium text-slate-500">85 Students</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mb-2">
+<div class="bg-primary h-full rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between text-xs mb-4">
+<span class="font-bold">$1.4M / $1.8M</span>
+<span class="opacity-60">75% Goal</span>
+</div>
+<button class="w-full py-3 bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white transition-all rounded-xl font-bold text-sm">View Reports</button>
+</div>
+</div>
+<div class="group relative overflow-hidden bg-surface-light dark:bg-surface-dark rounded-3xl border border-slate-200/50 dark:border-slate-700/50 hover:shadow-xl transition-all">
+<div class="h-40 bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+<img alt="Graduation" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPO54yKiVV4GpAExa7wemz4niZZ8edzfq-TLTD1xlzNk3BSNOfqx-7AK97hYekHaVXUjgWSmT0FBnngf45tRDt3MP2KFKM2gk03U2DSgm-dWqmQ1fn0AeByoMRDkloGcR7xJXuvvPbhQbgnJ2Fir3e-0z1iMs5Qojwf16APgxyyDfsFYeixGI9exfwCBu8CwCkwWclCHvcck12lZszlwek2wc91jzsmnZe-nYpNbqa_rYPiv8RwdN6sSMkWRmaecFTB1IuQkMlifPb"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<h4 class="font-bold">Creative Arts Residency</h4>
+<p class="text-xs opacity-80">London School of Design</p>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-center mb-4">
+<span class="px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold rounded-full">FULLY FUNDED</span>
+<span class="text-xs font-medium text-slate-500">12 Students</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mb-2">
+<div class="bg-green-500 h-full rounded-full" style="width: 100%"></div>
+</div>
+<div class="flex justify-between text-xs mb-4">
+<span class="font-bold">$450k / $450k</span>
+<span class="opacity-60">100% Goal</span>
+</div>
+<button class="w-full py-3 bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white transition-all rounded-xl font-bold text-sm">View Impact</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div class="space-y-8">
+<section class="bg-surface-light dark:bg-surface-dark rounded-3xl p-6 border border-slate-200/50 dark:border-slate-700/50 shadow-sm sticky top-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold flex items-center gap-2">
+<span class="material-icons-round text-secondary">gavel</span>
+                            Active DAO Proposals
+                        </h3>
+<span class="bg-secondary/10 text-secondary px-2 py-1 rounded text-[10px] font-bold">LIVE VOTING</span>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-slate-400">PROP #402</span>
+<span class="text-[10px] font-bold text-slate-400">2d Left</span>
+</div>
+<h4 class="text-sm font-bold mb-3 leading-tight">Increase textbook stipend by 15% for Fall 2024 semester.</h4>
+<div class="flex gap-2">
+<button class="flex-1 bg-secondary hover:bg-secondary/90 text-white py-2 rounded-xl text-xs font-bold transition-all">Vote For</button>
+<button class="flex-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 py-2 rounded-xl text-xs font-bold transition-all">Against</button>
+</div>
+</div>
+<div class="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-slate-400">PROP #405</span>
+<span class="text-[10px] font-bold text-slate-400">4d Left</span>
+</div>
+<h4 class="text-sm font-bold mb-3 leading-tight">Authorize partnership with ETH-Kenya Technical Institute.</h4>
+<div class="flex gap-2">
+<button class="flex-1 bg-secondary hover:bg-secondary/90 text-white py-2 rounded-xl text-xs font-bold transition-all">Vote For</button>
+<button class="flex-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 py-2 rounded-xl text-xs font-bold transition-all">Against</button>
+</div>
+</div>
+<div class="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors opacity-60">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-slate-400">PROP #398</span>
+<span class="text-green-500 text-[10px] font-bold">PASSED</span>
+</div>
+<h4 class="text-sm font-bold mb-1 leading-tight">Allocation of Treasury surplus to Hardship Fund.</h4>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 text-sm font-bold hover:border-secondary hover:text-secondary transition-all">
+                        View All Proposals
+                    </button>
+</section>
+<section class="bg-surface-light dark:bg-surface-dark rounded-3xl p-6 border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+<h3 class="text-lg font-bold mb-6">Real-time Chain Feed</h3>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0">
+<span class="material-icons-round text-green-500 text-sm">check_circle</span>
+</div>
+<div>
+<p class="text-xs font-bold">Tuition Disbursement Verified</p>
+<p class="text-[10px] text-slate-500">Oxford University • 0.42 ETH • 12m ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+<span class="material-icons-round text-primary text-sm">person_add</span>
+</div>
+<div>
+<p class="text-xs font-bold">New Student Accepted</p>
+<p class="text-[10px] text-slate-500">Sarah Jenkins • Computer Science • 1h ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center shrink-0">
+<span class="material-icons-round text-secondary text-sm">bolt</span>
+</div>
+<div>
+<p class="text-xs font-bold">Governance Vote Cast</p>
+<p class="text-[10px] text-slate-500">Anonymous Donor • Prop #402 • 3h ago</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-xs">
+<p>© 2024 CTS Scholarship Management. Powered by Blockchain Intelligence.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Audit Reports</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</footer>
+</main>
+<button class="fixed bottom-6 right-6 lg:hidden bg-primary text-white w-14 h-14 rounded-full shadow-2xl z-[60] flex items-center justify-center">
+<span class="material-icons-round">menu</span>
+</button>
+
+</body></html>
