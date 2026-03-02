@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CTS | College Admin | Student Applications</title>
+<link rel="icon" type="image/png" href="/cts_logo.png"/>
+<link rel="apple-touch-icon" href="/cts_logo.png"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#285185",
+          secondary: "#D67940",
+          accent: "#6F4849",
+          "background-light": "#CCD9E2",
+          "background-dark": "#0F172A",
+          "surface-light": "#FFFFFF",
+          "surface-dark": "#1E293B"
+        },
+        fontFamily: {
+          display: ["Outfit", "sans-serif"],
+          sans: ["Inter", "sans-serif"]
+        }
+      }
+    }
+  };
+
+  function applyTheme(isDark) {
+    document.documentElement.classList.toggle("dark", isDark);
+  }
+
+  function toggleDarkMode() {
+    const isDark = !document.documentElement.classList.contains("dark");
+    applyTheme(isDark);
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(savedTheme ? savedTheme === "dark" : prefersDark);
+  });
+</script>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<div class="flex min-h-screen">
+<aside class="w-72 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 p-6 hidden lg:flex flex-col">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="w-10 h-10 rounded-lg overflow-hidden bg-transparent flex items-center justify-center"><img alt="CTS Logo" class="w-10 h-10 object-contain" src="../assets/cts_logo.png"/></div>
+    <span class="text-xl font-display font-bold text-primary dark:text-white"><a href="../../Index.html">CTS</a> College Admin</span>
+  </div>
+  <nav class="space-y-1 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="college-applications.html"><span class="material-icons-outlined">assignment_ind</span>Student Applications</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span>Create Scholarship</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-proposals.html"><span class="material-icons-outlined">account_tree</span>DAO Proposals</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-reports.html"><span class="material-icons-outlined">analytics</span>Reports</a>
+  </nav>
+  <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
+    <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
+      <span class="material-icons-outlined dark:hidden">dark_mode</span>
+      <span class="material-icons-outlined hidden dark:block">light_mode</span>
+      <span>Appearance</span>
+    </button>
+    <a class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="login.html">
+      <span class="material-icons-outlined">logout</span>
+      <span>Log Out</span>
+    </a>
+  </div>
+</aside>
+
+<main class="flex-1 p-6 lg:p-10">
+  <header class="mb-8">
+    <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">College Admin Workspace</p>
+    <h1 class="text-3xl font-display font-bold mt-2">Student Applications</h1>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the college admin dashboard flow.</p>
+  </header>
+
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</p>
+      <p class="text-2xl font-bold mt-2">Active</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Live static page with aligned navigation.</p>
+    </article>
+    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Updated</p>
+      <p class="text-2xl font-bold mt-2">Feb 23, 2026</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Prepared for complete dashboard routing.</p>
+    </article>
+    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Next Action</p>
+      <p class="text-2xl font-bold mt-2">Connect Data</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Hook forms and blockchain calls per module.</p>
+    </article>
+  </section>
+
+  <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <h2 class="text-xl font-bold mb-4">Module Notes</h2>
+    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Sidebar navigation now links to real pages for this role.</span></li>
+      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Theme toggle and global visual language are consistent with existing dashboards.</span></li>
+      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Ready for incremental feature implementation without broken routes.</span></li>
+    </ul>
+  </section>
+</main>
+</div>
+</body>
+</html>
+
+
+
+
