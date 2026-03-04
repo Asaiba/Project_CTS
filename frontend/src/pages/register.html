@@ -44,7 +44,6 @@
         function selectRole(roleId) {
             const roleByCardId = {
                 'role-student': 'student',
-                'role-donor': 'donor',
             };
             selectedRole = roleByCardId[roleId] || "";
             const selectedRoleInput = document.getElementById('selected-role');
@@ -117,13 +116,6 @@
 </div>
 <h3 class="font-bold mb-1">Student</h3>
 <p class="text-xs text-slate-500 dark:text-slate-400">Apply for &amp; track scholarships</p>
-</div>
-<div class="role-card cursor-pointer p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl text-center group" id="role-donor" onclick="selectRole('role-donor')">
-<div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-<span class="material-icons text-primary">volunteer_activism</span>
-</div>
-<h3 class="font-bold mb-1">Donor</h3>
-<p class="text-xs text-slate-500 dark:text-slate-400">Fund &amp; monitor student impact</p>
 </div>
 </div>
 </div>
@@ -229,7 +221,7 @@
 </footer>
 
 <script type="module">
-        import { registerUser, roleDashboard, saveAuthSession } from "../js/api.js";
+        import { registerUser, saveAuthSession } from "../js/api.js";
 
         const registerForm = document.getElementById("register-form");
         const statusEl = document.getElementById("register-status");
@@ -258,8 +250,8 @@
                 setStatus("Please select a role before registering.", true);
                 return;
             }
-            if (!["student", "donor"].includes(role)) {
-                setStatus("Only Student and Donor registration is available.", true);
+            if (!["student"].includes(role)) {
+                setStatus("Only Student registration is available.", true);
                 return;
             }
             if (password !== confirmPassword) {
@@ -269,20 +261,37 @@
 
             submitBtn.disabled = true;
             submitBtn.classList.add("opacity-70", "cursor-not-allowed");
-            setStatus("Creating account...");
+            setStatus("Connecting wallet...");
 
             try {
+                if (!window.ethereum) {
+                    throw new Error("MetaMask is required to create an account.");
+                }
+                let accounts = await window.ethereum.request({ method: "eth_accounts" });
+                if (!accounts || !accounts.length) {
+                    accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                }
+                const connectedWallet = accounts?.[0] || "";
+                if (!connectedWallet) {
+                    throw new Error("Wallet connection failed.");
+                }
+                if (walletAddress && walletAddress.toLowerCase() !== connectedWallet.toLowerCase()) {
+                    throw new Error("Entered wallet address does not match connected MetaMask wallet.");
+                }
+                const finalWallet = connectedWallet;
+                const walletInput = document.getElementById("wallet-address");
+                if (walletInput) walletInput.value = finalWallet;
+                setStatus("Creating account...");
                 const data = await registerUser({
                     email,
                     username,
                     password,
                     role,
-                    walletAddress,
+                    walletAddress: finalWallet,
                 });
                 saveAuthSession(data);
-                const target = roleDashboard(data?.user?.role);
-                setStatus("Account created. Redirecting...");
-                window.location.href = target;
+                setStatus("Account created. Redirecting to login...");
+                window.location.href = "login.html";
             } catch (error) {
                 setStatus(error?.message || "Registration failed. Please try again.", true);
             } finally {

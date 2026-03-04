@@ -84,14 +84,11 @@
 <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-colleges.html">
 <span class="material-icons-outlined">school</span> Colleges
             </a>
-<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-applications.html">
-<span class="material-icons-outlined">assignment</span> Applications
-            </a>
-<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-wallet.html">
-<span class="material-icons-outlined">account_balance_wallet</span> My Wallet
-            </a>
 <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-governance.html">
-<span class="material-icons-outlined">history</span> Governance
+<span class="material-icons-outlined">gavel</span> Governance
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-applications.html">
+<span class="material-icons-outlined">history</span> History
             </a>
 </nav>
 <div class="p-4 border-t border-slate-200 dark:border-slate-800">
@@ -110,7 +107,7 @@
 <div class="flex items-center flex-1 max-w-xl">
 <div class="relative w-full">
 <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-<input class="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary text-sm transition-all" placeholder="Search colleges, scholarships..." type="text"/>
+<input id="student-dashboard-search" class="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary text-sm transition-all" placeholder="Search colleges, scholarships..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -121,8 +118,7 @@
 <div class="h-8 w-px bg-slate-200 dark:bg-slate-800 mx-2"></div>
 <div class="flex items-center gap-3 cursor-pointer group">
 <div class="text-right hidden sm:block">
-<p class="text-sm font-semibold">Alex Rivera</p>
-<p class="text-xs text-slate-500">Student ID: #CTS-2901</p>
+<p class="text-sm font-semibold" id="student-top-name">Student</p>
 </div>
 <img alt="Profile" class="w-10 h-10 rounded-full border-2 border-slate-100 dark:border-slate-800 group-hover:border-primary transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9q2cYT592qEGZRZVdJbZ7cuEVcBI8y4TigBge0gojgL9Kr2bv4Dq84psZImCEfKbqHPCjjgC6ELYYDTrgqclH0sg4eQPkA3W_TvHk-A_MQk6o75QCc4eK5RfFzkvc2MfvF0J2dpoNwtg5h020TYgemUkL5Bn77mhUsPSOWfx4K4aknBKuH3Rfx4r7Qepz84L6ijKAWlDizl5gsKuSjWC2utXyDlaylRb8_ZRVmoGHW9ufvEvQumi8azR0XDTCyLfr75EbVbvGRLI"/>
 </div>
@@ -137,12 +133,12 @@
 <h2 class="text-3xl font-bold flex items-center gap-2">
                                 4,250.00 <span class="text-lg font-medium opacity-80">ETH</span>
 </h2>
-<p class="text-xs mt-1 text-slate-300">â‰ˆ $4,250.00 USD</p>
+<p class="text-xs mt-1 text-slate-300">Approx. 4,250.00 ETH</p>
 </div>
 <div class="mt-6 flex gap-2">
-<button class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-md py-2 rounded-lg text-sm font-medium transition-all">Withdraw</button>
-<button class="flex-1 bg-white text-primary py-2 rounded-lg text-sm font-bold transition-all">Stake</button>
+<button id="withdraw-btn" class="w-full bg-white/20 hover:bg-white/30 backdrop-blur-md py-2 rounded-lg text-sm font-medium transition-all">Withdraw</button>
 </div>
+<p id="withdraw-status" class="text-xs mt-2 text-slate-200 min-h-4"></p>
 </div>
 <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full"></div>
 <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full"></div>
@@ -164,7 +160,7 @@
 <div>
 <p class="text-slate-500 dark:text-slate-400 text-sm">Total Scholarships Won</p>
 <h3 class="text-2xl font-bold">02</h3>
-<p class="text-xs text-slate-400 mt-1">Total $12,500 value</p>
+<p class="text-xs text-slate-400 mt-1">Total 12,500 ETH value</p>
 </div>
 </div>
 </div>
@@ -173,62 +169,8 @@
 <h2 class="text-xl font-bold">Featured Partner Colleges</h2>
 <a class="text-primary text-sm font-semibold hover:underline" href="student-colleges.html">View All</a>
 </div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-<div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
-<div class="h-32 bg-slate-200 dark:bg-slate-800 relative">
-<img alt="College Campus" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4JyaMaMRh0_Q6dfs37bjd3l0ZUSueFALW97ZYDujovQLFjK4OxoONOEVw8g4ZpbXHoBzPMNdVtJhoCd6gPeq3wIchtkEj3_aNHfthNlrkxqpWdujTH1zH2342iEH93vY_OWCAH9CXD8GJ1b11rdsQXw8e_mmRIdIZl1iVQ12vcgS46HS6RwkrBTA3b8MjCSXPivq4GgBLqSCGnRCpseoaNGTBJhlUbv0mLgzDd1GEpyN1dcyar1GpCnY8fBbZLemTWwOvx9nMQMc"/>
-<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 p-1.5 rounded-lg shadow-sm">
-<span class="material-icons-outlined text-sm text-primary">verified</span>
-</div>
-</div>
-<div class="p-4">
-<h4 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">ALU</h4>
-<p class="text-xs text-slate-500 mb-4">Blockchain &amp; Web3 Research</p>
-<div class="flex items-center justify-between">
-<span class="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-400">3 Open Grants</span>
-<button class="text-primary text-sm font-bold">Apply</button>
-</div>
-</div>
-</div>
-<div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
-<div class="h-32 bg-slate-200 dark:bg-slate-800 relative">
-<img alt="College Campus" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-_zPErMsGGmUgbcFKEOao86NQFDvD4y6GSqVlruEGxLahfZXpF3eaPHKaUFrAZ5L0E_5LTvftqcf2RwbPAKIS-GrZP-GUatv-2aQISeKTh1JpmtEI7dWm7wpAH2exJO4raIpTdURfwJdF5Prc06DBopSpM8Fz_0fMGseg9iRh5OLNzX-0MG6i9lwJTbc3CfEC26s1c8F1c8_-BXIwj6ZAhLr2NpDUJ9ReNq9W_O9naZZJ9FRcFVeYjOzTso5Tga6YThYDzUzGFqQ"/>
-</div>
-<div class="p-4">
-<h4 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">ULK</h4>
-<p class="text-xs text-slate-500 mb-4">DeFi Development Fund</p>
-<div class="flex items-center justify-between">
-<span class="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-400">1 Open Grant</span>
-<button class="text-primary text-sm font-bold">Apply</button>
-</div>
-</div>
-</div>
-<div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
-<div class="h-32 bg-slate-200 dark:bg-slate-800 relative">
-<img alt="College Campus" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD41Q4803JMYcUENQT8NiNlHwrKVJkaDoVIqO1jebS2WwZi2r1aZcrtXl-80T4yQxvVfmmTXW14heC1OpDEhiPrgCVHl9ceC0sWZqyylHCugdXllQzL0z_Jtgzw6dfnelyW4lZwFAyhIxAbRupv624e6lgjEJhEkhjd2mPm4XYvSuuadxXABiy98DGUUorPrYTbTfTekVktbiw6Rla_e85hcD2QPeFyKF-qnx69JbJ933wcbNmBxC420PzV1z3tx22JqkYDPx1UDjE"/>
-</div>
-<div class="p-4">
-<h4 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">UK</h4>
-<p class="text-xs text-slate-500 mb-4">Cryptography Studies</p>
-<div class="flex items-center justify-between">
-<span class="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-400">5 Open Grants</span>
-<button class="text-primary text-sm font-bold">Apply</button>
-</div>
-</div>
-</div>
-<div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
-<div class="h-32 bg-slate-200 dark:bg-slate-800 relative">
-<img alt="College Campus" class="w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjgNlzUQ4d3dGRhYeOz3VogxImmthwn8nms9EmoqUZ7zsWZvfmtOihDfXdFPMO6qBTaXR897qRUQ1GybCBTf-47iEz4vGkbZaK4ziwjLqHgQ_j54k-DxmWQpcrjWj7DSiqz1LALxDItUMHYEA-ylEgXNtOEqb6yAfiXc8LrH3ToByKdsqjsUMoXQUzoZ9ofMNvrUfff8Hkvm71GNr-yXYYGb7xKw0c0u8Ptf6vf8ebmxJPp5Rq4tcFPORfmp4ax-wBCMgPdGhCCqQ"/>
-</div>
-<div class="p-4">
-<h4 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">AUCA</h4>
-<p class="text-xs text-slate-500 mb-4">DAO Governance Lab</p>
-<div class="flex items-center justify-between">
-<span class="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-400">2 Open Grants</span>
-<button class="text-primary text-sm font-bold">Apply</button>
-</div>
-</div>
-</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="featured-colleges-grid">
+<div class="text-sm text-slate-500 dark:text-slate-400">Loading colleges...</div>
 </div>
 </section>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -236,64 +178,21 @@
 <div class="bg-surface-light dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
 <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
 <h2 class="font-bold">Application Status</h2>
-<button class="text-xs bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">History</button>
+<a class="text-xs bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" href="student-applications.html">History</a>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left">
 <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
 <tr>
-<th class="px-6 py-4">Scholarship Name</th>
+<th class="px-6 py-4">Funding Title</th>
 <th class="px-6 py-4">College</th>
-<th class="px-6 py-4">Amount</th>
+<th class="px-6 py-4">Applied Date</th>
 <th class="px-6 py-4">Status</th>
 <th class="px-6 py-4">Action</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-<tr>
-<td class="px-6 py-4 font-medium">Future Leaders Tech Grant</td>
-<td class="px-6 py-4">ALU</td>
-<td class="px-6 py-4">5,000 ETH</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-xs font-bold">Pending</span>
-</td>
-<td class="px-6 py-4">
-<button class="text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">visibility</span></button>
-</td>
-</tr>
-<tr>
-<td class="px-6 py-4 font-medium">Ethereum Developers 2024</td>
-<td class="px-6 py-4">ULK</td>
-<td class="px-6 py-4">2,500 ETH</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold">Funded</span>
-</td>
-<td class="px-6 py-4">
-<button class="text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">visibility</span></button>
-</td>
-</tr>
-<tr>
-<td class="px-6 py-4 font-medium">Global Impact Fellowship</td>
-<td class="px-6 py-4">UK</td>
-<td class="px-6 py-4">10,000 ETH</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 text-xs font-bold">Approved</span>
-</td>
-<td class="px-6 py-4">
-<button class="text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">visibility</span></button>
-</td>
-</tr>
-<tr>
-<td class="px-6 py-4 font-medium">Quantum Computing Grant</td>
-<td class="px-6 py-4">AUCA</td>
-<td class="px-6 py-4">1,500 ETH</td>
-<td class="px-6 py-4">
-<span class="px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold">Rejected</span>
-</td>
-<td class="px-6 py-4">
-<button class="text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">visibility</span></button>
-</td>
-</tr>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm" id="application-status-body">
+<tr><td class="px-6 py-4 text-slate-500" colspan="5">Loading application status...</td></tr>
 </tbody>
 </table>
 </div>
@@ -304,51 +203,40 @@
 <div class="p-6 border-b border-slate-200 dark:border-slate-800">
 <h2 class="font-bold">Recent Ledger Activity</h2>
 </div>
-<div class="p-6 space-y-6">
-<div class="flex items-start gap-4">
-<div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 shrink-0">
-<span class="material-icons-outlined">call_received</span>
+<div class="p-6 space-y-6" id="ledger-activity-list">
+<p class="text-sm text-slate-500 dark:text-slate-400">Loading activity...</p>
 </div>
-<div class="flex-1 overflow-hidden">
-<p class="text-sm font-semibold truncate">Received Reward</p>
-<p class="text-xs text-slate-500 truncate">Hash: 0x4f2a...891c</p>
-<p class="text-xs text-slate-400 mt-1">2 hours ago</p>
-</div>
-<div class="text-right">
-<p class="text-sm font-bold text-green-600">+2,500</p>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 shrink-0">
-<span class="material-icons-outlined">how_to_vote</span>
-</div>
-<div class="flex-1 overflow-hidden">
-<p class="text-sm font-semibold truncate">DAO Voting Activity</p>
-<p class="text-xs text-slate-500 truncate">Proposal #452 Approval</p>
-<p class="text-xs text-slate-400 mt-1">Yesterday</p>
-</div>
-<div class="text-right">
-<p class="text-sm font-bold text-slate-500">-5 ETH</p>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 shrink-0">
-<span class="material-icons-outlined">file_upload</span>
-</div>
-<div class="flex-1 overflow-hidden">
-<p class="text-sm font-semibold truncate">Document Upload</p>
-<p class="text-xs text-slate-500 truncate">Signed transcript IPFS</p>
-<p class="text-xs text-slate-400 mt-1">3 days ago</p>
-</div>
-<div class="text-right">
-<span class="text-[10px] uppercase font-bold text-slate-400">Success</span>
-</div>
-</div>
-<button class="w-full py-2 text-primary text-sm font-semibold border border-primary/20 rounded-xl hover:bg-primary/5 transition-all">View Blockchain Explorer</button>
+<div class="px-6 pb-6">
+<button id="ledger-explorer-btn" class="w-full py-2 text-primary text-sm font-semibold border border-primary/20 rounded-xl hover:bg-primary/5 transition-all">View Blockchain Explorer</button>
 </div>
 </div>
 </section>
 </div>
+<section>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h2 class="font-bold">DAO Offers</h2>
+<a class="text-xs bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" href="student-governance.html">Open Governance</a>
+</div>
+<p class="px-6 pt-4 text-sm min-h-5" id="dao-offers-status"></p>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
+<tr>
+<th class="px-6 py-4">Proposal</th>
+<th class="px-6 py-4">DAO Wallet</th>
+<th class="px-6 py-4">Offer</th>
+<th class="px-6 py-4">State</th>
+<th class="px-6 py-4">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm" id="dao-offers-body">
+<tr><td class="px-6 py-4 text-slate-500" colspan="5">Loading DAO offers...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
 </div>
 </main>
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-surface-light dark:bg-surface-dark border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-50">
@@ -357,11 +245,446 @@
 <button class="bg-primary w-12 h-12 rounded-full text-white shadow-lg -mt-8 flex items-center justify-center">
 <span class="material-icons-outlined">add</span>
 </button>
-<button class="text-slate-400"><span class="material-icons-outlined">account_balance_wallet</span></button>
-<button class="text-slate-400"><span class="material-icons-outlined">person</span></button>
+<button class="text-slate-400"><span class="material-icons-outlined">history</span></button>
+<button class="text-slate-400"><span class="material-icons-outlined">logout</span></button>
 </nav>
 
-</body></html>
+<script type="module">
+  import { API_BASE_URL } from "../js/config.js";
+  import {
+    chooseDaoOfferOnChain,
+    formatEth,
+    getConnectedAddress,
+    getProposalMetadata,
+    listDaoOffersOnChain,
+    listProposalsOnChain,
+  } from "../js/cts-contract.js";
+  import { getConnectedWallet, openContractOnExplorer, sendEth } from "../js/web3.js";
+  import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
+  requireSession({ roles: ["student"] });
+
+  const featuredGrid = document.getElementById("featured-colleges-grid");
+  const applicationStatusBody = document.getElementById("application-status-body");
+  const ledgerActivityList = document.getElementById("ledger-activity-list");
+  const searchInput = document.getElementById("student-dashboard-search");
+  const topNameEl = document.getElementById("student-top-name");
+  const daoOffersBody = document.getElementById("dao-offers-body");
+  const daoOffersStatusEl = document.getElementById("dao-offers-status");
+  const withdrawBtn = document.getElementById("withdraw-btn");
+  const withdrawStatusEl = document.getElementById("withdraw-status");
+  const explorerBtn = document.getElementById("ledger-explorer-btn");
+  const sessionUser = JSON.parse(localStorage.getItem("cts_user") || "null");
+  let allCollegesCache = [];
+  let allApplicationsCache = [];
+  let searchQuery = "";
+
+  if (topNameEl) topNameEl.textContent = sessionUser?.username || "Student";
+
+  const setWithdrawStatus = (message, isError = false) => {
+    if (!withdrawStatusEl) return;
+    withdrawStatusEl.textContent = message;
+    withdrawStatusEl.className = `text-xs mt-2 min-h-4 ${isError ? "text-red-200" : "text-slate-200"}`;
+  };
+
+  const setDaoOfferStatus = (message, isError = false) => {
+    if (!daoOffersStatusEl) return;
+    daoOffersStatusEl.textContent = message || "";
+    daoOffersStatusEl.className = `px-6 pt-4 text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+  };
+
+  const shortAddress = (address = "") => {
+    if (!address) return "N/A";
+    return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  };
+
+  const getTargetWallet = () => {
+    const fromProfile = (sessionUser?.walletAddress || "").trim();
+    if (fromProfile) return fromProfile;
+    const fromSession = (sessionStorage.getItem("wallet_address") || "").trim();
+    return fromSession;
+  };
+
+  withdrawBtn?.addEventListener("click", () => {
+    (async () => {
+      try {
+        const walletAddress = getTargetWallet();
+        if (!walletAddress) {
+          setWithdrawStatus("No wallet address linked to this account.", true);
+          return;
+        }
+
+        const rawAmount = window.prompt("Enter amount to withdraw (ETH):", "");
+        if (rawAmount === null) return;
+        setWithdrawStatus("Awaiting wallet confirmation...");
+
+        const sender = await getConnectedWallet();
+        const txHash = await sendEth({
+          from: sender,
+          to: walletAddress,
+          amountEth: rawAmount,
+        });
+        setWithdrawStatus(`Withdraw submitted: ${txHash.slice(0, 10)}...`);
+      } catch (error) {
+        setWithdrawStatus(error?.message || "Withdraw failed.", true);
+      }
+    })();
+  });
+
+  explorerBtn?.addEventListener("click", async () => {
+    try {
+      await openContractOnExplorer();
+    } catch (error) {
+      alert(error?.message || "Could not open explorer.");
+    }
+  });
+
+  const apiOrigin = (() => {
+    try {
+      return new URL(API_BASE_URL).origin;
+    } catch (_error) {
+      return "http://localhost:4000";
+    }
+  })();
+
+  const normalizeLogo = (logoUrl) => {
+    if (!logoUrl) return "";
+    if (logoUrl.startsWith("/uploads/")) return `${apiOrigin}${logoUrl}`;
+    try {
+      const parsed = new URL(logoUrl);
+      if (parsed.pathname.startsWith("/uploads/")) return `${apiOrigin}${parsed.pathname}`;
+    } catch (_error) {}
+    return logoUrl;
+  };
+
+  const fallbackBlock = (name) => {
+    const initials = (name || "U").slice(0, 2).toUpperCase();
+    return `<div class="h-32 bg-primary/10 dark:bg-slate-800 flex items-center justify-center text-primary text-xl font-bold">${initials}</div>`;
+  };
+
+  const card = (college, application) => `
+    <div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden group hover:shadow-lg transition-all">
+      ${college.logoUrl
+        ? `<div class="h-32 bg-slate-200 dark:bg-slate-800 relative"><img alt="${college.username} logo" class="w-full h-full object-cover opacity-90" src="${normalizeLogo(college.logoUrl)}" onerror="this.onerror=null;this.src='../assets/l1.png';this.classList.remove('object-cover');this.classList.add('object-contain','p-3');"/></div>`
+        : fallbackBlock(college.username)}
+      <div class="p-4">
+        <h4 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">${college.username}</h4>
+        <p class="text-xs text-slate-500 mb-4 truncate">${application?.title || application?.message || "Funding title not set"}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-400">Institution</span>
+          <a class="text-primary text-sm font-bold" href="student-colleges.html">View</a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const authRequest = async (path, retry = true) => {
+    let currentToken = localStorage.getItem("cts_access_token") || "";
+    let response = await fetch(`${API_BASE_URL}${path}`, {
+      headers: { Authorization: `Bearer ${currentToken}` },
+    });
+    if (response.status === 401 && retry) {
+      currentToken = await refreshSessionToken();
+      if (!currentToken) {
+        logoutAndRedirect("login.html");
+        throw new Error("Session expired");
+      }
+      return authRequest(path, false);
+    }
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data?.message || "Request failed");
+    return data;
+  };
+
+  const loadFeaturedColleges = async () => {
+    try {
+      const [collegesData, appData] = await Promise.all([
+        authRequest("/users/colleges"),
+        authRequest("/applications/mine"),
+      ]);
+
+      const allColleges = collegesData.items || [];
+      const myApplications = appData.items || [];
+      allCollegesCache = allColleges;
+      allApplicationsCache = myApplications;
+      applySearch();
+    } catch (error) {
+      const rawMessage = error?.message || "Failed to load colleges.";
+      const friendlyMessage = rawMessage === "Failed to fetch"
+        ? "Cannot reach backend API. Ensure backend is running on port 4000."
+        : rawMessage;
+      featuredGrid.innerHTML = `<div class="text-sm text-red-600 dark:text-red-400">${friendlyMessage}</div>`;
+      if (applicationStatusBody) {
+        applicationStatusBody.innerHTML = `<tr><td class="px-6 py-4 text-red-600 dark:text-red-400" colspan="5">${friendlyMessage}</td></tr>`;
+      }
+      if (ledgerActivityList) {
+        ledgerActivityList.innerHTML = `<p class="text-sm text-red-600 dark:text-red-400">${friendlyMessage}</p>`;
+      }
+    }
+  };
+
+  const statusClass = (status) => {
+    if (status === "approved") return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
+    if (status === "rejected") return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+    return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
+  };
+
+  const activityMeta = (status) => {
+    if (status === "approved") {
+      return {
+        title: "Application Approved",
+        icon: "check_circle",
+        iconClass: "bg-green-100 dark:bg-green-900/30 text-green-600",
+        badge: "APPROVED",
+        badgeClass: "text-green-600",
+      };
+    }
+    if (status === "rejected") {
+      return {
+        title: "Application Denied",
+        icon: "cancel",
+        iconClass: "bg-red-100 dark:bg-red-900/30 text-red-600",
+        badge: "DENIED",
+        badgeClass: "text-red-600",
+      };
+    }
+    return {
+      title: "Application Submitted",
+      icon: "schedule",
+      iconClass: "bg-blue-100 dark:bg-blue-900/30 text-blue-600",
+      badge: "PENDING",
+      badgeClass: "text-blue-600",
+    };
+  };
+
+  const timeAgo = (dateValue) => {
+    if (!dateValue) return "Unknown time";
+    const now = Date.now();
+    const then = new Date(dateValue).getTime();
+    if (!Number.isFinite(then)) return "Unknown time";
+    const diffMin = Math.max(1, Math.floor((now - then) / 60000));
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return `${diffH}h ago`;
+    const diffD = Math.floor(diffH / 24);
+    return `${diffD}d ago`;
+  };
+
+  const findCollegeByName = (colleges, name) => {
+    const q = (name || "").toLowerCase();
+    return colleges.find((c) => (c.username || "").toLowerCase() === q)
+      || colleges.find((c) => (c.username || "").toLowerCase().includes(q))
+      || null;
+  };
+
+  const collegeCell = (collegeName, colleges) => {
+    const college = findCollegeByName(colleges, collegeName);
+    const initials = (collegeName || "U").slice(0, 2).toUpperCase();
+    const logo = college?.logoUrl
+      ? `<img alt="${collegeName} logo" src="${normalizeLogo(college.logoUrl)}" class="w-7 h-7 rounded object-cover border border-slate-200 dark:border-slate-700" onerror="this.onerror=null;this.outerHTML='<div class=&quot;w-7 h-7 rounded bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center&quot;>${initials}</div>'"/>`
+      : `<div class="w-7 h-7 rounded bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center">${initials}</div>`;
+    return `<div class="flex items-center gap-2">${logo}<span>${collegeName}</span></div>`;
+  };
+
+  const renderLedgerActivity = (applications = []) => {
+    if (!ledgerActivityList) return;
+    if (!applications.length) {
+      ledgerActivityList.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">No ledger activity yet.</p>';
+      return;
+    }
+
+    const items = [...applications]
+      .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+      .slice(0, 6);
+
+    ledgerActivityList.innerHTML = items
+      .map((item) => {
+        const status = (item?.status || "pending").toLowerCase();
+        const meta = activityMeta(status);
+        const occurredAt = item.updatedAt || item.createdAt;
+        const collegeName = item?.college?.username || "College";
+        const title = item?.title || item?.message || "Funding title not set";
+        const shortId = (item?.id || "").slice(0, 8);
+        return `
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full ${meta.iconClass} flex items-center justify-center shrink-0">
+              <span class="material-icons-outlined">${meta.icon}</span>
+            </div>
+            <div class="flex-1 overflow-hidden">
+              <p class="text-sm font-semibold truncate">${meta.title}</p>
+              <p class="text-xs text-slate-500 truncate">${collegeName} - ${title}</p>
+              <p class="text-xs text-slate-400 mt-1">${timeAgo(occurredAt)} - Ref ${shortId}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase font-bold ${meta.badgeClass}">${meta.badge}</span>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  };
+
+  const renderApplicationTable = (applications, colleges) => {
+    if (!applicationStatusBody) return;
+    if (!applications?.length) {
+      applicationStatusBody.innerHTML = '<tr><td class="px-6 py-4 text-slate-500" colspan="5">No application history yet.</td></tr>';
+      return;
+    }
+    applicationStatusBody.innerHTML = applications.map((row) => {
+      const collegeName = row?.college?.username || "College";
+      const title = row?.title || row?.message || "Funding title not set";
+      const appliedAt = row?.createdAt ? new Date(row.createdAt).toLocaleDateString() : "-";
+      const status = row?.status || "pending";
+      return `
+        <tr>
+          <td class="px-6 py-4 font-medium">${title}</td>
+          <td class="px-6 py-4">${collegeCell(collegeName, colleges)}</td>
+          <td class="px-6 py-4">${appliedAt}</td>
+          <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${statusClass(status)}">${status.toUpperCase()}</span></td>
+          <td class="px-6 py-4"><a class="text-slate-400 hover:text-primary transition-colors" href="student-applications.html"><span class="material-icons-outlined">visibility</span></a></td>
+        </tr>
+      `;
+    }).join("");
+  };
+
+  const applySearch = () => {
+    const q = (searchQuery || "").trim().toLowerCase();
+    if (!q) {
+      const appByCollegeId = new Map(allApplicationsCache.map((item) => [item.college?.id, item]));
+      const featured = allCollegesCache.slice(0, 4);
+      featuredGrid.innerHTML = featured.length
+        ? featured.map((college) => card(college, appByCollegeId.get(college.id))).join("")
+        : '<div class="text-sm text-slate-500 dark:text-slate-400">No colleges available.</div>';
+      renderApplicationTable(allApplicationsCache, allCollegesCache);
+      renderLedgerActivity(allApplicationsCache);
+      return;
+    }
+
+    const filteredApplications = allApplicationsCache.filter((item) => {
+      const haystack = [
+        item?.college?.username || "",
+        item?.college?.email || "",
+        item?.title || "",
+        item?.description || "",
+        item?.message || "",
+        item?.status || "",
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(q);
+    });
+
+    const matchedCollegeIds = new Set(filteredApplications.map((item) => item?.college?.id).filter(Boolean));
+    const filteredColleges = allCollegesCache.filter((college) => {
+      const haystack = [college?.username || "", college?.email || "", college?.walletAddress || ""].join(" ").toLowerCase();
+      return haystack.includes(q) || matchedCollegeIds.has(college.id);
+    });
+
+    const appByCollegeId = new Map(filteredApplications.map((item) => [item.college?.id, item]));
+    const featured = filteredColleges.slice(0, 4);
+    featuredGrid.innerHTML = featured.length
+      ? featured.map((college) => card(college, appByCollegeId.get(college.id))).join("")
+      : '<div class="text-sm text-slate-500 dark:text-slate-400">No matching colleges found.</div>';
+    renderApplicationTable(filteredApplications, allCollegesCache);
+    renderLedgerActivity(filteredApplications);
+  };
+
+  const renderDaoOffersTable = async () => {
+    if (!daoOffersBody) return;
+    try {
+      setDaoOfferStatus("");
+      const viewerWallet = await getConnectedAddress();
+      const proposals = await listProposalsOnChain({ maxItems: 150, viewerAddress: viewerWallet });
+      const myProposals = proposals.filter((p) => (p.student || "").toLowerCase() === viewerWallet.toLowerCase());
+      const eligible = myProposals.filter(
+        (p) => p.hasEnded && Number(p.votesFor) > Number(p.votesAgainst) && !p.cancelled && !p.executed,
+      );
+
+      const rows = [];
+      for (const proposal of eligible) {
+        const meta = getProposalMetadata(proposal.id) || {};
+        const title = meta.title || "Untitled Funding";
+        const selectedDao = (proposal.selectedDao || "").toLowerCase();
+        const selectedExists = selectedDao && selectedDao !== "0x0000000000000000000000000000000000000000";
+        const offers = await listDaoOffersOnChain(proposal.id);
+
+        for (const offer of offers) {
+          const offerWallet = offer.daoWallet || "";
+          const isSelected = (offerWallet || "").toLowerCase() === selectedDao || Boolean(offer.isSelected);
+          const disableAccept = selectedExists || isSelected;
+          rows.push(`
+            <tr>
+              <td class="px-6 py-4">
+                <p class="font-semibold">#${proposal.id} ${title}</p>
+                <p class="text-xs text-slate-500">${shortAddress(proposal.college)}</p>
+              </td>
+              <td class="px-6 py-4 font-mono text-xs">${shortAddress(offerWallet)}</td>
+              <td class="px-6 py-4">${await formatEth(offer.amountWei)} ETH</td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 rounded-full text-xs font-bold ${
+                  isSelected
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                    : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                }">
+                  ${isSelected ? "SELECTED" : "OPEN"}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <button
+                  class="dao-accept-btn px-3 py-1.5 rounded text-xs font-bold ${
+                    disableAccept
+                      ? "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
+                      : "bg-primary text-white hover:bg-primary/90"
+                  }"
+                  data-proposal-id="${proposal.id}"
+                  data-dao-wallet="${offerWallet}"
+                  ${disableAccept ? "disabled" : ""}
+                >
+                  ${isSelected ? "Accepted" : "Accept Offer"}
+                </button>
+              </td>
+            </tr>
+          `);
+        }
+      }
+
+      daoOffersBody.innerHTML = rows.length
+        ? rows.join("")
+        : '<tr><td class="px-6 py-4 text-slate-500" colspan="5">No completed voting offers available yet.</td></tr>';
+    } catch (error) {
+      daoOffersBody.innerHTML = '<tr><td class="px-6 py-4 text-red-600 dark:text-red-400" colspan="5">Failed to load DAO offers.</td></tr>';
+      setDaoOfferStatus(error?.message || "Failed to load DAO offers.", true);
+    }
+  };
+
+  daoOffersBody?.addEventListener("click", async (event) => {
+    const button = event.target.closest(".dao-accept-btn");
+    if (!button) return;
+    const proposalId = button.getAttribute("data-proposal-id");
+    const daoWallet = button.getAttribute("data-dao-wallet");
+    if (!proposalId || !daoWallet) return;
+    const confirmed = window.confirm(`Accept DAO offer from ${shortAddress(daoWallet)} for proposal #${proposalId}?`);
+    if (!confirmed) return;
+
+    try {
+      button.disabled = true;
+      setDaoOfferStatus("Submitting your selection on-chain...");
+      const txHash = await chooseDaoOfferOnChain({ proposalId, daoWallet });
+      setDaoOfferStatus(`Offer accepted. Tx: ${txHash.slice(0, 10)}...`);
+      await renderDaoOffersTable();
+    } catch (error) {
+      button.disabled = false;
+      setDaoOfferStatus(error?.message || "Failed to accept DAO offer.", true);
+    }
+  });
+
+  searchInput?.addEventListener("input", (event) => {
+    searchQuery = event.target?.value || "";
+    applySearch();
+  });
+
+  loadFeaturedColleges();
+  renderDaoOffersTable();
+</script></body></html>
 
 
 

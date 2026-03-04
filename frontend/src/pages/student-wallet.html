@@ -58,9 +58,7 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-colleges.html"><span class="material-icons-outlined">school</span>Colleges</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">assignment</span>Applications</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-wallet.html"><span class="material-icons-outlined">account_balance_wallet</span>My Wallet</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">how_to_vote</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">history</span>History</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
     <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
@@ -110,7 +108,10 @@
   </section>
 </main>
 </div>
-</body>
+<script type="module">
+  import { requireSession } from "../js/session.js";
+  requireSession({ roles: ["student"] });
+</script></body>
 </html>
 
 

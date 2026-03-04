@@ -7,10 +7,30 @@ const publicUser = (user) => ({
   username: user.username,
   role: user.role,
   walletAddress: user.walletAddress,
+  logoUrl: user.logoUrl,
 });
 
 export const getMe = async (req, res) => {
   return res.json({ user: publicUser(req.user) });
+};
+
+export const listColleges = async (_req, res) => {
+  const colleges = await prisma.user.findMany({
+    where: {
+      role: "college",
+      isActive: true,
+    },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      walletAddress: true,
+      logoUrl: true,
+    },
+  });
+
+  return res.json({ items: colleges });
 };
 
 export const updateMe = async (req, res, next) => {

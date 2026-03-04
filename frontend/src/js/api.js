@@ -39,7 +39,6 @@ export const saveAuthSession = ({ accessToken, refreshToken, user }) => {
 export const roleDashboard = (role) => {
   const map = {
     student: "student-dashboard.html",
-    donor: "donor-dashboard.html",
     college: "college-dashboard.html",
     dao: "dao-dashboard.html",
     admin: "admin-dashboard.html",

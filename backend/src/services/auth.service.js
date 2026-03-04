@@ -26,7 +26,7 @@ export const issueAuthTokens = async (user) => {
 };
 
 export const registerUser = async ({ email, username, password, role, walletAddress }) => {
-  const enforcedRole = role === "donor" ? "donor" : "student";
+  const enforcedRole = "student";
   const passwordHash = await hashPassword(password);
 
   return prisma.user.create({
@@ -40,7 +40,7 @@ export const registerUser = async ({ email, username, password, role, walletAddr
   });
 };
 
-export const loginWithEmailPassword = async ({ email, password }) => {
+export const loginWithEmailPassword = async ({ email, password, walletAddress }) => {
   const user = await prisma.user.findUnique({
     where: { email: email.trim().toLowerCase() },
   });
@@ -48,6 +48,8 @@ export const loginWithEmailPassword = async ({ email, password }) => {
   if (!user || !user.passwordHash) return null;
   const ok = await verifyPassword(password, user.passwordHash);
   if (!ok) return null;
+  const normalizedWallet = normalizeWallet(walletAddress);
+  if (!normalizedWallet || !user.walletAddress || user.walletAddress !== normalizedWallet) return null;
   return user;
 };
 
@@ -67,7 +69,6 @@ export const loginWithGoogleIdToken = async ({ idToken }) => {
   const payload = ticket.getPayload();
   const email = payload?.email?.trim().toLowerCase();
   const emailVerified = payload?.email_verified;
-  const rawName = payload?.name?.trim();
 
   if (!email || !emailVerified) return null;
 
@@ -76,20 +77,7 @@ export const loginWithGoogleIdToken = async ({ idToken }) => {
   });
 
   if (user) return user;
-
-  const fallbackUsername = email.split("@")[0] || "google_user";
-  const username = rawName || fallbackUsername;
-
-  user = await prisma.user.create({
-    data: {
-      email,
-      username: username.slice(0, 60),
-      role: "student",
-      passwordHash: null,
-    },
-  });
-
-  return user;
+  return null;
 };
 
 export const rotateRefreshToken = async (refreshToken) => {

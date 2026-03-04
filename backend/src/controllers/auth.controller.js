@@ -10,6 +10,7 @@ import {
   revokeRefreshToken,
   rotateRefreshToken,
 } from "../services/auth.service.js";
+import { registerStudentOnChainByOwner } from "../services/onchain.service.js";
 import { env } from "../config/env.js";
 
 const publicUser = (user) => ({
@@ -18,11 +19,23 @@ const publicUser = (user) => ({
   username: user.username,
   role: user.role,
   walletAddress: user.walletAddress,
+  logoUrl: user.logoUrl,
 });
 
 export const register = async (req, res, next) => {
   try {
     const user = await registerUser(req.validated.body);
+    try {
+      await registerStudentOnChainByOwner({
+        walletAddress: user.walletAddress,
+        username: user.username,
+      });
+    } catch (chainError) {
+      await prisma.user.delete({ where: { id: user.id } }).catch(() => null);
+      return res
+        .status(chainError.statusCode || 502)
+        .json({ error: "onchain_registration_failed", message: chainError.message || "On-chain registration failed" });
+    }
     const tokens = await issueAuthTokens(user);
     return res.status(201).json({ user: publicUser(user), ...tokens });
   } catch (error) {
@@ -62,7 +75,9 @@ export const loginGoogle = async (req, res, next) => {
 
     const user = await loginWithGoogleIdToken(req.validated.body);
     if (!user) {
-      return res.status(401).json({ error: "invalid_google_token", message: "Invalid Google token" });
+      return res
+        .status(401)
+        .json({ error: "google_not_registered", message: "Google email is not registered in CTS" });
     }
 
     const tokens = await issueAuthTokens(user);

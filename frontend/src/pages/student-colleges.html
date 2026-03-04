@@ -58,9 +58,8 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-colleges.html"><span class="material-icons-outlined">school</span>Colleges</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">assignment</span>Applications</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-wallet.html"><span class="material-icons-outlined">account_balance_wallet</span>My Wallet</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">how_to_vote</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">history</span>History</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
     <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
@@ -82,35 +81,183 @@
     <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the student dashboard flow.</p>
   </header>
 
-  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</p>
-      <p class="text-2xl font-bold mt-2">Active</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Live static page with aligned navigation.</p>
-    </article>
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Updated</p>
-      <p class="text-2xl font-bold mt-2">Feb 23, 2026</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Prepared for complete dashboard routing.</p>
-    </article>
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Next Action</p>
-      <p class="text-2xl font-bold mt-2">Connect Data</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Hook forms and blockchain calls per module.</p>
-    </article>
-  </section>
-
   <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-    <h2 class="text-xl font-bold mb-4">Module Notes</h2>
-    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Sidebar navigation now links to real pages for this role.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Theme toggle and global visual language are consistent with existing dashboards.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Ready for incremental feature implementation without broken routes.</span></li>
-    </ul>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold">Registered Institutions</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400" id="institutions-count">Loading...</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="institutions-grid">
+      <div class="text-sm text-slate-500 dark:text-slate-400">Loading institutions...</div>
+    </div>
   </section>
 </main>
 </div>
-</body>
+<script type="module">
+  import { API_BASE_URL } from "../js/config.js";
+  import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
+  requireSession({ roles: ["student"] });
+
+  const institutionsGrid = document.getElementById("institutions-grid");
+  const institutionsCount = document.getElementById("institutions-count");
+  const apiOrigin = (() => {
+    try {
+      return new URL(API_BASE_URL).origin;
+    } catch (_error) {
+      return "http://localhost:4000";
+    }
+  })();
+
+  const shortAddress = (address) => {
+    if (!address) return "No wallet";
+    return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  };
+
+  const normalizeLogo = (logoUrl) => {
+    if (!logoUrl) return "";
+    if (logoUrl.startsWith("/uploads/")) return `${apiOrigin}${logoUrl}`;
+    return logoUrl;
+  };
+
+  const fallbackLogo = (name) => {
+    const initials = (name || "U").slice(0, 2).toUpperCase();
+    return `<div class="w-14 h-14 rounded-xl bg-primary/10 text-primary font-bold flex items-center justify-center">${initials}</div>`;
+  };
+
+  const statusPill = (status) => {
+    if (status === "approved") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">APPROVED</span>';
+    if (status === "rejected") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">REJECTED</span>';
+    if (status === "pending") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">PENDING</span>';
+    return "";
+  };
+
+  const card = (college, latestApplication, applicationCount = 0) => `
+    <article class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900/60">
+      <div class="flex items-center gap-3 mb-3">
+        ${college.logoUrl
+          ? `<img src="${normalizeLogo(college.logoUrl)}" alt="${college.username} logo" class="w-14 h-14 rounded-xl object-cover border border-slate-200 dark:border-slate-700" onerror="this.onerror=null;this.src='../assets/l1.png';this.classList.remove('object-cover');this.classList.add('object-contain','p-1');"/>`
+          : fallbackLogo(college.username)}
+        <div class="min-w-0">
+          <p class="font-bold text-slate-900 dark:text-white truncate">${college.username}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${college.email}</p>
+        </div>
+      </div>
+      <p class="text-xs font-mono text-slate-500 dark:text-slate-400">${shortAddress(college.walletAddress)}</p>
+      <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Applications sent: ${applicationCount}</p>
+      <div class="mt-3 flex items-center justify-between gap-3">
+        ${statusPill(latestApplication?.status)}
+        <button class="apply-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary text-white hover:opacity-90" data-college-id="${college.id}">
+          ${applicationCount > 0 ? "Apply Again" : "Apply"}
+        </button>
+      </div>
+    </article>
+  `;
+
+  const authFetch = async (path, options = {}, retry = true) => {
+    let token = localStorage.getItem("cts_access_token") || "";
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          ...(options.headers || {}),
+        },
+      });
+    } catch (_networkError) {
+      throw new Error("Cannot reach backend API. Ensure backend is running on port 4000.");
+    }
+    if (response.status === 401 && retry) {
+      token = await refreshSessionToken();
+      if (!token) {
+        logoutAndRedirect("login.html");
+        throw new Error("Session expired");
+      }
+      return authFetch(path, options, false);
+    }
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data?.message || "Request failed");
+    return data;
+  };
+
+  const loadInstitutions = async () => {
+    try {
+      const [collegesData, myApplicationsData] = await Promise.all([
+        authFetch("/users/colleges"),
+        authFetch("/applications/mine"),
+      ]);
+      const items = collegesData.items || [];
+      const appsByCollegeId = new Map();
+      for (const item of myApplicationsData.items || []) {
+        const id = item?.college?.id;
+        if (!id) continue;
+        if (!appsByCollegeId.has(id)) appsByCollegeId.set(id, []);
+        appsByCollegeId.get(id).push(item);
+      }
+      institutionsCount.textContent = `${items.length} institutions`;
+      institutionsGrid.innerHTML = items.length
+        ? items
+            .map((college) => {
+              const collegeApps = appsByCollegeId.get(college.id) || [];
+              const latestApplication = collegeApps[0] || null;
+              return card(college, latestApplication, collegeApps.length);
+            })
+            .join("")
+        : '<div class="text-sm text-slate-500 dark:text-slate-400">No institutions available.</div>';
+
+      institutionsGrid.querySelectorAll(".apply-btn").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const collegeId = button.getAttribute("data-college-id");
+          if (!collegeId) return;
+          const previousText = button.textContent;
+          button.disabled = true;
+          button.textContent = "Submitting...";
+          try {
+            const title = (window.prompt("Enter funding title:", "") || "").trim();
+            if (!title) {
+              button.disabled = false;
+              button.textContent = previousText;
+              return;
+            }
+            const description = (window.prompt("Enter funding description:", "") || "").trim();
+            if (!description) {
+              button.disabled = false;
+              button.textContent = previousText;
+              return;
+            }
+            await authFetch("/applications", {
+              method: "POST",
+              body: JSON.stringify({
+                collegeId,
+                title,
+                description,
+                message: title,
+              }),
+            });
+            await loadInstitutions();
+          } catch (error) {
+            button.disabled = false;
+            button.textContent = previousText;
+            const rawMessage = error?.message || "Failed to apply.";
+            const friendlyMessage = rawMessage === "Failed to fetch"
+              ? "Cannot reach backend API. Ensure backend is running on port 4000."
+              : rawMessage;
+            alert(friendlyMessage);
+          }
+        });
+      });
+    } catch (error) {
+      const rawMessage = error?.message || "Failed to load institutions.";
+      const friendlyMessage = rawMessage === "Failed to fetch"
+        ? "Cannot reach backend API. Ensure backend is running on port 4000."
+        : rawMessage;
+      institutionsGrid.innerHTML = `<div class="text-sm text-red-600 dark:text-red-400">${friendlyMessage}</div>`;
+      institutionsCount.textContent = "Unavailable";
+    }
+  };
+
+  loadInstitutions();
+</script></body>
 </html>
 
 

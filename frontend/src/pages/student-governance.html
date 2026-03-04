@@ -58,9 +58,8 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-colleges.html"><span class="material-icons-outlined">school</span>Colleges</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">assignment</span>Applications</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-wallet.html"><span class="material-icons-outlined">account_balance_wallet</span>My Wallet</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-governance.html"><span class="material-icons-outlined">how_to_vote</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">history</span>History</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
     <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
@@ -78,41 +77,173 @@
 <main class="flex-1 p-6 lg:p-10">
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Student Workspace</p>
-    <h1 class="text-3xl font-display font-bold mt-2">Governance</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the student dashboard flow.</p>
+    <h1 class="text-3xl font-display font-bold mt-2">DAO Offer Selection</h1>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">After voting closes, choose the DAO offer amount and wallet you prefer to work with.</p>
   </header>
 
-  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</p>
-      <p class="text-2xl font-bold mt-2">Active</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Live static page with aligned navigation.</p>
-    </article>
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Updated</p>
-      <p class="text-2xl font-bold mt-2">Feb 23, 2026</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Prepared for complete dashboard routing.</p>
-    </article>
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Next Action</p>
-      <p class="text-2xl font-bold mt-2">Connect Data</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Hook forms and blockchain calls per module.</p>
-    </article>
-  </section>
-
-  <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-    <h2 class="text-xl font-bold mb-4">Module Notes</h2>
-    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Sidebar navigation now links to real pages for this role.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Theme toggle and global visual language are consistent with existing dashboards.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Ready for incremental feature implementation without broken routes.</span></li>
-    </ul>
+  <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+    <div class="flex items-center justify-between gap-2">
+      <h2 class="text-xl font-bold">My On-Chain Proposals</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400" id="student-governance-wallet">Wallet: --</p>
+    </div>
+    <p id="student-governance-status" class="text-sm min-h-5 mt-3"></p>
+    <div class="space-y-4 mt-4" id="student-governance-list">
+      <p class="text-sm text-slate-500 dark:text-slate-400">Loading proposals...</p>
+    </div>
   </section>
 </main>
 </div>
+<script type="module">
+  import {
+    chooseDaoOfferOnChain,
+    formatEth,
+    getConnectedAddress,
+    getProposalMetadata,
+    listDaoOffersOnChain,
+    listProposalsOnChain,
+    withdrawScholarshipOnChain,
+  } from "../js/cts-contract.js";
+  import { requireSession } from "../js/session.js";
+  requireSession({ roles: ["student"] });
+
+  const statusEl = document.getElementById("student-governance-status");
+  const listEl = document.getElementById("student-governance-list");
+  const walletEl = document.getElementById("student-governance-wallet");
+  let viewerWallet = "";
+
+  const setStatus = (message, isError = false) => {
+    if (!statusEl) return;
+    statusEl.textContent = message || "";
+    statusEl.className = `text-sm min-h-5 mt-3 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+  };
+
+  const short = (address) =>
+    address && address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address || "N/A";
+
+  const renderOffer = (proposalId, offer, canChoose) => `
+    <div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+      <div>
+        <p class="text-sm font-semibold">${short(offer.daoWallet)}</p>
+        <p class="text-xs text-slate-500">${offer.amountEth} ETH ${offer.isSelected ? "(selected)" : ""}</p>
+      </div>
+      <button class="choose-offer-btn px-3 py-1.5 rounded text-xs font-bold ${canChoose && !offer.isSelected ? "bg-primary text-white hover:bg-primary/90" : "bg-slate-200 text-slate-500 cursor-not-allowed"}"
+        data-proposal-id="${proposalId}" data-dao-wallet="${offer.daoWallet}" ${canChoose && !offer.isSelected ? "" : "disabled"}>
+        ${offer.isSelected ? "Selected" : "Choose"}
+      </button>
+    </div>
+  `;
+
+  const renderProposal = (proposal) => `
+    <article class="p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <p class="font-bold">Proposal #${proposal.id} - ${proposal.title}</p>
+        <span class="text-xs px-2 py-1 rounded ${proposal.ready ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"}">
+          ${proposal.stateText}
+        </span>
+      </div>
+      <p class="text-sm text-slate-500 mt-1">${proposal.description}</p>
+      <p class="text-xs text-slate-500 mt-2">Requested: ${proposal.requestedAmountEth} ETH | YES: ${proposal.votesFor} | NO: ${proposal.votesAgainst}</p>
+      <div class="mt-3 space-y-2">
+        ${(proposal.offers || []).length
+          ? proposal.offers.map((offer) => renderOffer(proposal.id, offer, proposal.canChoose)).join("")
+          : '<p class="text-sm text-slate-500">No DAO offers submitted yet.</p>'}
+      </div>
+      <div class="mt-3 flex justify-end">
+        <button class="withdraw-scholarship-btn px-3 py-1.5 rounded text-xs font-bold ${proposal.canWithdraw ? "bg-emerald-600 text-white hover:bg-emerald-500" : "bg-slate-200 text-slate-500 cursor-not-allowed"}"
+          data-proposal-id="${proposal.id}" ${proposal.canWithdraw ? "" : "disabled"}>
+          Withdraw Funds
+        </button>
+      </div>
+    </article>
+  `;
+
+  const load = async () => {
+    try {
+      setStatus("");
+      viewerWallet = await getConnectedAddress();
+      if (walletEl) walletEl.textContent = `Wallet: ${short(viewerWallet)}`;
+      const proposalsRaw = await listProposalsOnChain({ maxItems: 100, viewerAddress: viewerWallet });
+      const mine = proposalsRaw.filter((p) => (p.student || "").toLowerCase() === viewerWallet.toLowerCase());
+
+      const hydrated = await Promise.all(mine.map(async (p) => {
+        const offersRaw = await listDaoOffersOnChain(p.id);
+        const offers = await Promise.all(offersRaw.map(async (o) => ({
+          ...o,
+          amountEth: await formatEth(o.amountWei),
+        })));
+        const selectedExists = p.selectedDao && p.selectedDao !== "0x0000000000000000000000000000000000000000";
+        const passed = Number(p.votesFor) > Number(p.votesAgainst);
+        const ready = p.hasEnded && passed && !p.cancelled && !p.executed;
+        const canChoose = ready && !selectedExists;
+        const canWithdraw = Boolean(p.isFunded) && BigInt(p.pendingPayoutWei || 0n) > 0n;
+        return {
+          ...p,
+          title: getProposalMetadata(p.id)?.title || "Untitled Funding",
+          description: getProposalMetadata(p.id)?.description || "No funding description provided.",
+          requestedAmountEth: await formatEth(p.amountWei),
+          offers,
+          canChoose,
+          canWithdraw,
+          ready,
+          stateText: selectedExists
+            ? (canWithdraw ? "Funds available to withdraw" : (p.isFunded ? "Funded" : "Selected - awaiting funding"))
+            : (ready ? "Ready for your selection" : "Not ready"),
+        };
+      }));
+
+      if (!hydrated.length) {
+        listEl.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">No proposals found for your student wallet.</p>';
+        return;
+      }
+
+      listEl.innerHTML = hydrated.map(renderProposal).join("");
+    } catch (error) {
+      setStatus(error?.message || "Failed to load student governance.", true);
+      listEl.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400">Could not load proposals.</p>';
+    }
+  };
+
+  listEl?.addEventListener("click", async (event) => {
+    const btn = event.target.closest(".choose-offer-btn");
+    const withdrawBtn = event.target.closest(".withdraw-scholarship-btn");
+    if (btn) {
+      const proposalId = btn.getAttribute("data-proposal-id");
+      const daoWallet = btn.getAttribute("data-dao-wallet");
+      if (!proposalId || !daoWallet) return;
+      const confirmed = window.confirm(`Choose DAO wallet ${short(daoWallet)} for proposal #${proposalId}?`);
+      if (!confirmed) return;
+      try {
+        btn.disabled = true;
+        setStatus("Submitting selection on-chain...");
+        const txHash = await chooseDaoOfferOnChain({ proposalId, daoWallet });
+        setStatus(`DAO offer selected. Tx: ${txHash.slice(0, 10)}...`);
+        await load();
+      } catch (error) {
+        btn.disabled = false;
+        setStatus(error?.message || "Failed to choose DAO offer.", true);
+      }
+      return;
+    }
+
+    if (withdrawBtn) {
+      const proposalId = withdrawBtn.getAttribute("data-proposal-id");
+      if (!proposalId) return;
+      const confirmed = window.confirm(`Withdraw funded amount for proposal #${proposalId} to your wallet now?`);
+      if (!confirmed) return;
+      try {
+        withdrawBtn.disabled = true;
+        setStatus("Submitting withdrawal on-chain...");
+        const txHash = await withdrawScholarshipOnChain(proposalId);
+        setStatus(`Funds withdrawn. Tx: ${txHash.slice(0, 10)}...`);
+        await load();
+      } catch (error) {
+        withdrawBtn.disabled = false;
+        setStatus(error?.message || "Failed to withdraw scholarship.", true);
+      }
+    }
+  });
+
+  load();
+</script>
 </body>
 </html>
-
-
-
-

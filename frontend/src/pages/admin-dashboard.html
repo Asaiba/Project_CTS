@@ -59,23 +59,23 @@
             <span class="text-xl font-display font-bold tracking-tight"><a aria-label="Go to landing page" href="../../Index.html">CTS</a> Admin</span>
           </div>
           <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-            <a class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg transition-colors" href="admin-dashboard.html">
+            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg transition-colors" data-tab="dashboard" href="admin-dashboard.html#dashboard">
               <span class="material-icons-outlined">dashboard</span>
               <span class="font-medium">Dashboard</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-applications.html">
+            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="institutions" href="admin-dashboard.html#institutions">
               <span class="material-icons-outlined">school</span>
               <span class="font-medium">Institutions</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-proposals.html">
+            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="dao" href="admin-dashboard.html#dao">
               <span class="material-icons-outlined">how_to_vote</span>
               <span class="font-medium">DAO</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-create-scholarship.html">
+            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="scholarships" href="admin-dashboard.html#scholarships">
               <span class="material-icons-outlined">workspace_premium</span>
               <span class="font-medium">Scholarships</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-reports.html">
+            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="settings" href="admin-dashboard.html#settings">
               <span class="material-icons-outlined">settings</span>
               <span class="font-medium">Settings</span>
             </a>
@@ -110,6 +110,7 @@
                   <span class="material-icons-outlined">search</span>
                 </div>
                 <input
+                  id="admin-search"
                   class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 focus:border-none h-full placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
                   placeholder="Search institutions..."
                   value=""
@@ -139,7 +140,7 @@
         </header>
         <main class="flex flex-1 justify-center py-8">
           <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 sm:px-10">
-            <div class="flex flex-wrap justify-between items-end gap-3 mb-8">
+            <div class="flex flex-wrap justify-between items-end gap-3 mb-8" id="dashboard">
               <div class="flex flex-col gap-1">
                 <p class="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">System Admin Dashboard</p>
                 <p class="text-slate-500 dark:text-slate-400 text-base font-normal">
@@ -153,7 +154,7 @@
                   <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Institutions</p>
                   <span class="material-icons-outlined text-primary">school</span>
                 </div>
-                <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">128</p>
+                <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight" id="total-institutions-count">0</p>
                 <div class="flex items-center gap-1">
                   <span class="material-icons-outlined text-emerald-500 text-sm">trending_up</span>
                   <p class="text-emerald-500 text-xs font-semibold">+5% this month</p>
@@ -164,7 +165,7 @@
                   <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active DAO Members</p>
                   <span class="material-icons-outlined text-primary">groups</span>
                 </div>
-                <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">42</p>
+                <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight" id="active-dao-count">0</p>
                 <div class="flex items-center gap-1">
                   <span class="material-icons-outlined text-emerald-500 text-sm">trending_up</span>
                   <p class="text-emerald-500 text-xs font-semibold">+2% this month</p>
@@ -172,20 +173,21 @@
               </div>
               <div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="flex items-center justify-between">
-                  <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Scholarship Volume</p>
-                  <span class="material-icons-outlined text-primary">currency_bitcoin</span>
+                  <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Users</p>
+                  <span class="material-icons-outlined text-primary">person</span>
                 </div>
-                <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">1.2M CTS</p>
+                <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight" id="total-users-count">0</p>
                 <div class="flex items-center gap-1 text-slate-400">
                   <span class="material-icons-outlined text-sm">schedule</span>
-                  <p class="text-xs font-semibold">Real-time update</p>
+                  <p class="text-xs font-semibold">Live system count</p>
                 </div>
               </div>
             </div>
-            <section class="mb-12">
+            <section class="mb-12" id="institutions">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight border-l-4 border-primary pl-4">Institution Management</h3>
                 <button
+                  id="add-school-btn"
                   class="flex items-center gap-2 px-6 h-11 bg-accent hover:bg-accent/90 text-white rounded-lg font-bold text-sm transition-all shadow-md active:scale-95"
                 >
                   <span class="material-icons-outlined">add</span>
@@ -203,149 +205,39 @@
                       <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">ST</div>
-                          <div>
-                            <p class="font-bold text-slate-900 dark:text-white">Stanford University</p>
-                            <p class="text-xs text-slate-400">Palo Alto, CA</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">0x71C...4f89</td>
-                      <td class="px-6 py-4">
-                        <span class="px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-tighter">Verified</span>
-                      </td>
-                      <td class="px-6 py-4 text-slate-700 dark:text-slate-300 font-medium">1,240</td>
-                      <td class="px-6 py-4 text-right">
-                        <button class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">edit</span></button>
-                        <button class="p-2 text-slate-400 hover:text-red-500 transition-colors"><span class="material-icons-outlined">delete</span></button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">MI</div>
-                          <div>
-                            <p class="font-bold text-slate-900 dark:text-white">MIT</p>
-                            <p class="text-xs text-slate-400">Cambridge, MA</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">0x2aF...99b2</td>
-                      <td class="px-6 py-4">
-                        <span class="px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-tighter">Verified</span>
-                      </td>
-                      <td class="px-6 py-4 text-slate-700 dark:text-slate-300 font-medium">3,120</td>
-                      <td class="px-6 py-4 text-right">
-                        <button class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">edit</span></button>
-                        <button class="p-2 text-slate-400 hover:text-red-500 transition-colors"><span class="material-icons-outlined">delete</span></button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                          <div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary font-bold">HA</div>
-                          <div>
-                            <p class="font-bold text-slate-900 dark:text-white">Harvard University</p>
-                            <p class="text-xs text-slate-400">Cambridge, MA</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">0x4E9...11c4</td>
-                      <td class="px-6 py-4">
-                        <span class="px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-tighter">Pending</span>
-                      </td>
-                      <td class="px-6 py-4 text-slate-700 dark:text-slate-300 font-medium">0</td>
-                      <td class="px-6 py-4 text-right">
-                        <button class="p-2 text-slate-400 hover:text-primary transition-colors"><span class="material-icons-outlined">edit</span></button>
-                        <button class="p-2 text-slate-400 hover:text-red-500 transition-colors"><span class="material-icons-outlined">delete</span></button>
-                      </td>
+                  <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="institutions-tbody">
+                    <tr>
+                      <td class="px-6 py-8 text-sm text-slate-500" colspan="5">Loading institutions...</td>
                     </tr>
                   </tbody>
                 </table>
                 <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
-                  <p class="text-xs text-slate-500">Showing 3 of 128 registered colleges</p>
+                  <p class="text-xs text-slate-500" id="institutions-pagination-text">Showing 0 of 0 registered colleges</p>
                   <div class="flex gap-2">
-                    <button class="p-1 px-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 hover:bg-white dark:hover:bg-slate-800">Prev</button>
-                    <button class="p-1 px-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 hover:bg-white dark:hover:bg-slate-800">Next</button>
+                    <button class="p-1 px-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 hover:bg-white dark:hover:bg-slate-800 disabled:opacity-50" id="institutions-prev-btn">Prev</button>
+                    <button class="p-1 px-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 hover:bg-white dark:hover:bg-slate-800 disabled:opacity-50" id="institutions-next-btn">Next</button>
                   </div>
                 </div>
               </div>
             </section>
-            <section class="mb-12">
+            <section class="mb-12" id="dao">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight border-l-4 border-primary pl-4">DAO Governance Membership</h3>
                 <button
+                  id="grant-dao-btn"
                   class="flex items-center gap-2 px-6 h-11 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm transition-all shadow-md active:scale-95"
                 >
                   <span class="material-icons-outlined">how_to_reg</span>
                   Grant DAO Status
                 </button>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-primary/40 transition-colors relative group">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="bg-primary/10 p-3 rounded-lg text-primary">
-                      <span class="material-icons-outlined">verified_user</span>
-                    </div>
-                    <span class="bg-slate-100 dark:bg-slate-800 text-[10px] font-bold px-2 py-1 rounded text-slate-500">LVL 4 PROPOSER</span>
-                  </div>
-                  <h4 class="font-bold text-slate-900 dark:text-white mb-1">Dr. Aris Thorne</h4>
-                  <p class="text-xs text-slate-400 mb-4 font-mono truncate">0x9dE...A231</p>
-                  <div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-800 pt-4">
-                    <div class="flex flex-col">
-                      <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Voting Power</span>
-                      <span class="text-primary font-bold">2,450 VP</span>
-                    </div>
-                    <button class="text-xs font-bold text-accent hover:underline flex items-center gap-1">
-                      Manage Access <span class="material-icons-outlined text-sm">chevron_right</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-primary/40 transition-colors relative group">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="bg-primary/10 p-3 rounded-lg text-primary">
-                      <span class="material-icons-outlined">gavel</span>
-                    </div>
-                    <span class="bg-slate-100 dark:bg-slate-800 text-[10px] font-bold px-2 py-1 rounded text-slate-500">LVL 3 VOTER</span>
-                  </div>
-                  <h4 class="font-bold text-slate-900 dark:text-white mb-1">Global Tech Fund</h4>
-                  <p class="text-xs text-slate-400 mb-4 font-mono truncate">0x1B8...33F4</p>
-                  <div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-800 pt-4">
-                    <div class="flex flex-col">
-                      <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Voting Power</span>
-                      <span class="text-primary font-bold">12,100 VP</span>
-                    </div>
-                    <button class="text-xs font-bold text-accent hover:underline flex items-center gap-1">
-                      Manage Access <span class="material-icons-outlined text-sm">chevron_right</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-primary/40 transition-colors relative group">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="bg-primary/10 p-3 rounded-lg text-primary">
-                      <span class="material-icons-outlined">security</span>
-                    </div>
-                    <span class="bg-slate-100 dark:bg-slate-800 text-[10px] font-bold px-2 py-1 rounded text-slate-500">GUARDIAN</span>
-                  </div>
-                  <h4 class="font-bold text-slate-900 dark:text-white mb-1">Sarah Jenkins</h4>
-                  <p class="text-xs text-slate-400 mb-4 font-mono truncate">0xF42...901E</p>
-                  <div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-800 pt-4">
-                    <div class="flex flex-col">
-                      <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Voting Power</span>
-                      <span class="text-primary font-bold">1,000 VP</span>
-                    </div>
-                    <button class="text-xs font-bold text-accent hover:underline flex items-center gap-1">
-                      Manage Access <span class="material-icons-outlined text-sm">chevron_right</span>
-                    </button>
-                  </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="dao-members-grid">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 text-sm text-slate-500">
+                  Loading DAO members...
                 </div>
               </div>
             </section>
-            <section class="mb-12">
+            <section class="mb-12" id="settings">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight border-l-4 border-primary pl-4">Access Management</h3>
               </div>
@@ -362,7 +254,6 @@
                       <option value="dao">DAO Member</option>
                       <option value="admin">Admin</option>
                       <option value="student">Student</option>
-                      <option value="donor">Donor</option>
                     </select>
                   </div>
                   <div class="md:col-span-3 flex items-center justify-between gap-4">
@@ -373,32 +264,81 @@
                 <p class="text-sm min-h-5 mt-3" id="promote-status"></p>
               </div>
             </section>
-            <div class="bg-slate-900/5 dark:bg-slate-900/40 rounded-2xl p-8 border-2 border-dashed border-slate-200 dark:border-slate-800">
+            <div class="bg-slate-900/5 dark:bg-slate-900/40 rounded-2xl p-8 border-2 border-dashed border-slate-200 dark:border-slate-800" id="scholarships">
               <div class="max-w-xl mx-auto text-center mb-8">
                 <span class="material-icons-outlined text-4xl text-primary/40 mb-2">add_business</span>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Quick Add Institution</h3>
-                <p class="text-sm text-slate-500">Onboard a new educational partner to the CTS ecosystem.</p>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Quick Add Account</h3>
+                <p class="text-sm text-slate-500">Create institution and other user accounts with a login email.</p>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
                 <div class="flex flex-col gap-2">
                   <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Institution Name</label>
-                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" placeholder="e.g. Oxford University" type="text" />
+                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-name" placeholder="e.g. Oxford University" type="text" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Login Email</label>
+                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-email" placeholder="institution@example.com" type="email" />
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Account Role</label>
+                  <select class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-role">
+                    <option value="college">College</option>
+                    <option value="student">Student</option>
+                    <option value="dao">DAO Member</option>
+                    <option value="admin">Admin</option>
+                  </select>
                 </div>
                 <div class="flex flex-col gap-2">
                   <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Wallet Address</label>
-                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono text-sm focus:ring-primary focus:border-primary" placeholder="0x..." type="text" />
+                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono text-sm focus:ring-primary focus:border-primary" id="new-school-wallet" placeholder="0x..." type="text" />
                 </div>
                 <div class="flex flex-col gap-2 md:col-span-2">
-                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Logo Upload</label>
-                  <div class="h-24 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 cursor-pointer transition-colors">
-                    <span class="material-icons-outlined text-slate-400">cloud_upload</span>
-                    <span class="text-xs text-slate-400">Click to upload PNG or SVG</span>
-                  </div>
+                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Temporary Password (Optional)</label>
+                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-password" placeholder="Leave blank to auto-generate" type="text" />
                 </div>
                 <div class="md:col-span-2 flex justify-end gap-3 pt-4">
-                  <button class="px-6 h-11 rounded-lg font-bold text-sm text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">Cancel</button>
-                  <button class="px-8 h-11 rounded-lg font-bold text-sm bg-accent text-white shadow-lg shadow-accent/20 hover:bg-accent/90 transition-all">Submit Registration</button>
+                  <button class="px-6 h-11 rounded-lg font-bold text-sm text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" id="new-school-cancel-btn" type="button">Cancel</button>
+                  <button class="px-8 h-11 rounded-lg font-bold text-sm bg-accent text-white shadow-lg shadow-accent/20 hover:bg-accent/90 transition-all" id="new-school-submit-btn" type="button">Submit Registration</button>
                 </div>
+                <p class="md:col-span-2 text-sm min-h-5 mt-2" id="new-school-status"></p>
+              </div>
+            </div>
+            <div id="edit-user-modal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-900/60 px-4">
+              <div class="w-full max-w-2xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+                  <h3 class="text-lg font-bold text-slate-900 dark:text-white">Edit Account</h3>
+                  <button id="edit-user-close-btn" type="button" class="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                    <span class="material-icons-outlined">close</span>
+                  </button>
+                </div>
+                <form id="edit-user-form" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="edit-username">Institution Name</label>
+                    <input id="edit-username" type="text" class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="edit-email">Login Email</label>
+                    <input id="edit-email" type="email" class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" />
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="edit-role">Role</label>
+                    <select id="edit-role" class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary">
+                      <option value="college">College</option>
+                      <option value="dao">DAO Member</option>
+                      <option value="admin">Admin</option>
+                      <option value="student">Student</option>
+                    </select>
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="edit-wallet">Wallet Address</label>
+                    <input id="edit-wallet" type="text" class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary font-mono" placeholder="0x..." />
+                  </div>
+                  <p id="edit-user-status" class="md:col-span-2 text-sm min-h-5"></p>
+                  <div class="md:col-span-2 flex justify-end gap-3">
+                    <button id="edit-user-cancel-btn" type="button" class="px-6 h-11 rounded-lg font-bold text-sm text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Cancel</button>
+                    <button type="submit" class="px-8 h-11 rounded-lg font-bold text-sm bg-primary text-white hover:bg-primary/90">Save Changes</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -414,6 +354,7 @@
       const root = document.documentElement;
       const appearanceToggle = document.getElementById("appearance-toggle");
       const appearanceIcon = document.getElementById("appearance-icon");
+      const adminTabLinks = Array.from(document.querySelectorAll(".admin-tab-link"));
       const savedTheme = localStorage.getItem("theme");
       const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -433,31 +374,658 @@
           localStorage.setItem("theme", isDark ? "dark" : "light");
         });
       }
+
+      const setActiveTab = (tabName) => {
+        adminTabLinks.forEach((link) => {
+          const isActive = link.dataset.tab === tabName;
+          link.classList.toggle("bg-white/10", isActive);
+          link.classList.toggle("text-white", isActive);
+          link.classList.toggle("text-white/70", !isActive);
+        });
+      };
+
+      const syncTabFromHash = () => {
+        const tab = (window.location.hash || "#dashboard").replace("#", "");
+        setActiveTab(tab);
+      };
+
+      window.addEventListener("hashchange", syncTabFromHash);
+      syncTabFromHash();
     </script>
-    <script>
+    <script type="module">
+      import { API_BASE_URL, CTS_OWNER_ADDRESS } from "../js/config.js";
+      import { logoutAndRedirect, refreshSessionToken } from "../js/session.js";
+      import {
+        addDaoMemberOnChain,
+        getConnectedAddress,
+        getContractOwnerAddress,
+        isDaoMemberOnChain,
+        isCollegeRegisteredOnChain,
+        isStudentRegisteredOnChain,
+        registerStudentOnChain,
+        registerCollegeOnChain,
+      } from "../js/cts-contract.js";
+
+      const authHeaders = (token = localStorage.getItem("cts_access_token")) => {
+        return {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token || ""}`,
+        };
+      };
+      const apiOrigin = (() => {
+        try {
+          return new URL(API_BASE_URL).origin;
+        } catch (_error) {
+          return "http://localhost:4000";
+        }
+      })();
+
+      const tryRefreshOrLogout = async () => {
+        const nextToken = await refreshSessionToken();
+        if (!nextToken) {
+          logoutAndRedirect("login.html");
+          return null;
+        }
+        return nextToken;
+      };
+
+      const request = async (path, options = {}, retry = true) => {
+        let response;
+        const method = (options.method || "GET").toUpperCase();
+        const fetchPath = method === "GET"
+          ? `${path}${path.includes("_ts=") ? "" : `${path.includes("?") ? "&" : "?"}_ts=${Date.now()}`}`
+          : path;
+        try {
+          response = await fetch(`${API_BASE_URL}${fetchPath}`, {
+            ...options,
+            cache: "no-store",
+            headers: {
+              ...authHeaders(),
+              ...(options.headers || {}),
+            },
+          });
+        } catch (_error) {
+          throw new Error("Cannot reach backend API. Ensure backend is running on port 4000.");
+        }
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401 && retry) {
+          const nextToken = await tryRefreshOrLogout();
+          if (!nextToken) throw new Error("Session expired. Please login again.");
+          return request(
+            path,
+            {
+              ...options,
+              cache: "no-store",
+              headers: {
+                ...authHeaders(nextToken),
+                ...(options.headers || {}),
+              },
+            },
+            false,
+          );
+        }
+        if (!response.ok) {
+          const fieldErrors = data?.details?.fieldErrors || {};
+          const firstError =
+            Object.values(fieldErrors).find((value) => Array.isArray(value) && value.length)?.[0] || "";
+          throw new Error(firstError || data?.message || "Request failed");
+        }
+        return data;
+      };
+
       const promoteForm = document.getElementById("promote-user-form");
       const promoteEmailInput = document.getElementById("promote-email");
       const promoteRoleInput = document.getElementById("promote-role");
       const promoteStatus = document.getElementById("promote-status");
+      const institutionsTbody = document.getElementById("institutions-tbody");
+      const institutionsPaginationText = document.getElementById("institutions-pagination-text");
+      const institutionsPrevBtn = document.getElementById("institutions-prev-btn");
+      const institutionsNextBtn = document.getElementById("institutions-next-btn");
+      const adminSearch = document.getElementById("admin-search");
+      const daoMembersGrid = document.getElementById("dao-members-grid");
+      const totalInstitutionsCount = document.getElementById("total-institutions-count");
+      const activeDaoCount = document.getElementById("active-dao-count");
+      const totalUsersCount = document.getElementById("total-users-count");
+      const addSchoolBtn = document.getElementById("add-school-btn");
+      const grantDaoBtn = document.getElementById("grant-dao-btn");
+      const newSchoolName = document.getElementById("new-school-name");
+      const newSchoolEmail = document.getElementById("new-school-email");
+      const newSchoolRole = document.getElementById("new-school-role");
+      const newSchoolWallet = document.getElementById("new-school-wallet");
+      const newSchoolPassword = document.getElementById("new-school-password");
+      const newSchoolSubmitBtn = document.getElementById("new-school-submit-btn");
+      const newSchoolCancelBtn = document.getElementById("new-school-cancel-btn");
+      const newSchoolStatus = document.getElementById("new-school-status");
+      const editUserModal = document.getElementById("edit-user-modal");
+      const editUserForm = document.getElementById("edit-user-form");
+      const editUserStatus = document.getElementById("edit-user-status");
+      const editUserCloseBtn = document.getElementById("edit-user-close-btn");
+      const editUserCancelBtn = document.getElementById("edit-user-cancel-btn");
+      const editUsernameInput = document.getElementById("edit-username");
+      const editEmailInput = document.getElementById("edit-email");
+      const editRoleInput = document.getElementById("edit-role");
+      const editWalletInput = document.getElementById("edit-wallet");
 
-      const setPromoteStatus = (message, isError = false) => {
-        if (!promoteStatus) return;
-        promoteStatus.textContent = message;
-        promoteStatus.className = `text-sm min-h-5 mt-3 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+      let page = 1;
+      const limit = 10;
+      let searchQuery = "";
+      let usersByEmail = new Map();
+      let usersById = new Map();
+      let editingUserId = "";
+      const accessToken = localStorage.getItem("cts_access_token");
+
+      if (!accessToken) {
+        window.location.href = "login.html";
+      }
+
+      const setStatus = (el, message, isError = false) => {
+        if (!el) return;
+        el.textContent = message;
+        el.className = `text-sm min-h-5 mt-3 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
       };
 
-      promoteForm?.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const email = promoteEmailInput?.value?.trim();
-        const role = promoteRoleInput?.value || "";
-        if (!email) {
-          setPromoteStatus("Please enter the user email.", true);
+      const setEditStatus = (message, isError = false) => {
+        if (!editUserStatus) return;
+        editUserStatus.textContent = message;
+        editUserStatus.className = `md:col-span-2 text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+      };
+
+      const openEditModal = (user) => {
+        if (!user || !editUserModal) return;
+        editingUserId = user.id;
+        if (editUsernameInput) editUsernameInput.value = user.username || "";
+        if (editEmailInput) editEmailInput.value = user.email || "";
+        if (editRoleInput) editRoleInput.value = user.role || "college";
+        if (editWalletInput) editWalletInput.value = user.walletAddress || "";
+        setEditStatus("");
+        editUserModal.classList.remove("hidden");
+        editUserModal.classList.add("flex");
+      };
+
+      const closeEditModal = () => {
+        editingUserId = "";
+        setEditStatus("");
+        if (!editUserModal) return;
+        editUserModal.classList.add("hidden");
+        editUserModal.classList.remove("flex");
+      };
+
+      const shortAddress = (address) => {
+        if (!address) return "N/A";
+        return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+      };
+
+      const createInstitutionRow = (user) => {
+        const initials = (user.username || user.email || "U").slice(0, 2).toUpperCase();
+        const avatar = `<div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold">${initials}</div>`;
+        const statusChip = user.isActive
+          ? '<span class="px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-tighter">Active</span>'
+          : '<span class="px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-tighter">Inactive</span>';
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors" data-user-id="${user.id}">
+            <td class="px-6 py-5">
+              <div class="flex items-center gap-4">
+                ${avatar}
+                <div>
+                  <p class="font-bold text-slate-900 dark:text-white">${user.username}</p>
+                  <p class="text-xs text-slate-400">${user.email}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-5 font-mono text-xs text-slate-500 dark:text-slate-400">${shortAddress(user.walletAddress)}</td>
+            <td class="px-6 py-5">${statusChip}</td>
+            <td class="px-6 py-5 text-slate-700 dark:text-slate-300 font-medium">${user.role}</td>
+            <td class="px-6 py-5 text-right">
+              <button class="p-2 text-slate-400 hover:text-primary transition-colors js-edit-user" data-user-id="${user.id}" title="Edit Role"><span class="material-icons-outlined">edit</span></button>
+              <button class="p-2 text-slate-400 hover:text-emerald-600 transition-colors js-register-college-chain" data-user-id="${user.id}" title="Register On-Chain" ${user.walletAddress ? "" : "disabled"}>
+                <span class="material-icons-outlined">link</span>
+              </button>
+              <button class="p-2 text-slate-400 hover:text-red-500 transition-colors js-deactivate-user" data-user-id="${user.id}" title="Delete"><span class="material-icons-outlined">delete</span></button>
+            </td>
+          </tr>
+        `;
+      };
+
+      const renderDaoCards = (daoUsers) => {
+        if (!daoMembersGrid) return;
+        if (!daoUsers.length) {
+          daoMembersGrid.innerHTML = '<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 text-sm text-slate-500">No DAO members found.</div>';
           return;
         }
-        setPromoteStatus(`Role change queued locally: ${email} -> ${role}.`);
+        daoMembersGrid.innerHTML = daoUsers
+          .slice(0, 9)
+          .map(
+            (user) => `
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-primary/40 transition-colors relative group">
+              <div class="flex items-start justify-between mb-4">
+                <div class="bg-primary/10 p-3 rounded-lg text-primary"><span class="material-icons-outlined">verified_user</span></div>
+                <span class="bg-slate-100 dark:bg-slate-800 text-[10px] font-bold px-2 py-1 rounded text-slate-500">DAO MEMBER</span>
+              </div>
+              <h4 class="font-bold text-slate-900 dark:text-white mb-1">${user.username}</h4>
+              <p class="text-xs text-slate-400 mb-4 font-mono truncate">${shortAddress(user.walletAddress)}</p>
+              <div class="flex justify-between items-end border-t border-slate-100 dark:border-slate-800 pt-4">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Status</span>
+                  <span class="text-primary font-bold">${user.isActive ? "Active" : "Inactive"}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button class="text-xs font-bold text-accent hover:underline flex items-center gap-1 js-edit-user" data-user-id="${user.id}">Manage Access <span class="material-icons-outlined text-sm">chevron_right</span></button>
+                  <button class="text-xs font-bold text-red-500 hover:underline flex items-center gap-1 js-deactivate-user" data-user-id="${user.id}">Delete <span class="material-icons-outlined text-sm">delete</span></button>
+                </div>
+              </div>
+            </div>`
+          )
+          .join("");
+      };
+
+      const fetchUsers = async () => {
+        const [lookupData, institutionsData, daoData, activeDaoData, usersTotalData] = await Promise.all([
+          request(`/admin/users?page=1&limit=100&q=${encodeURIComponent(searchQuery)}`),
+          request(`/admin/users?page=${page}&limit=${limit}&role=college&q=${encodeURIComponent(searchQuery)}`),
+          request(`/admin/users?page=1&limit=20&role=dao&q=${encodeURIComponent(searchQuery)}`),
+          request("/admin/users?page=1&limit=1&role=dao&isActive=true"),
+          request("/admin/users?page=1&limit=1"),
+        ]);
+
+        const allUsers = lookupData.items || [];
+        usersByEmail = new Map(allUsers.map((u) => [u.email.toLowerCase(), u]));
+        usersById = new Map(allUsers.map((u) => [u.id, u]));
+        const institutions = institutionsData.items || [];
+        const daoUsers = daoData.items || [];
+
+        if (institutionsTbody) {
+          institutionsTbody.innerHTML = institutions.length
+            ? institutions.map(createInstitutionRow).join("")
+            : '<tr><td class="px-6 py-8 text-sm text-slate-500" colspan="5">No institutions found.</td></tr>';
+        }
+
+        if (institutionsPaginationText) {
+          institutionsPaginationText.textContent = `Showing ${institutions.length} of ${institutionsData.total || 0} registered colleges`;
+        }
+
+        if (institutionsPrevBtn) institutionsPrevBtn.disabled = page <= 1;
+        if (institutionsNextBtn) institutionsNextBtn.disabled = (page * limit) >= (institutionsData.total || 0);
+
+        if (totalInstitutionsCount) totalInstitutionsCount.textContent = `${institutionsData.total || 0}`;
+        if (activeDaoCount) activeDaoCount.textContent = `${activeDaoData.total || 0}`;
+        if (totalUsersCount) totalUsersCount.textContent = `${usersTotalData.total || 0}`;
+
+        renderDaoCards(daoUsers);
+      };
+
+      const updateUserRoleById = async (id, role) =>
+        request(`/admin/users/${id}/role`, {
+          method: "PATCH",
+          body: JSON.stringify({ role }),
+        });
+
+      const updateUserById = async (id, payload) =>
+        request(`/admin/users/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify(payload),
+        });
+
+      const deleteUserById = async (id) => request(`/admin/users/${id}`, { method: "DELETE" });
+
+      const createAdminUser = async ({ username, email, role, walletAddress, password }) => {
+        const trimmedPassword = (password || "").trim();
+        return request("/admin/users", {
+          method: "POST",
+          body: JSON.stringify({
+            email,
+            username,
+            role: role || "college",
+            walletAddress: walletAddress || null,
+            password: trimmedPassword || undefined,
+          }),
+        });
+      };
+
+      const registerCollegeWalletOnChain = async (user) => {
+        if (!user?.walletAddress) {
+          throw new Error("This institution has no wallet address.");
+        }
+        await ensureContractOwnerConnected();
+        const alreadyRegistered = await isCollegeRegisteredOnChain(user.walletAddress);
+        if (alreadyRegistered) {
+          return { alreadyRegistered: true };
+        }
+        const txHash = await registerCollegeOnChain({
+          walletAddress: user.walletAddress,
+          collegeName: user.username || "College",
+        });
+        return { alreadyRegistered: false, txHash };
+      };
+
+      const ensureContractOwnerConnected = async () => {
+        const [connected, contractOwner] = await Promise.all([
+          getConnectedAddress(),
+          getContractOwnerAddress(),
+        ]);
+        const configuredOwner = String(CTS_OWNER_ADDRESS || "").toLowerCase();
+        const connectedLower = connected.toLowerCase();
+        const contractOwnerLower = String(contractOwner || "").toLowerCase();
+        if (connectedLower !== contractOwnerLower) {
+          const configuredInfo = configuredOwner
+            ? ` Configured admin wallet: ${CTS_OWNER_ADDRESS}.`
+            : "";
+          throw new Error(
+            `Wrong MetaMask account selected. Connected: ${connected}. Contract owner: ${contractOwner}.${configuredInfo} Switch account in MetaMask and retry.`
+          );
+        }
+        return { connected, contractOwner };
+      };
+
+      const ensureDaoMemberWalletOnChain = async (user) => {
+        if (!user?.walletAddress) {
+          throw new Error("DAO user must have a wallet address to be added on-chain.");
+        }
+        await ensureContractOwnerConnected();
+        const alreadyDao = await isDaoMemberOnChain(user.walletAddress);
+        if (alreadyDao) {
+          return { alreadyRegistered: true };
+        }
+        const txHash = await addDaoMemberOnChain(user.walletAddress);
+        return { alreadyRegistered: false, txHash };
+      };
+
+      promoteForm?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const email = promoteEmailInput?.value?.trim().toLowerCase();
+        const role = promoteRoleInput?.value || "";
+        if (!email) {
+          setStatus(promoteStatus, "Please enter the user email.", true);
+          return;
+        }
+        const user = usersByEmail.get(email);
+        if (!user) {
+          setStatus(promoteStatus, "User not found in current list. Use search and retry.", true);
+          return;
+        }
+        try {
+          const roleResult = await updateUserRoleById(user.id, role);
+          let onChainMessage = "";
+          if (role === "dao") {
+            const targetUser = roleResult?.user || user;
+            const daoResult = await ensureDaoMemberWalletOnChain(targetUser);
+            onChainMessage = daoResult.alreadyRegistered
+              ? " DAO wallet already registered on-chain."
+              : ` DAO wallet added on-chain (Tx: ${daoResult.txHash.slice(0, 10)}...).`;
+          }
+          setStatus(promoteStatus, `Role updated: ${email} -> ${role}.${onChainMessage}`);
+          await fetchUsers();
+        } catch (error) {
+          setStatus(promoteStatus, error.message || "Failed to update role.", true);
+        }
+      });
+
+      institutionsTbody?.addEventListener("click", async (event) => {
+        const editBtn = event.target.closest(".js-edit-user");
+        const registerBtn = event.target.closest(".js-register-college-chain");
+        const deactivateBtn = event.target.closest(".js-deactivate-user");
+        if (editBtn) {
+          const id = editBtn.dataset.userId;
+          if (!id) return;
+          const user = usersById.get(id);
+          if (!user) {
+            setStatus(promoteStatus, "User not found in current list. Refresh and retry.", true);
+            return;
+          }
+          openEditModal(user);
+        }
+        if (registerBtn) {
+          const id = registerBtn.dataset.userId;
+          if (!id) return;
+          const user = usersById.get(id);
+          if (!user) {
+            setStatus(promoteStatus, "User not found in current list. Refresh and retry.", true);
+            return;
+          }
+          registerBtn.disabled = true;
+          try {
+            const result = await registerCollegeWalletOnChain(user);
+            if (result.alreadyRegistered) {
+              setStatus(promoteStatus, `${user.username} is already registered on-chain.`);
+            } else {
+              setStatus(promoteStatus, `${user.username} registered on-chain. Tx: ${result.txHash.slice(0, 10)}...`);
+            }
+          } catch (error) {
+            setStatus(promoteStatus, error.message || "Failed to register college on-chain.", true);
+          } finally {
+            registerBtn.disabled = false;
+          }
+        }
+        if (deactivateBtn) {
+          const id = deactivateBtn.dataset.userId;
+          if (!id || !confirm("Delete this institution account permanently?")) return;
+          try {
+            await deleteUserById(id);
+            await fetchUsers();
+          } catch (error) {
+            setStatus(promoteStatus, error.message || "Failed to delete user.", true);
+          }
+        }
+      });
+
+      daoMembersGrid?.addEventListener("click", async (event) => {
+        const editBtn = event.target.closest(".js-edit-user");
+        const deactivateBtn = event.target.closest(".js-deactivate-user");
+
+        if (editBtn) {
+          const id = editBtn.dataset.userId;
+          if (!id) return;
+          const user = usersById.get(id);
+          if (!user) {
+            setStatus(promoteStatus, "User not found in current list. Refresh and retry.", true);
+            return;
+          }
+          openEditModal(user);
+        }
+
+        if (deactivateBtn) {
+          const id = deactivateBtn.dataset.userId;
+          if (!id || !confirm("Delete this DAO member account permanently?")) return;
+          try {
+            await deleteUserById(id);
+            await fetchUsers();
+          } catch (error) {
+            setStatus(promoteStatus, error.message || "Failed to delete user.", true);
+          }
+        }
+      });
+
+      institutionsPrevBtn?.addEventListener("click", async () => {
+        if (page <= 1) return;
+        page -= 1;
+        await fetchUsers();
+      });
+
+      institutionsNextBtn?.addEventListener("click", async () => {
+        page += 1;
+        await fetchUsers();
+      });
+
+      adminSearch?.addEventListener("input", async (event) => {
+        searchQuery = event.target.value.trim();
+        page = 1;
+        await fetchUsers();
+      });
+
+      addSchoolBtn?.addEventListener("click", () => {
+        window.location.hash = "#scholarships";
+        newSchoolName?.focus();
+      });
+
+      grantDaoBtn?.addEventListener("click", () => {
+        window.location.hash = "#settings";
+        if (promoteRoleInput) promoteRoleInput.value = "dao";
+        promoteEmailInput?.focus();
+      });
+
+      editUserCloseBtn?.addEventListener("click", closeEditModal);
+      editUserCancelBtn?.addEventListener("click", closeEditModal);
+      editUserModal?.addEventListener("click", (event) => {
+        if (event.target === editUserModal) closeEditModal();
+      });
+      editUserForm?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!editingUserId) {
+          setEditStatus("No user selected.", true);
+          return;
+        }
+
+        const username = editUsernameInput?.value?.trim() || "";
+        const email = editEmailInput?.value?.trim().toLowerCase() || "";
+        const role = editRoleInput?.value || "";
+        const walletAddress = editWalletInput?.value?.trim() || "";
+
+        if (!username) {
+          setEditStatus("Institution name is required.", true);
+          return;
+        }
+        if (!email) {
+          setEditStatus("Login email is required.", true);
+          return;
+        }
+        if (!role) {
+          setEditStatus("Role is required.", true);
+          return;
+        }
+
+        try {
+          const result = await updateUserById(editingUserId, {
+            username,
+            email,
+            role,
+            walletAddress: walletAddress || null,
+          });
+          const updated = result?.user;
+          let onChainMessage = "";
+          if (role === "dao" && updated) {
+            const daoResult = await ensureDaoMemberWalletOnChain(updated);
+            onChainMessage = daoResult.alreadyRegistered
+              ? " DAO wallet already registered on-chain."
+              : ` DAO wallet added on-chain (Tx: ${daoResult.txHash.slice(0, 10)}...).`;
+          }
+          if (updated?.id) {
+            usersById.set(updated.id, updated);
+            if (updated.email) usersByEmail.set(updated.email.toLowerCase(), updated);
+          }
+          closeEditModal();
+          setStatus(promoteStatus, `User updated successfully.${onChainMessage}`);
+          await fetchUsers();
+        } catch (error) {
+          setEditStatus(error.message || "Failed to update user.", true);
+        }
+      });
+
+      newSchoolCancelBtn?.addEventListener("click", () => {
+        if (newSchoolName) newSchoolName.value = "";
+        if (newSchoolEmail) newSchoolEmail.value = "";
+        if (newSchoolRole) newSchoolRole.value = "college";
+        if (newSchoolWallet) newSchoolWallet.value = "";
+        if (newSchoolPassword) newSchoolPassword.value = "";
+        setStatus(newSchoolStatus, "");
+      });
+
+      newSchoolSubmitBtn?.addEventListener("click", async () => {
+        const username = newSchoolName?.value?.trim() || "";
+        const email = newSchoolEmail?.value?.trim().toLowerCase() || "";
+        const role = newSchoolRole?.value || "college";
+        const walletAddress = newSchoolWallet?.value?.trim() || "";
+        const password = newSchoolPassword?.value?.trim() || "";
+        if (!username) {
+          setStatus(newSchoolStatus, "Institution name is required.", true);
+          return;
+        }
+        if (!email) {
+          setStatus(newSchoolStatus, "Login email is required.", true);
+          return;
+        }
+        if (password && password.length < 8) {
+          setStatus(newSchoolStatus, "Temporary password must be at least 8 characters.", true);
+          return;
+        }
+        try {
+          const created = await createAdminUser({ username, email, role, walletAddress, password });
+          const emailInfo = created.tempPasswordEmail || {};
+          const passwordMessage = created.generatedPassword
+            ? (emailInfo.sent
+              ? "Temporary password was sent by email."
+              : (emailInfo.reason === "smtp_not_configured"
+                ? `SMTP not configured. Temporary password: ${created.generatedPassword}`
+                : `Email send failed. Temporary password: ${created.generatedPassword}`))
+            : "User created with provided password.";
+          let chainMessage = "";
+          if (role === "college" && created?.user?.walletAddress) {
+            try {
+              const chainResult = await registerCollegeWalletOnChain(created.user);
+              chainMessage = chainResult.alreadyRegistered
+                ? " College wallet is already registered on-chain."
+                : ` College wallet registered on-chain (Tx: ${chainResult.txHash.slice(0, 10)}...).`;
+            } catch (chainError) {
+              chainMessage = ` On-chain college registration skipped: ${chainError.message || "failed"}`;
+            }
+          } else if (role === "dao" && created?.user?.walletAddress) {
+            try {
+              await ensureContractOwnerConnected();
+              const alreadyDao = await isDaoMemberOnChain(created.user.walletAddress);
+              if (alreadyDao) {
+                chainMessage = " DAO wallet is already registered on-chain.";
+              } else {
+                const txHash = await addDaoMemberOnChain(created.user.walletAddress);
+                chainMessage = ` DAO wallet registered on-chain (Tx: ${txHash.slice(0, 10)}...).`;
+              }
+            } catch (chainError) {
+              chainMessage = ` On-chain DAO registration skipped: ${chainError.message || "failed"}`;
+            }
+          } else if (role === "student" && created?.user?.walletAddress) {
+            try {
+              await ensureContractOwnerConnected();
+              const alreadyStudent = await isStudentRegisteredOnChain(created.user.walletAddress);
+              if (alreadyStudent) {
+                chainMessage = " Student wallet is already registered on-chain.";
+              } else {
+                const txHash = await registerStudentOnChain(
+                  created.user.walletAddress,
+                  created.user.username || username
+                );
+                chainMessage = ` Student wallet registered on-chain (Tx: ${txHash.slice(0, 10)}...).`;
+              }
+            } catch (chainError) {
+              chainMessage = ` On-chain student registration skipped: ${chainError.message || "failed"}`;
+            }
+          }
+          setStatus(
+            newSchoolStatus,
+            `${(created.user?.role || role).toUpperCase()} account created. ${passwordMessage}${chainMessage}`
+          );
+          if (newSchoolName) newSchoolName.value = "";
+          if (newSchoolEmail) newSchoolEmail.value = "";
+          if (newSchoolRole) newSchoolRole.value = "college";
+          if (newSchoolWallet) newSchoolWallet.value = "";
+          if (newSchoolPassword) newSchoolPassword.value = "";
+          await fetchUsers();
+          window.location.hash = "#institutions";
+          if ((created.user?.role || role) === "admin") {
+            window.location.reload();
+            return;
+          }
+        } catch (error) {
+          setStatus(newSchoolStatus, error.message || "Failed to create institution.", true);
+        }
+      });
+
+      fetchUsers().catch((error) => {
+        if (institutionsTbody) {
+          institutionsTbody.innerHTML = `<tr><td class="px-6 py-8 text-sm text-red-600" colspan="5">${error.message || "Failed to load admin data."}</td></tr>`;
+        }
       });
     </script>
-  </body>
+  <script type="module">
+  import { requireSession } from "../js/session.js";
+  requireSession({ roles: ["admin"] });
+</script></body>
 </html>
 
 

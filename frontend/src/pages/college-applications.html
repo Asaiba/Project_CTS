@@ -79,40 +79,203 @@
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">College Admin Workspace</p>
     <h1 class="text-3xl font-display font-bold mt-2">Student Applications</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the college admin dashboard flow.</p>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">Review applicants and approve to pre-fill funding details for DAO proposal publishing.</p>
   </header>
 
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</p>
-      <p class="text-2xl font-bold mt-2">Active</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Live static page with aligned navigation.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Total</p>
+      <p class="text-2xl font-bold mt-2" id="summary-total">0</p>
     </article>
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Updated</p>
-      <p class="text-2xl font-bold mt-2">Feb 23, 2026</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Prepared for complete dashboard routing.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Pending</p>
+      <p class="text-2xl font-bold mt-2 text-amber-600 dark:text-amber-400" id="summary-pending">0</p>
     </article>
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Next Action</p>
-      <p class="text-2xl font-bold mt-2">Connect Data</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Hook forms and blockchain calls per module.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Approved</p>
+      <p class="text-2xl font-bold mt-2 text-emerald-600 dark:text-emerald-400" id="summary-approved">0</p>
     </article>
   </section>
 
   <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-    <h2 class="text-xl font-bold mb-4">Module Notes</h2>
-    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Sidebar navigation now links to real pages for this role.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Theme toggle and global visual language are consistent with existing dashboards.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Ready for incremental feature implementation without broken routes.</span></li>
-    </ul>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold">Applications List</h2>
+      <a class="text-sm text-primary font-semibold hover:underline" href="college-dashboard.html">Go to DAO Publish Form</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-primary text-white">
+          <tr>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Student</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Email</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Wallet</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Funding Title</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Funding Description</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Applied</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Status</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="applications-table-body">
+          <tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="8">Loading applications...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm min-h-5 mt-3" id="applications-status"></p>
   </section>
 </main>
 </div>
-</body>
+<script type="module">
+  import { API_BASE_URL } from "../js/config.js";
+  import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
+  requireSession({ roles: ["college"] });
+
+  const tableBody = document.getElementById("applications-table-body");
+  const statusEl = document.getElementById("applications-status");
+  const totalEl = document.getElementById("summary-total");
+  const pendingEl = document.getElementById("summary-pending");
+  const approvedEl = document.getElementById("summary-approved");
+  const approvedPrefillKey = "cts_college_approved_application_prefill";
+
+  const setStatus = (message, isError = false) => {
+    if (!statusEl) return;
+    statusEl.textContent = message || "";
+    statusEl.className = `text-sm min-h-5 mt-3 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+  };
+
+  const shortAddress = (address) => {
+    if (!address) return "No wallet";
+    return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  };
+
+  const statusPill = (status) => {
+    if (status === "approved") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">APPROVED</span>';
+    if (status === "rejected") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">REJECTED</span>';
+    return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">PENDING</span>';
+  };
+
+  const authFetch = async (path, options = {}, retry = true) => {
+    let token = localStorage.getItem("cts_access_token") || "";
+    let response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+    });
+    if (response.status === 401 && retry) {
+      token = await refreshSessionToken();
+      if (!token) {
+        logoutAndRedirect("login.html");
+        throw new Error("Session expired");
+      }
+      return authFetch(path, options, false);
+    }
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data?.message || "Request failed");
+    return data;
+  };
+
+  const approveAndPrefill = async (item) => {
+    await authFetch(`/applications/${item.id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "approved" }),
+    });
+    localStorage.setItem(approvedPrefillKey, JSON.stringify({
+      applicationId: item.id,
+      studentWallet: item.student?.walletAddress || "",
+      title: item.title || item.message || "",
+      description: item.description || "",
+    }));
+    window.location.href = "college-dashboard.html#proposal";
+  };
+
+  const renderTable = (items = []) => {
+    if (!items.length) {
+      tableBody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="8">No applications found.</td></tr>';
+      return;
+    }
+    tableBody.innerHTML = items.map((item) => {
+      const student = item.student || {};
+      const title = (item.title || item.message || "Untitled funding").trim();
+      const description = (item.description || "No description provided.").trim();
+      const canApprove = item.status === "pending";
+      return `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+          <td class="px-4 py-4 text-sm font-semibold">${student.username || "-"}</td>
+          <td class="px-4 py-4 text-sm text-slate-500">${student.email || "-"}</td>
+          <td class="px-4 py-4 text-xs font-mono text-slate-500">${shortAddress(student.walletAddress)}</td>
+          <td class="px-4 py-4 text-sm font-medium">${title}</td>
+          <td class="px-4 py-4 text-sm text-slate-500">${description}</td>
+          <td class="px-4 py-4 text-sm text-slate-500">${new Date(item.createdAt).toLocaleString()}</td>
+          <td class="px-4 py-4">${statusPill(item.status)}</td>
+          <td class="px-4 py-4 text-right">
+            <div class="inline-flex items-center gap-2">
+              <button class="approve-prefill-btn px-3 py-1.5 rounded text-xs font-semibold ${canApprove ? "bg-emerald-600 text-white hover:bg-emerald-500" : "bg-slate-300 text-slate-600 cursor-not-allowed"}" data-app-id="${item.id}" ${canApprove ? "" : "disabled"}>
+                ${canApprove ? "Approve -> DAO" : "Approved"}
+              </button>
+              <button class="deny-application-btn px-3 py-1.5 rounded text-xs font-semibold ${canApprove ? "bg-red-600 text-white hover:bg-red-500" : "bg-slate-300 text-slate-600 cursor-not-allowed"}" data-app-id="${item.id}" ${canApprove ? "" : "disabled"}>
+                ${canApprove ? "Deny" : (item.status === "rejected" ? "Denied" : "Deny")}
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  };
+
+  const load = async () => {
+    try {
+      setStatus("");
+      const data = await authFetch("/applications/college?limit=100");
+      const items = data.items || [];
+      const summary = data.summary || {};
+      totalEl.textContent = String(summary.total || items.length || 0);
+      pendingEl.textContent = String(summary.pending || 0);
+      approvedEl.textContent = String(summary.approved || 0);
+      renderTable(items);
+
+      tableBody.querySelectorAll(".approve-prefill-btn").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const appId = button.getAttribute("data-app-id");
+          const item = items.find((row) => row.id === appId);
+          if (!item || item.status !== "pending") return;
+          button.disabled = true;
+          try {
+            await approveAndPrefill(item);
+          } catch (error) {
+            button.disabled = false;
+            setStatus(error.message || "Failed to approve application.", true);
+          }
+        });
+      });
+      tableBody.querySelectorAll(".deny-application-btn").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const appId = button.getAttribute("data-app-id");
+          const item = items.find((row) => row.id === appId);
+          if (!item || item.status !== "pending") return;
+          const confirmed = window.confirm("Deny this application?");
+          if (!confirmed) return;
+          button.disabled = true;
+          try {
+            await authFetch(`/applications/${item.id}/status`, {
+              method: "PATCH",
+              body: JSON.stringify({ status: "rejected" }),
+            });
+            setStatus("Application denied.");
+            await load();
+          } catch (error) {
+            button.disabled = false;
+            setStatus(error.message || "Failed to deny application.", true);
+          }
+        });
+      });
+    } catch (error) {
+      tableBody.innerHTML = `<tr><td class="px-4 py-4 text-sm text-red-600 dark:text-red-400" colspan="8">${error.message || "Failed to load applications."}</td></tr>`;
+    }
+  };
+
+  load();
+</script></body>
 </html>
-
-
-
-

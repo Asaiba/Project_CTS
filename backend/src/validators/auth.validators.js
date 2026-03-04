@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const roleSchema = z.enum(["student", "donor", "college", "dao", "admin"]);
+const roleSchema = z.enum(["student", "college", "dao", "admin"]);
 
 export const registerSchema = z.object({
   body: z.object({
@@ -8,7 +8,7 @@ export const registerSchema = z.object({
     username: z.string().min(2).max(60),
     password: z.string().min(8).max(120),
     role: roleSchema.default("student"),
-    walletAddress: z.string().trim().min(2).max(120).optional().nullable(),
+    walletAddress: z.string().trim().min(4).max(120),
   }),
   query: z.object({}).optional(),
   params: z.object({}).optional(),
@@ -18,6 +18,7 @@ export const loginSchema = z.object({
   body: z.object({
     email: z.string().email(),
     password: z.string().min(1),
+    walletAddress: z.string().trim().min(4),
   }),
   query: z.object({}).optional(),
   params: z.object({}).optional(),

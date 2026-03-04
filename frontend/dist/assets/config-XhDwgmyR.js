@@ -1,0 +1,1 @@
+const a=typeof window<"u"&&window.location.hostname==="127.0.0.1"?"127.0.0.1":"localhost",o=`http://${a}:4000/api`,t=o,s="0x1d7Cd344a17A70E24779B7e7040Fb3386D5623B0",d="0x52a176d6059b65daf15de8a047daf749ef457ec4";export{t as A,d as C,s as a};

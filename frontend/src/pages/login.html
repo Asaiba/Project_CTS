@@ -247,6 +247,7 @@
         setWalletStatus(false);
     </script>
 <script type="module">
+        import { assertContractDeployed, getCtsContractAddress, shortAddress } from "../js/contract.js";
         import { forgotPassword, loginUser, loginWithGoogle, loginWithWallet, roleDashboard, saveAuthSession } from "../js/api.js";
 
         const loginForm = document.getElementById("login-form");
@@ -263,6 +264,11 @@
             if (!loginStatus) return;
             loginStatus.textContent = message;
             loginStatus.className = `text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+        }
+
+        async function ensureContractConnection() {
+            const deployed = await assertContractDeployed(window.ethereum);
+            setStatus(`Connected to CTS contract ${shortAddress(deployed.address)}.`);
         }
 
         function initGoogleLogin() {
@@ -284,9 +290,24 @@
                         setStatus("Google login failed.", true);
                         return;
                     }
-                    setStatus("Signing in with Google...");
+                    setStatus("Connecting wallet...");
                     try {
+                        const connectedWallet = await window.connectWalletForCts?.();
+                        if (!connectedWallet) {
+                            setStatus("Wallet connection failed.", true);
+                            return;
+                        }
+                        setStatus("Signing in with Google...");
                         const data = await loginWithGoogle({ idToken });
+                        const registeredWallet = data?.user?.walletAddress || "";
+                        if (!registeredWallet) {
+                            setStatus("Google account exists but has no linked wallet. Use email login first.", true);
+                            return;
+                        }
+                        if (connectedWallet.toLowerCase() !== registeredWallet.toLowerCase()) {
+                            setStatus("Connected wallet does not match your registered wallet.", true);
+                            return;
+                        }
                         saveAuthSession(data);
                         window.location.href = roleDashboard(data?.user?.role);
                     } catch (error) {
@@ -308,22 +329,23 @@
             event.preventDefault();
             const email = document.getElementById("email")?.value?.trim() || "";
             const password = passwordInput?.value || "";
-            setStatus("Signing in...");
+            setStatus("Connecting wallet...");
             try {
-                const data = await loginUser({ email, password });
+                const connectedWallet = await window.connectWalletForCts?.();
+                if (!connectedWallet) {
+                    setStatus("Wallet connection failed.", true);
+                    return;
+                }
+                setStatus("Signing in...");
+                const data = await loginUser({ email, password, walletAddress: connectedWallet });
                 saveAuthSession(data);
                 const registeredWallet = data?.user?.walletAddress || "";
                 if (registeredWallet) {
-                    setStatus("Credentials verified. Connecting wallet...");
-                    const connectedWallet = await window.connectWalletForCts?.();
-                    if (!connectedWallet) {
-                        setStatus("Wallet connection failed.", true);
-                        return;
-                    }
                     if (connectedWallet.toLowerCase() !== registeredWallet.toLowerCase()) {
                         setStatus("Connected wallet does not match your registered wallet.", true);
                         return;
                     }
+                    await ensureContractConnection();
                 }
                 window.location.href = roleDashboard(data?.user?.role);
             } catch (error) {
@@ -354,6 +376,7 @@
                     setStatus("Wallet connection failed.", true);
                     return;
                 }
+                await ensureContractConnection();
                 setStatus("Signing in with wallet...");
                 const data = await loginWithWallet({ walletAddress });
                 saveAuthSession(data);
@@ -372,6 +395,7 @@
         });
 
         initGoogleLogin();
+        window.CTS_CONTRACT_ADDRESS = getCtsContractAddress();
     </script>
 </body></html>
 
