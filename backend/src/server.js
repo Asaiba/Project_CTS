@@ -1,9 +1,10 @@
-import { env } from "./config/env.js";
 import { prisma } from "./lib/prisma.js";
 import { app } from "./app.js";
 
-const server = app.listen(env.port, () => {
-  console.log(`CTS backend listening on http://localhost:${env.port}`);
+const PORT = process.env.PORT || 4000;
+
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 const shutdown = async () => {
