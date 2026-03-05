@@ -6,12 +6,10 @@ services:
     postgresMajorVersion: "16"
 
   - type: web
-    name: cts-api
-    runtime: node
+    name: cts-app
+    runtime: docker
     plan: free
-    rootDir: backend
-    buildCommand: npm ci && npx prisma generate
-    startCommand: npx prisma migrate deploy && npm run start
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
@@ -57,13 +55,3 @@ services:
       name: cts-uploads
       mountPath: /var/data
       sizeGB: 1
-
-  - type: static
-    name: cts-frontend
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: dist
-    pullRequestPreviewsEnabled: false
-    envVars:
-      - key: VITE_API_BASE_URL
-        sync: false
