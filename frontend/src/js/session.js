@@ -1,7 +1,8 @@
+import { API_BASE_URL } from "./config.js";
+
 const ACCESS_TOKEN_KEY = "cts_access_token";
 const REFRESH_TOKEN_KEY = "cts_refresh_token";
 const USER_KEY = "cts_user";
-const API_BASE_URL = "http://localhost:4000/api";
 
 const ROLE_DASHBOARD = {
   student: "student-dashboard.html",
