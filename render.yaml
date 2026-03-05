@@ -3,7 +3,6 @@ services:
     name: cts-db
     plan: free
     ipAllowList: []
-    postgresMajorVersion: "16"
 
   - type: web
     name: cts-app
