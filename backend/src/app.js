@@ -54,13 +54,16 @@ app.use("/api", apiRouter);
 
 const frontendDistDir = path.resolve(__dirname, "../../frontend/dist");
 if (fs.existsSync(frontendDistDir)) {
+  const frontendEntryFile = fs.existsSync(path.join(frontendDistDir, "index.html"))
+    ? path.join(frontendDistDir, "index.html")
+    : path.join(frontendDistDir, "Index.html");
   app.use(express.static(frontendDistDir));
   app.get("*", (req, res, next) => {
     if (req.path.startsWith("/api") || req.path.startsWith("/uploads")) {
       next();
       return;
     }
-    res.sendFile(path.join(frontendDistDir, "index.html"));
+    res.sendFile(frontendEntryFile);
   });
 }
 
