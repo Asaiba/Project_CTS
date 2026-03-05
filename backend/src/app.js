@@ -52,5 +52,17 @@ app.use("/uploads", express.static(uploadDir));
 
 app.use("/api", apiRouter);
 
+const frontendDistDir = path.resolve(__dirname, "../../frontend/dist");
+if (fs.existsSync(frontendDistDir)) {
+  app.use(express.static(frontendDistDir));
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api") || req.path.startsWith("/uploads")) {
+      next();
+      return;
+    }
+    res.sendFile(path.join(frontendDistDir, "index.html"));
+  });
+}
+
 app.use(notFound);
 app.use(errorHandler);
