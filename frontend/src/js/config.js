@@ -1,6 +1,5 @@
-const host =
-  typeof window !== "undefined" && window.location.hostname === "127.0.0.1" ? "127.0.0.1" : "localhost";
-const defaultApiBaseUrl = `http://${host}:4000/api`;
+const defaultApiBaseUrl =
+  typeof window !== "undefined" ? `${window.location.origin}/api` : "http://localhost:4000/api";
 const configuredApiBaseUrl =
   (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_BASE_URL) || "";
 
