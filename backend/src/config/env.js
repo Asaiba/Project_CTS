@@ -10,12 +10,19 @@ const must = (name, fallback = "") => {
   return value;
 };
 
-const configuredOrigins = (process.env.FRONTEND_ORIGIN || "http://localhost:5173")
+const configuredOrigins = (process.env.FRONTEND_ORIGIN || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const frontendOrigins = Array.from(new Set([...configuredOrigins, "http://localhost:5173", "http://127.0.0.1:5173"]));
+const localDevOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+const frontendOrigins = Array.from(
+  new Set(
+    (process.env.NODE_ENV || "development") === "production"
+      ? configuredOrigins
+      : [...configuredOrigins, ...localDevOrigins],
+  ),
+);
 
 export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
@@ -25,7 +32,7 @@ export const env = {
   jwtRefreshSecret: must("JWT_REFRESH_SECRET"),
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
-  frontendOrigin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",
+  frontendOrigin: process.env.FRONTEND_ORIGIN || "",
   frontendOrigins,
   googleClientId: process.env.GOOGLE_CLIENT_ID || "",
   smtpHost: process.env.SMTP_HOST || "",
