@@ -37,4 +37,5 @@ export const env = {
   ethRpcUrl: process.env.ETH_RPC_URL || "",
   ctsContractAddress: process.env.CTS_CONTRACT_ADDRESS || "",
   ctsOwnerPrivateKey: process.env.CTS_OWNER_PRIVATE_KEY || "",
+  uploadDir: process.env.UPLOAD_DIR || "",
 };

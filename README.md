@@ -106,10 +106,12 @@ Change this password after first login.
 
 Detailed hosting instructions are in:
 - [docs/DEPLOY_RAILWAY_VERCEL.md](/c:/Users/saiba/Desktop/Project_CTS/docs/DEPLOY_RAILWAY_VERCEL.md)
+- [docs/DEPLOY_RENDER.md](/c:/Users/saiba/Desktop/Project_CTS/docs/DEPLOY_RENDER.md)
 
 Templates added:
 - `backend/.env.railway.example`
+- `backend/.env.render.example`
 - `frontend/.env.vercel.example`
 - `frontend/vercel.json`
 - `backend/railway.json`
-
+- `render.yaml` (Render full-stack blueprint)
