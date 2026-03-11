@@ -64,7 +64,7 @@ const frontendDistDir = path.resolve(__dirname, "../../frontend/dist");
 if (fs.existsSync(frontendDistDir)) {
   const frontendEntryFile = fs.existsSync(path.join(frontendDistDir, "index.html"))
     ? path.join(frontendDistDir, "index.html")
-    : path.join(frontendDistDir, "Index.html");
+    : path.join(frontendDistDir, "index.html");
   app.use(express.static(frontendDistDir, { index: false }));
   app.get("*", (req, res, next) => {
     if (req.path.startsWith("/api") || req.path.startsWith("/uploads")) {
@@ -77,3 +77,4 @@ if (fs.existsSync(frontendDistDir)) {
 
 app.use(notFound);
 app.use(errorHandler);
+
