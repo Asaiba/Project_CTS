@@ -266,6 +266,17 @@
             loginStatus.className = `text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
         }
 
+        const handleLogin = async (payload) => {
+            try {
+                const data = await loginUser(payload);
+                saveAuthSession(data);
+                window.location.href = roleDashboard(data.user.role);
+            } catch (error) {
+                setStatus(error?.message || "Login failed.", true);
+                throw error;
+            }
+        };
+
         async function ensureContractConnection() {
             const deployed = await assertContractDeployed(window.ethereum);
             setStatus(`Connected to CTS contract ${shortAddress(deployed.address)}.`);
@@ -337,17 +348,7 @@
                     return;
                 }
                 setStatus("Signing in...");
-                const data = await loginUser({ email, password, walletAddress: connectedWallet });
-                saveAuthSession(data);
-                const registeredWallet = data?.user?.walletAddress || "";
-                if (registeredWallet) {
-                    if (connectedWallet.toLowerCase() !== registeredWallet.toLowerCase()) {
-                        setStatus("Connected wallet does not match your registered wallet.", true);
-                        return;
-                    }
-                    await ensureContractConnection();
-                }
-                window.location.href = roleDashboard(data?.user?.role);
+                await handleLogin({ email, password, walletAddress: connectedWallet });
             } catch (error) {
                 setStatus(error?.message || "Login failed.", true);
             }
