@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const htmlEntries = (() => {
   const input = {
-    index: path.resolve(__dirname, "Index.html"),
+    index: path.resolve(__dirname, "index.html"),
   };
   const pagesDir = path.resolve(__dirname, "src/pages");
   if (!fs.existsSync(pagesDir)) return input;
