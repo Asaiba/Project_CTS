@@ -21,10 +21,18 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 app.use(
   cors({
     origin: (origin, callback) => {
+      if (env.nodeEnv !== "production") {
+        callback(null, true);
+        return;
+      }
       if (!origin) {
         callback(null, true);
         return;

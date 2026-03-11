@@ -79,7 +79,7 @@ node prisma/seed.js
 
 ```powershell
 cd backend
-npm run dev
+node src/server.js
 ```
 
 Health check:
@@ -102,16 +102,5 @@ Frontend URL:
 
 Change this password after first login.
 
-## Deployment Guides
-
-Detailed hosting instructions are in:
-- [docs/DEPLOY_RAILWAY_VERCEL.md](/c:/Users/saiba/Desktop/Project_CTS/docs/DEPLOY_RAILWAY_VERCEL.md)
-- [docs/DEPLOY_RENDER.md](/c:/Users/saiba/Desktop/Project_CTS/docs/DEPLOY_RENDER.md)
-
-Templates added:
-- `backend/.env.railway.example`
-- `backend/.env.render.example`
-- `frontend/.env.vercel.example`
-- `frontend/vercel.json`
-- `backend/railway.json`
-- `render.yaml` (Render full-stack blueprint)
+## Local Notes
+- If `npm run dev` fails on Windows with `spawn EPERM`, keep using `node src/server.js` for the backend.
