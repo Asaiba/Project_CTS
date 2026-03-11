@@ -21,29 +21,31 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  }),
-);
+const allowedOrigins = [
+  "https://cts-1-sdqt.onrender.com",
+  "https://project-cts.vercel.app",
+  "https://project-cts.onrender.com",
+  "http://localhost:5173",
+];
+const configuredOrigins = Array.isArray(env.frontendOrigins) ? env.frontendOrigins : [];
+const corsOrigins = Array.from(new Set([...allowedOrigins, ...configuredOrigins])).filter(Boolean);
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (env.nodeEnv !== "production") {
+      if (!origin || corsOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
-      if (!origin) {
-        callback(null, true);
-        return;
-      }
-      if (env.frontendOrigins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error(`CORS not allowed for origin ${origin}`));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  }),
+);
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
   }),
 );
 app.use(
@@ -55,6 +57,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan(env.nodeEnv === "production" ? "combined" : "dev"));
 app.use("/uploads", express.static(uploadDir));
 

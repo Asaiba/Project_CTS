@@ -14,9 +14,15 @@ const toJson = async (response) => {
   }
 };
 
+const normalizeApiBase = () => {
+  const base = `${API_BASE_URL}`.replace(/\/+$/, "");
+  return base.endsWith("/api") ? base : `${base}/api`;
+};
+
 const request = async (path, options = {}) => {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${normalizeApiBase()}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       ...jsonHeaders,
       ...(options.headers || {}),
