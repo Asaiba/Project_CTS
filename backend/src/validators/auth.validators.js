@@ -26,7 +26,11 @@ export const loginSchema = z.object({
 
 export const walletLoginSchema = z.object({
   body: z.object({
-    walletAddress: z.string().trim().min(4),
+    walletAddress: z.string().trim().min(4).optional(),
+    address: z.string().trim().min(4).optional(),
+  }).refine((data) => data.walletAddress || data.address, {
+    message: "Wallet address is required",
+    path: ["walletAddress"],
   }),
   query: z.object({}).optional(),
   params: z.object({}).optional(),

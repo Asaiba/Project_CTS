@@ -56,13 +56,35 @@ export const login = async (req, res) => {
   return res.json({ user: publicUser(user), ...tokens });
 };
 
-export const loginWallet = async (req, res) => {
-  const user = await loginWithWallet(req.validated.body);
-  if (!user) {
-    return res.status(401).json({ error: "invalid_wallet", message: "No user found for wallet address" });
+export const loginWallet = async (req, res, next) => {
+  try {
+    const body = req.validated?.body || req.body || {};
+    const rawAddress = body.address || body.walletAddress;
+
+    if (!rawAddress) {
+      return res.status(400).json({ message: "Wallet address is required" });
+    }
+
+    const normalizedAddress = String(rawAddress).trim().toLowerCase();
+    if (!normalizedAddress) {
+      return res.status(400).json({ message: "Wallet address is required" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        walletAddress: normalizedAddress,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Wallet not registered" });
+    }
+
+    const tokens = await issueAuthTokens(user);
+    return res.json({ user: publicUser(user), ...tokens });
+  } catch (error) {
+    return next(error);
   }
-  const tokens = await issueAuthTokens(user);
-  return res.json({ user: publicUser(user), ...tokens });
 };
 
 export const loginGoogle = async (req, res, next) => {
