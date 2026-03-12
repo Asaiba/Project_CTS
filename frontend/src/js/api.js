@@ -73,6 +73,12 @@ export const forgotPassword = (payload) =>
     body: JSON.stringify(payload),
   });
 
+export const loginWithWallet = (payload) =>
+  request("/auth/login-wallet", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
 export const logoutUser = () => {
   localStorage.removeItem("cts_access_token");
   localStorage.removeItem("cts_refresh_token");

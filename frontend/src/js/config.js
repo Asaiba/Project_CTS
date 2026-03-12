@@ -7,12 +7,7 @@ const configuredApiBaseUrl =
   (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_BASE_URL) || "";
 
 export const API_BASE_URL = configuredApiBaseUrl || defaultApiBaseUrl;
-export const PAGE_BASE = (() => {
-  if (typeof window === "undefined") return "/pages";
-  const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-  const isVitePort = ["5173", "5174", "4173"].includes(window.location.port);
-  return isLocalHost && isVitePort ? "/src/pages" : "/pages";
-})();
+export const PAGE_BASE = "/src/pages";
 
 export const buildPageUrl = (target) => {
   if (!target) return `${PAGE_BASE}/login.html`;

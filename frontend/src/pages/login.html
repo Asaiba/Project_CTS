@@ -3,23 +3,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>CTS | Blockchain Scholarship Management</title>
-<script>
-        const token = localStorage.getItem("cts_access_token");
-        if (token) {
-            const user = JSON.parse(localStorage.getItem("cts_user") || "null");
-            const role = user?.role || "student";
-            const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-            const isVitePort = ["5173", "5174", "4173"].includes(window.location.port);
-            const pageBase = isLocalHost && isVitePort ? "/src/pages" : "/pages";
-            const map = {
-                student: `${pageBase}/student-dashboard.html`,
-                college: `${pageBase}/college-dashboard.html`,
-                dao: `${pageBase}/dao-dashboard.html`,
-                admin: `${pageBase}/admin-dashboard.html`,
-            };
-            window.location.href = map[role] || `${pageBase}/student-dashboard.html`;
-        }
-    </script>
 <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
 <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
