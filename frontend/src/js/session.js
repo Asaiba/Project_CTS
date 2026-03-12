@@ -97,7 +97,7 @@ export const requireSession = ({ roles = [] } = {}) => {
 
     if (roles.length && !roles.includes(user.role)) {
       const redirect = ROLE_DASHBOARD[user.role] || buildPageUrl("login.html");
-      window.location.replace(normalizePagePath(redirect));
+      window.location.replace(redirect);
       return false;
     }
     return true;
@@ -143,7 +143,7 @@ export const requireSession = ({ roles = [] } = {}) => {
 
     if (roles.length && !roles.includes(serverUser.role)) {
       const redirect = ROLE_DASHBOARD[serverUser.role] || buildPageUrl("login.html");
-      window.location.replace(normalizePagePath(redirect));
+      window.location.replace(redirect);
     }
   };
 

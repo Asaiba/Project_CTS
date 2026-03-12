@@ -4,7 +4,6 @@ import {
   issueAuthTokens,
   loginWithEmailPassword,
   loginWithGoogleIdToken,
-  loginWithWallet,
   registerUser,
   resetPasswordWithToken,
   revokeRefreshToken,
