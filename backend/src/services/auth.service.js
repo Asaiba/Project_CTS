@@ -49,7 +49,9 @@ export const loginWithEmailPassword = async ({ email, password, walletAddress })
   const ok = await verifyPassword(password, user.passwordHash);
   if (!ok) return null;
   const normalizedWallet = normalizeWallet(walletAddress);
-  if (!normalizedWallet || !user.walletAddress || user.walletAddress !== normalizedWallet) return null;
+  if (normalizedWallet) {
+    if (!user.walletAddress || user.walletAddress !== normalizedWallet) return null;
+  }
   return user;
 };
 

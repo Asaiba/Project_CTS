@@ -9,7 +9,7 @@ const toJson = async (response) => {
   if (!text) return {};
   try {
     return JSON.parse(text);
-  } catch (_error) {
+  } catch {
     return {};
   }
 };
@@ -19,91 +19,16 @@ const normalizeApiBase = () => {
   return base.endsWith("/api") ? base : `${base}/api`;
 };
 
-/* -------------------------
-   TOKEN STORAGE
-------------------------- */
-
-export const saveAuthSession = ({ accessToken, refreshToken, user }) => {
-  if (accessToken) localStorage.setItem("cts_access_token", accessToken);
-  if (refreshToken) localStorage.setItem("cts_refresh_token", refreshToken);
-  if (user) localStorage.setItem("cts_user", JSON.stringify(user));
-};
-
-export const clearAuthSession = () => {
-  localStorage.removeItem("cts_access_token");
-  localStorage.removeItem("cts_refresh_token");
-  localStorage.removeItem("cts_user");
-};
-
-/* -------------------------
-   TOKEN REFRESH
-------------------------- */
-
-const refreshAccessToken = async () => {
-  const refreshToken = localStorage.getItem("cts_refresh_token");
-  if (!refreshToken) throw new Error("No refresh token");
-
-  const response = await fetch(`${normalizeApiBase()}/auth/refresh`, {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify({ refreshToken }),
-  });
-
-  const data = await toJson(response);
-
-  if (!response.ok) {
-    clearAuthSession();
-    throw new Error("Session expired");
-  }
-
-  if (data.accessToken) {
-    localStorage.setItem("cts_access_token", data.accessToken);
-  }
-
-  return data.accessToken;
-};
-
-/* -------------------------
-   MAIN REQUEST FUNCTION
-------------------------- */
-
-const request = async (path, options = {}, retry = true) => {
-  const accessToken = localStorage.getItem("cts_access_token");
-
+const request = async (path, options = {}) => {
   const response = await fetch(`${normalizeApiBase()}${path}`, {
     ...options,
     headers: {
       ...jsonHeaders,
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...(options.headers || {}),
     },
   });
 
   const data = await toJson(response);
-
-  /* ---- TOKEN EXPIRED ---- */
-
-  if (response.status === 401 && retry) {
-    try {
-      const newToken = await refreshAccessToken();
-
-      return request(
-        path,
-        {
-          ...options,
-          headers: {
-            ...jsonHeaders,
-            Authorization: `Bearer ${newToken}`,
-          },
-        },
-        false,
-      );
-    } catch (error) {
-      clearAuthSession();
-      window.location.href = "/login.html";
-      throw error;
-    }
-  }
 
   if (!response.ok) {
     const message = data?.message || "Request failed";
@@ -113,23 +38,22 @@ const request = async (path, options = {}, retry = true) => {
   return data;
 };
 
-/* -------------------------
-   ROLE DASHBOARDS
-------------------------- */
+export const saveAuthSession = ({ accessToken, refreshToken, token, user }) => {
+  localStorage.setItem("cts_access_token", accessToken || token || "");
+  localStorage.setItem("cts_refresh_token", refreshToken || "");
+  localStorage.setItem("cts_user", JSON.stringify(user || null));
+};
 
 export const roleDashboard = (role) => {
   const map = {
-    student: "student-dashboard.html",
-    college: "college-dashboard.html",
-    dao: "dao-dashboard.html",
-    admin: "admin-dashboard.html",
+    student: "/student-dashboard.html",
+    college: "/college-dashboard.html",
+    dao: "/dao-dashboard.html",
+    admin: "/admin-dashboard.html",
   };
-  return map[role] || "student-dashboard.html";
-};
 
-/* -------------------------
-   AUTH API CALLS
-------------------------- */
+  return map[role] || "/student-dashboard.html";
+};
 
 export const registerUser = (payload) =>
   request("/auth/register", {
@@ -143,18 +67,6 @@ export const loginUser = (payload) =>
     body: JSON.stringify(payload),
   });
 
-export const loginWithWallet = (payload) =>
-  request("/auth/login-wallet", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-
-export const loginWithGoogle = (payload) =>
-  request("/auth/login-google", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-
 export const forgotPassword = (payload) =>
   request("/auth/forgot-password", {
     method: "POST",
@@ -162,6 +74,8 @@ export const forgotPassword = (payload) =>
   });
 
 export const logoutUser = () => {
-  clearAuthSession();
+  localStorage.removeItem("cts_access_token");
+  localStorage.removeItem("cts_refresh_token");
+  localStorage.removeItem("cts_user");
   window.location.href = "/login.html";
 };
