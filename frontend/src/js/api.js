@@ -14,12 +14,20 @@ const toJson = async (response) => {
   }
 };
 
-const API = `${API_BASE_URL}/api`;
+const API = API_BASE_URL;
 
-const request = async (path, options = {}) => {
-  const token = localStorage.getItem("cts_access_token");
+export const logoutUser = () => {
+  localStorage.removeItem("cts_access_token");
+  localStorage.removeItem("cts_refresh_token");
+  localStorage.removeItem("cts_user");
+  sessionStorage.removeItem("wallet_connected");
+  sessionStorage.removeItem("wallet_address");
 
-  const response = await fetch(`${API}${path}`, {
+  window.location.href = buildPageUrl("login.html");
+};
+
+const fetchWithToken = (path, token, options = {}) =>
+  fetch(`${API}${path}`, {
     ...options,
     headers: {
       ...jsonHeaders,
@@ -27,6 +35,34 @@ const request = async (path, options = {}) => {
       ...(options.headers || {}),
     },
   });
+
+const request = async (path, options = {}) => {
+  let token = localStorage.getItem("cts_access_token");
+
+  let response = await fetchWithToken(path, token, options);
+
+  if (response.status === 401) {
+    const refreshToken = localStorage.getItem("cts_refresh_token");
+    if (refreshToken) {
+      const refreshResponse = await fetch(`${API}/auth/refresh`, {
+        method: "POST",
+        headers: jsonHeaders,
+        body: JSON.stringify({ refreshToken }),
+      });
+      const refreshData = await toJson(refreshResponse);
+      if (refreshResponse.ok && refreshData?.accessToken) {
+        token = refreshData.accessToken;
+        localStorage.setItem("cts_access_token", token);
+        if (refreshData.refreshToken) {
+          localStorage.setItem("cts_refresh_token", refreshData.refreshToken);
+        }
+        response = await fetchWithToken(path, token, options);
+      } else {
+        logoutUser();
+        return;
+      }
+    }
+  }
 
   const data = await toJson(response);
 
@@ -78,11 +114,3 @@ export const forgotPassword = (payload) =>
     method: "POST",
     body: JSON.stringify(payload),
   });
-
-export const logoutUser = () => {
-  localStorage.removeItem("cts_access_token");
-  localStorage.removeItem("cts_refresh_token");
-  localStorage.removeItem("cts_user");
-
-  window.location.href = buildPageUrl("login.html");
-};

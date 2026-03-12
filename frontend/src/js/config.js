@@ -1,5 +1,9 @@
-﻿export const API_BASE_URL =
+﻿const RAW_API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "https://project-cts.onrender.com";
+const normalizedApiBase = `${RAW_API_BASE_URL}`.replace(/\/+$/, "");
+export const API_BASE_URL = normalizedApiBase.endsWith("/api")
+  ? normalizedApiBase
+  : `${normalizedApiBase}/api`;
 
 export const buildPageUrl = (page) => {
   return `/${page}`;
