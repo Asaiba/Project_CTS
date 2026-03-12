@@ -76,7 +76,8 @@ const bindLogoutLinks = () => {
     'a[href="login.html"]',
     'a[href="./login.html"]',
     'a[href="../pages/login.html"]',
-    'a[href="/pages/login.html"]',
+    'a[href="/login.html"]',
+    'a[href="/src/pages/login.html"]',
   ];
   document.querySelectorAll(logoutSelectors.join(",")).forEach((link) => {
     link.addEventListener("click", (event) => {
