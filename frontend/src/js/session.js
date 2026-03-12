@@ -1,14 +1,14 @@
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL, buildPageUrl } from "./config.js";
 
 const ACCESS_TOKEN_KEY = "cts_access_token";
 const REFRESH_TOKEN_KEY = "cts_refresh_token";
 const USER_KEY = "cts_user";
 
 const ROLE_DASHBOARD = {
-  student: "/pages/student-dashboard.html",
-  college: "/pages/college-dashboard.html",
-  dao: "/pages/dao-dashboard.html",
-  admin: "/pages/admin-dashboard.html",
+  student: buildPageUrl("student-dashboard.html"),
+  college: buildPageUrl("college-dashboard.html"),
+  dao: buildPageUrl("dao-dashboard.html"),
+  admin: buildPageUrl("admin-dashboard.html"),
 };
 
 const normalizeApiBase = () => {
@@ -16,12 +16,7 @@ const normalizeApiBase = () => {
   return base.endsWith("/api") ? base : `${base}/api`;
 };
 
-const normalizePagePath = (target) => {
-  if (!target) return "/pages/login.html";
-  if (target.startsWith("/")) return target;
-  if (target.startsWith("pages/")) return `/${target}`;
-  return `/pages/${target}`;
-};
+const normalizePagePath = (target) => buildPageUrl(target || "login.html");
 
 const parseUser = () => {
   try {
@@ -100,7 +95,7 @@ export const requireSession = ({ roles = [] } = {}) => {
     }
 
     if (roles.length && !roles.includes(user.role)) {
-      const redirect = ROLE_DASHBOARD[user.role] || "/pages/login.html";
+      const redirect = ROLE_DASHBOARD[user.role] || buildPageUrl("login.html");
       window.location.replace(normalizePagePath(redirect));
       return false;
     }
@@ -146,7 +141,7 @@ export const requireSession = ({ roles = [] } = {}) => {
     localStorage.setItem(USER_KEY, JSON.stringify(serverUser));
 
     if (roles.length && !roles.includes(serverUser.role)) {
-      const redirect = ROLE_DASHBOARD[serverUser.role] || "/pages/login.html";
+      const redirect = ROLE_DASHBOARD[serverUser.role] || buildPageUrl("login.html");
       window.location.replace(normalizePagePath(redirect));
     }
   };

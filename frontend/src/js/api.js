@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL, buildPageUrl } from "./config.js";
 
 const jsonHeaders = {
   "Content-Type": "application/json",
@@ -46,13 +46,13 @@ export const saveAuthSession = ({ accessToken, refreshToken, token, user }) => {
 
 export const roleDashboard = (role) => {
   const map = {
-    student: "/pages/student-dashboard.html",
-    college: "/pages/college-dashboard.html",
-    dao: "/pages/dao-dashboard.html",
-    admin: "/pages/admin-dashboard.html",
+    student: buildPageUrl("student-dashboard.html"),
+    college: buildPageUrl("college-dashboard.html"),
+    dao: buildPageUrl("dao-dashboard.html"),
+    admin: buildPageUrl("admin-dashboard.html"),
   };
 
-  return map[role] || "/pages/student-dashboard.html";
+  return map[role] || buildPageUrl("student-dashboard.html");
 };
 
 export const registerUser = (payload) =>
@@ -77,5 +77,5 @@ export const logoutUser = () => {
   localStorage.removeItem("cts_access_token");
   localStorage.removeItem("cts_refresh_token");
   localStorage.removeItem("cts_user");
-  window.location.href = "/pages/login.html";
+  window.location.href = buildPageUrl("login.html");
 };

@@ -7,5 +7,18 @@ const configuredApiBaseUrl =
   (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_BASE_URL) || "";
 
 export const API_BASE_URL = configuredApiBaseUrl || defaultApiBaseUrl;
+export const PAGE_BASE = (() => {
+  if (typeof window === "undefined") return "/pages";
+  const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const isVitePort = ["5173", "5174", "4173"].includes(window.location.port);
+  return isLocalHost && isVitePort ? "/src/pages" : "/pages";
+})();
+
+export const buildPageUrl = (target) => {
+  if (!target) return `${PAGE_BASE}/login.html`;
+  if (target.startsWith("/pages/") || target.startsWith("/src/pages/")) return target;
+  const cleaned = target.replace(/^\/+/, "");
+  return `${PAGE_BASE}/${cleaned}`;
+};
 export const CTS_CONTRACT_ADDRESS = "0x1d7Cd344a17A70E24779B7e7040Fb3386D5623B0";
 export const CTS_OWNER_ADDRESS = "0x52a176d6059b65daf15de8a047daf749ef457ec4";
