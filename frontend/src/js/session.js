@@ -87,6 +87,19 @@ const bindLogoutLinks = () => {
   });
 };
 
+const checkWalletConsistency = async (user) => {
+  if (!user?.walletAddress || !window.ethereum) return;
+  try {
+    const accounts = await window.ethereum.request({ method: "eth_accounts" });
+    if (!accounts || !accounts.length) return;
+    if (accounts[0].toLowerCase() !== user.walletAddress.toLowerCase()) {
+      logoutAndRedirect("login.html");
+    }
+  } catch {
+    // cannot query MetaMask, skip
+  }
+};
+
 export const requireSession = ({ roles = [] } = {}) => {
   const validate = () => {
     const { accessToken, user } = getSession();
@@ -149,11 +162,21 @@ export const requireSession = ({ roles = [] } = {}) => {
 
   if (!validate()) return;
   bindLogoutLinks();
-  syncSessionWithServer();
+  syncSessionWithServer().then(() => checkWalletConsistency(parseUser()));
+
+  if (window.ethereum?.on) {
+    window.ethereum.on("accountsChanged", (accounts) => {
+      const user = parseUser();
+      if (!user?.walletAddress) return;
+      if (!accounts.length || accounts[0].toLowerCase() !== user.walletAddress.toLowerCase()) {
+        logoutAndRedirect("login.html");
+      }
+    });
+  }
 
   // Handles browser back-forward cache: page re-checks auth before showing.
   window.addEventListener("pageshow", () => {
     validate();
-    syncSessionWithServer();
+    syncSessionWithServer().then(() => checkWalletConsistency(parseUser()));
   });
 };

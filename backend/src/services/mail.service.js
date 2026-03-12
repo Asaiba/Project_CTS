@@ -9,6 +9,7 @@ const getTransporter = () => {
     host: env.smtpHost,
     port: env.smtpPort,
     secure: env.smtpSecure,
+    requireTLS: !env.smtpSecure,
     auth: {
       user: env.smtpUser,
       pass: env.smtpPass,
@@ -32,12 +33,17 @@ export const sendTempPasswordEmail = async ({ toEmail, username, tempPassword, r
     "Please login and change your password immediately.",
   ].join("\n");
 
-  await transporter.sendMail({
-    from: env.smtpFrom,
-    to: toEmail,
-    subject: "CTS account temporary password",
-    text,
-  });
+  try {
+    await transporter.sendMail({
+      from: env.smtpFrom,
+      to: toEmail,
+      subject: "CTS account temporary password",
+      text,
+    });
+  } catch (err) {
+    console.error("[mail] sendTempPasswordEmail failed:", err.message);
+    return { sent: false, reason: "send_failed", detail: err.message };
+  }
 
   return { sent: true };
 };
