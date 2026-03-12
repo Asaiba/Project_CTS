@@ -9,12 +9,12 @@
             const user = JSON.parse(localStorage.getItem("cts_user") || "null");
             const role = user?.role || "student";
             const map = {
-                student: "/student-dashboard.html",
-                college: "/college-dashboard.html",
-                dao: "/dao-dashboard.html",
-                admin: "/admin-dashboard.html",
+                student: "/pages/student-dashboard.html",
+                college: "/pages/college-dashboard.html",
+                dao: "/pages/dao-dashboard.html",
+                admin: "/pages/admin-dashboard.html",
             };
-            window.location.href = map[role] || "/student-dashboard.html";
+            window.location.href = map[role] || "/pages/student-dashboard.html";
         }
     </script>
 <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>

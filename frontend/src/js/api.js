@@ -46,13 +46,13 @@ export const saveAuthSession = ({ accessToken, refreshToken, token, user }) => {
 
 export const roleDashboard = (role) => {
   const map = {
-    student: "/student-dashboard.html",
-    college: "/college-dashboard.html",
-    dao: "/dao-dashboard.html",
-    admin: "/admin-dashboard.html",
+    student: "/pages/student-dashboard.html",
+    college: "/pages/college-dashboard.html",
+    dao: "/pages/dao-dashboard.html",
+    admin: "/pages/admin-dashboard.html",
   };
 
-  return map[role] || "/student-dashboard.html";
+  return map[role] || "/pages/student-dashboard.html";
 };
 
 export const registerUser = (payload) =>
@@ -77,5 +77,5 @@ export const logoutUser = () => {
   localStorage.removeItem("cts_access_token");
   localStorage.removeItem("cts_refresh_token");
   localStorage.removeItem("cts_user");
-  window.location.href = "/login.html";
+  window.location.href = "/pages/login.html";
 };

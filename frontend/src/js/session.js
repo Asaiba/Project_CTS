@@ -5,10 +5,22 @@ const REFRESH_TOKEN_KEY = "cts_refresh_token";
 const USER_KEY = "cts_user";
 
 const ROLE_DASHBOARD = {
-  student: "student-dashboard.html",
-  college: "college-dashboard.html",
-  dao: "dao-dashboard.html",
-  admin: "admin-dashboard.html",
+  student: "/pages/student-dashboard.html",
+  college: "/pages/college-dashboard.html",
+  dao: "/pages/dao-dashboard.html",
+  admin: "/pages/admin-dashboard.html",
+};
+
+const normalizeApiBase = () => {
+  const base = `${API_BASE_URL}`.replace(/\/+$/, "");
+  return base.endsWith("/api") ? base : `${base}/api`;
+};
+
+const normalizePagePath = (target) => {
+  if (!target) return "/pages/login.html";
+  if (target.startsWith("/")) return target;
+  if (target.startsWith("pages/")) return `/${target}`;
+  return `/pages/${target}`;
 };
 
 const parseUser = () => {
@@ -35,7 +47,7 @@ export const refreshSessionToken = async () => {
   const refreshToken = getRefreshToken();
   if (!refreshToken) return null;
 
-  const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+  const response = await fetch(`${normalizeApiBase()}/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),
@@ -55,7 +67,7 @@ export const refreshSessionToken = async () => {
 
 export const logoutAndRedirect = (target = "login.html") => {
   clearSession();
-  window.location.replace(target);
+  window.location.replace(normalizePagePath(target));
 };
 
 const getSession = () => {
@@ -69,6 +81,7 @@ const bindLogoutLinks = () => {
     'a[href="login.html"]',
     'a[href="./login.html"]',
     'a[href="../pages/login.html"]',
+    'a[href="/pages/login.html"]',
   ];
   document.querySelectorAll(logoutSelectors.join(",")).forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -87,8 +100,8 @@ export const requireSession = ({ roles = [] } = {}) => {
     }
 
     if (roles.length && !roles.includes(user.role)) {
-      const redirect = ROLE_DASHBOARD[user.role] || "login.html";
-      window.location.replace(redirect);
+      const redirect = ROLE_DASHBOARD[user.role] || "/pages/login.html";
+      window.location.replace(normalizePagePath(redirect));
       return false;
     }
     return true;
@@ -96,7 +109,7 @@ export const requireSession = ({ roles = [] } = {}) => {
 
   const syncSessionWithServer = async () => {
     const callWhoAmI = async (token) =>
-      fetch(`${API_BASE_URL}/auth/me`, {
+      fetch(`${normalizeApiBase()}/auth/me`, {
         headers: {
           Authorization: `Bearer ${token || ""}`,
         },
@@ -133,8 +146,8 @@ export const requireSession = ({ roles = [] } = {}) => {
     localStorage.setItem(USER_KEY, JSON.stringify(serverUser));
 
     if (roles.length && !roles.includes(serverUser.role)) {
-      const redirect = ROLE_DASHBOARD[serverUser.role] || "login.html";
-      window.location.replace(redirect);
+      const redirect = ROLE_DASHBOARD[serverUser.role] || "/pages/login.html";
+      window.location.replace(normalizePagePath(redirect));
     }
   };
 
