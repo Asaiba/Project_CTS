@@ -1,4 +1,4 @@
-import { API_BASE_URL, buildPageUrl } from "./config.js";
+﻿import { API_BASE_URL, buildPageUrl } from "./config.js";
 
 const jsonHeaders = {
   "Content-Type": "application/json",
@@ -14,16 +14,16 @@ const toJson = async (response) => {
   }
 };
 
-const normalizeApiBase = () => {
-  const base = `${API_BASE_URL}`.replace(/\/+$/, "");
-  return base.endsWith("/api") ? base : `${base}/api`;
-};
+const API = `${API_BASE_URL}/api`;
 
 const request = async (path, options = {}) => {
-  const response = await fetch(`${normalizeApiBase()}${path}`, {
+  const token = localStorage.getItem("cts_access_token");
+
+  const response = await fetch(`${API}${path}`, {
     ...options,
     headers: {
       ...jsonHeaders,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     },
   });
@@ -67,14 +67,14 @@ export const loginUser = (payload) =>
     body: JSON.stringify(payload),
   });
 
-export const forgotPassword = (payload) =>
-  request("/auth/forgot-password", {
+export const loginWithWallet = (payload) =>
+  request("/auth/login-wallet", {
     method: "POST",
     body: JSON.stringify(payload),
   });
 
-export const loginWithWallet = (payload) =>
-  request("/auth/login-wallet", {
+export const forgotPassword = (payload) =>
+  request("/auth/forgot-password", {
     method: "POST",
     body: JSON.stringify(payload),
   });
@@ -83,5 +83,6 @@ export const logoutUser = () => {
   localStorage.removeItem("cts_access_token");
   localStorage.removeItem("cts_refresh_token");
   localStorage.removeItem("cts_user");
+
   window.location.href = buildPageUrl("login.html");
 };
