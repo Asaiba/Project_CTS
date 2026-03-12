@@ -40,7 +40,7 @@ app.use(
       callback(new Error(`CORS not allowed for origin ${origin}`));
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
 app.use(

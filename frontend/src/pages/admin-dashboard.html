@@ -446,7 +446,7 @@
             },
           });
         } catch (_error) {
-          throw new Error("Cannot reach backend API. Ensure backend is running on port 4000.");
+          throw new Error("Cannot reach backend API. Check your connection or try again shortly.");
         }
         const data = await response.json().catch(() => ({}));
         if (response.status === 401 && retry) {
