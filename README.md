@@ -1,6 +1,6 @@
 # CTS Project (College Tokenized System)
 
-CTS is a full-stack scholarship platform with:
+CTS is a full-stack project funding platform with:
 - Web frontend (Vite + static HTML pages)
 - Backend API (Express + Prisma + PostgreSQL)
 - On-chain integration (Sepolia contract for college/student/DAO actions)
@@ -25,7 +25,7 @@ Project_CTS/
 - `admin`: manages users (promote role, create institution/dao/admin accounts)
 - `college`: reviews applications, publishes proposals to DAO
 - `dao`: votes on proposals and can fund selected offers
-- `student`: applies to colleges, views governance outcomes, can withdraw funded scholarship
+- `student`: applies to colleges, views governance outcomes, can withdraw funded project
 
 ### 3) Off-chain vs on-chain data
 - Off-chain (PostgreSQL): auth, profiles, applications, audit logs.
