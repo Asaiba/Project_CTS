@@ -176,6 +176,8 @@
         const ready = p.hasEnded && passed && !p.cancelled && !p.executed;
         const canChoose = ready && !selectedExists;
         const canWithdraw = Boolean(p.isFunded) && BigInt(p.pendingPayoutWei || 0n) > 0n;
+        const isDenied = p.cancelled || (p.hasEnded && !passed);
+        const isHistory = Boolean(p.isFunded) || isDenied;
         return {
           ...p,
           title: getProposalMetadata(p.id)?.title || "Untitled Funding",
@@ -185,18 +187,21 @@
           canChoose,
           canWithdraw,
           ready,
+          isHistory,
           stateText: selectedExists
             ? (canWithdraw ? "Funds available to withdraw" : (p.isFunded ? "Funded" : "Selected - awaiting funding"))
             : (ready ? "Ready for your selection" : "Not ready"),
         };
       }));
 
-      if (!hydrated.length) {
-        listEl.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">No proposals found for your student wallet.</p>';
+      const active = hydrated.filter((p) => !p.isHistory);
+
+      if (!active.length) {
+        listEl.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">No active proposals. Funded and denied proposals are in your <a href="student-applications.html" class="text-primary underline">History</a>.</p>';
         return;
       }
 
-      listEl.innerHTML = hydrated.map(renderProposal).join("");
+      listEl.innerHTML = active.map(renderProposal).join("");
     } catch (error) {
       setStatus(error?.message || "Failed to load student governance.", true);
       listEl.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400">Could not load proposals.</p>';

@@ -96,6 +96,14 @@
     </article>
   </section>
 
+  <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+    <h2 class="text-xl font-bold mb-4">On-Chain Proposal History</h2>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Proposals that have been funded or denied.</p>
+    <div class="space-y-3" id="onchain-history-list">
+      <p class="text-sm text-slate-500 dark:text-slate-400">Loading...</p>
+    </div>
+  </section>
+
   <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
     <h2 class="text-xl font-bold mb-4">Application History</h2>
     <div class="overflow-x-auto">
@@ -122,7 +130,63 @@
 <script type="module">
   import { API_BASE_URL } from "../js/config.js";
   import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
+  import { formatEth, getConnectedAddress, getProposalMetadata, listDaoOffersOnChain, listProposalsOnChain } from "../js/cts-contract.js";
   requireSession({ roles: ["student"] });
+
+  const onchainList = document.getElementById("onchain-history-list");
+  const short = (addr) => addr && addr.length > 12 ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : addr || "N/A";
+
+  const loadOnchainHistory = async () => {
+    try {
+      const wallet = await getConnectedAddress();
+      const all = await listProposalsOnChain({ maxItems: 100, viewerAddress: wallet });
+      const mine = all.filter((p) => (p.student || "").toLowerCase() === wallet.toLowerCase());
+
+      const hydrated = await Promise.all(mine.map(async (p) => {
+        const passed = Number(p.votesFor) > Number(p.votesAgainst);
+        const isDenied = p.cancelled || (p.hasEnded && !passed);
+        const isFunded = Boolean(p.isFunded);
+        if (!isDenied && !isFunded) return null;
+
+        const offersRaw = await listDaoOffersOnChain(p.id);
+        const offers = await Promise.all(offersRaw.map(async (o) => ({ ...o, amountEth: await formatEth(o.amountWei) })));
+        const selected = offers.find((o) => o.isSelected);
+
+        return {
+          id: p.id,
+          title: getProposalMetadata(p.id)?.title || "Untitled Funding",
+          amountEth: await formatEth(p.amountWei),
+          isDenied,
+          isFunded,
+          selectedDaoWallet: selected?.daoWallet || null,
+          selectedAmount: selected?.amountEth || null,
+        };
+      }));
+
+      const history = hydrated.filter(Boolean);
+
+      if (!history.length) {
+        onchainList.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">No funded or denied on-chain proposals yet.</p>';
+        return;
+      }
+
+      onchainList.innerHTML = history.map((p) => `
+        <div class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div>
+            <p class="font-semibold text-sm">Proposal #${p.id} — ${p.title}</p>
+            <p class="text-xs text-slate-500 mt-1">Requested: ${p.amountEth} ETH${p.selectedDaoWallet ? ` · DAO: ${short(p.selectedDaoWallet)} (${p.selectedAmount} ETH)` : ""}</p>
+          </div>
+          ${p.isFunded
+            ? '<span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-bold">FUNDED</span>'
+            : '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 font-bold">DENIED</span>'}
+        </div>
+      `).join("");
+    } catch (e) {
+      onchainList.innerHTML = `<p class="text-sm text-red-500">${e?.message || "Failed to load on-chain history."}</p>`;
+    }
+  };
+
+  loadOnchainHistory();
 
   const summaryTotal = document.getElementById("summary-total");
   const summaryPending = document.getElementById("summary-pending");
