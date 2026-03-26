@@ -61,6 +61,8 @@ Edit `backend/.env` and set:
 - `DATABASE_URL` (default local URL is already in `.env.example`)
 - JWT secrets
 - `FRONTEND_ORIGIN=http://localhost:5173`
+- `APP_BASE_URL=http://localhost:5173`
+- SMTP settings if you want invite/reset emails through SendGrid
 - `ETH_RPC_URL`
 - `CTS_CONTRACT_ADDRESS`
 - `CTS_OWNER_PRIVATE_KEY`
@@ -95,6 +97,42 @@ npm run dev
 
 Frontend URL:
 - `http://localhost:5173`
+
+## Render Deployment Checklist
+
+### Backend service
+- Root directory: `backend`
+- Build command: `npm install && npx prisma generate && npx prisma migrate deploy`
+- Start command: `npm start`
+
+Set these environment variables in Render:
+- `DATABASE_URL`
+- `JWT_ACCESS_SECRET`
+- `JWT_REFRESH_SECRET`
+- `FRONTEND_ORIGIN=https://your-frontend.onrender.com`
+- `APP_BASE_URL=https://your-frontend.onrender.com`
+- `SMTP_HOST=smtp.sendgrid.net`
+- `SMTP_PORT=587`
+- `SMTP_SECURE=false`
+- `SMTP_USER=apikey`
+- `SMTP_PASS=<your SendGrid API key>`
+- `SMTP_FROM=<your verified sender>`
+- `ETH_RPC_URL`
+- `CTS_CONTRACT_ADDRESS=0xEAf24CD54048A6CED382A1B80E2E7AE4A221913d`
+- `CTS_OWNER_PRIVATE_KEY`
+
+### Frontend static site
+- Root directory: `frontend`
+- Build command: `npm install && npm run build`
+- Publish directory: `dist`
+
+Set this environment variable in Render:
+- `VITE_API_BASE_URL=https://your-backend.onrender.com`
+
+For the password setup flow to work in production:
+- `APP_BASE_URL` must point to the deployed frontend URL.
+- `FRONTEND_ORIGIN` must include the deployed frontend URL so backend CORS allows it.
+- SendGrid sender verification must be complete for `SMTP_FROM`.
 
 ## Default Seed Admin
 - Email: `admin@cts.local`

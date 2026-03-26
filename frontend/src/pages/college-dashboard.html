@@ -78,15 +78,11 @@
 </a>
 <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-create-scholarship.html">
 <span class="material-icons-outlined">add_chart</span>
-<span class="font-medium">Create Project Funding</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-proposals.html">
-<span class="material-icons-outlined">account_tree</span>
-<span class="font-medium">DAO Proposals</span>
+<span class="font-medium">Create Proposal</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-reports.html">
 <span class="material-icons-outlined">analytics</span>
-<span class="font-medium">Reports</span>
+<span class="font-medium">Funding Reports</span>
 </a>
 </nav>
 <div class="p-4 mt-auto border-t border-white/10">
@@ -120,10 +116,15 @@
 <button class="p-2 text-slate-400 hover:text-primary transition-colors">
 <span class="material-icons-outlined">notifications</span>
 </button>
-<button class="bg-secondary hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold transition-all shadow-sm">
-<span class="material-icons-outlined text-[18px]">publish</span>
-                        Submit Proposal to DAO
-                    </button>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+<button aria-label="Toggle appearance" class="w-10 h-10 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" onclick="toggleDarkMode()" title="Toggle appearance">
+<span class="material-icons-outlined dark:hidden">dark_mode</span>
+<span class="material-icons-outlined hidden dark:block">light_mode</span>
+</button>
+<a class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" href="login.html">
+<span class="material-icons-outlined text-[18px]">logout</span>
+<span class="hidden sm:inline">Log Out</span>
+</a>
 </div>
 </div>
 </header>
@@ -144,10 +145,9 @@
 <div class="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg">
 <span class="material-icons-outlined">account_balance_wallet</span>
 </div>
-<span class="text-xs font-medium text-slate-400">Last 30 days</span>
 </div>
-<p class="text-sm text-slate-500 dark:text-slate-400">Funds Disbursed</p>
-<h3 class="text-2xl font-bold mt-1">42.50 ETH</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Wallet Balance</p>
+<h3 class="text-2xl font-bold mt-1" id="college-wallet-balance">-- ETH</h3>
 </div>
 <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <div class="flex items-center justify-between mb-4">
@@ -181,55 +181,21 @@
 <thead class="bg-primary text-white">
 <tr>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Student Name</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Email</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Wallet</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Funding Title</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Funding Description</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Scholarship Essay</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Applied Date</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Status</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="college-applications-body">
 <tr>
-<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="7">Loading applications...</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="5">Loading applications...</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="space-y-6">
-<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-<span class="material-icons-outlined text-primary">add_circle_outline</span>
-                            New DAO Proposal
-                        </h2>
-<form class="space-y-4" id="college-proposal-form">
-<div>
-<label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Student Wallet Address</label>
-<input id="college-proposal-student-wallet" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="0x..." type="text"/>
-</div>
-<div>
-<label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Project Funding Amount (ETH)</label>
-<input id="college-proposal-amount" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="e.g. 1.5" type="number" min="0.0001" step="0.0001"/>
-</div>
-<div>
-<label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Funding Title</label>
-<input id="college-proposal-title" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="e.g. STEM Excellence Grant" type="text"/>
-</div>
-<div>
-<label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Funding Description</label>
-<textarea id="college-proposal-description" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" rows="3" placeholder="Describe what this funding supports and expected impact."></textarea>
-</div>
-<div>
-<label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Voting Duration (Minutes)</label>
-<input id="college-proposal-duration" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" value="60" min="1" max="43200" type="number"/>
-</div>
-<button class="w-full bg-primary text-white py-2.5 rounded-lg font-bold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.98]" type="submit">
-                                Publish Proposal
-                            </button>
-<p class="text-sm min-h-5" id="college-proposal-status"></p>
-</form>
-</div>
 <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
 <h2 class="text-lg font-bold mb-4">Network Status</h2>
 <div class="space-y-3">
@@ -251,7 +217,7 @@
 <div class="p-3 bg-accent/5 border border-accent/20 rounded-lg">
 <p class="text-xs text-accent font-medium leading-relaxed">
 <span class="material-icons-outlined text-[14px] align-middle mr-1">info</span>
-                                    2 proposals awaiting your vote in the DAO Governance module.
+                                    2 proposals awaiting DAO offers in the proposal module.
                                 </p>
 </div>
 </div>
@@ -270,19 +236,19 @@
 <span class="material-icons-outlined text-3xl">how_to_vote</span>
 </div>
 <div>
-<h3 class="text-xl font-bold">Community Governance</h3>
+<h3 class="text-xl font-bold">Scholarship Coordination</h3>
 <p class="text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
-                            Active donors and institutions can vote on platform updates and new project funding distributions. Ensure your voice is heard in the next funding cycle.
+                            Active institutions can review platform updates and scholarship activity while tracking offer progress for funded students.
                         </p>
 </div>
 </div>
 <div class="flex gap-4 w-full md:w-auto">
-<button class="flex-1 md:flex-none border border-slate-200 dark:border-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                        View History
-                    </button>
-<button class="flex-1 md:flex-none bg-secondary text-white px-6 py-2.5 rounded-lg font-bold shadow-lg hover:brightness-110 transition-all">
-                        Vote Now
-                    </button>
+<a class="flex-1 md:flex-none border border-slate-200 dark:border-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-center" href="college-reports.html">
+                        View Funding Reports
+                    </a>
+<a class="flex-1 md:flex-none bg-secondary text-white px-6 py-2.5 rounded-lg font-bold shadow-lg hover:brightness-110 transition-all text-center" href="college-create-scholarship.html">
+                        Create Proposal
+                    </a>
 </div>
 </div>
 </div>
@@ -301,11 +267,9 @@
     getConnectedAddress,
     getProposalMetadata,
     isCollegeRegisteredOnChain,
-    isStudentRegisteredOnChain,
     listProposalsOnChain,
-    saveProposalMetadata,
-    submitScholarshipProposalOnChain,
   } from "../js/cts-contract.js";
+  import { getNativeBalanceWei } from "../js/web3.js";
   import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
   requireSession({ roles: ["college"] });
 
@@ -343,43 +307,13 @@
     };
   }
 
-  const proposalForm = document.getElementById("college-proposal-form");
-  const proposalStudentWallet = document.getElementById("college-proposal-student-wallet");
-  const proposalAmount = document.getElementById("college-proposal-amount");
-  const proposalTitle = document.getElementById("college-proposal-title");
-  const proposalDescription = document.getElementById("college-proposal-description");
-  const proposalDuration = document.getElementById("college-proposal-duration");
-  const proposalStatus = document.getElementById("college-proposal-status");
   const proposalList = document.getElementById("college-proposals-list");
   const totalApplicationsEl = document.getElementById("college-total-applications");
   const pendingApplicationsEl = document.getElementById("college-pending-applications");
   const approvedStudentsEl = document.getElementById("college-approved-students");
   const applicationsBody = document.getElementById("college-applications-body");
   const onChainStatusEl = document.getElementById("college-onchain-status");
-  const approvedPrefillKey = "cts_college_approved_application_prefill";
-
-  const setProposalStatus = (message, isError = false) => {
-    if (!proposalStatus) return;
-    proposalStatus.textContent = message;
-    proposalStatus.className = `text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
-  };
-
-  const consumeApprovedPrefill = () => {
-    const raw = localStorage.getItem(approvedPrefillKey) || "";
-    if (!raw) return;
-    try {
-      const payload = JSON.parse(raw);
-      if (proposalStudentWallet && payload.studentWallet) proposalStudentWallet.value = payload.studentWallet;
-      if (proposalTitle && payload.title) proposalTitle.value = payload.title;
-      if (proposalDescription && payload.description) proposalDescription.value = payload.description;
-      setProposalStatus("Approved application details prefilled. Set amount and publish to DAO.");
-      proposalForm?.scrollIntoView({ behavior: "smooth", block: "center" });
-    } catch (_error) {
-      // ignore malformed local storage payload
-    } finally {
-      localStorage.removeItem(approvedPrefillKey);
-    }
-  };
+  const walletBalanceEl = document.getElementById("college-wallet-balance");
 
   const setOnChainStatus = (registered, wallet = "") => {
     if (!onChainStatusEl) return;
@@ -433,7 +367,7 @@
   };
 
   const formatRemaining = (ms) => {
-    if (ms <= 0) return "Voting closed";
+    if (ms <= 0) return "Offer window closed";
     const totalMinutes = Math.floor(ms / 60000);
     const days = Math.floor(totalMinutes / (60 * 24));
     const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
@@ -443,9 +377,30 @@
     return `${minutes}m left`;
   };
 
+  const previewEssay = (essay = "", maxLength = 140) => {
+    const trimmed = String(essay || "").trim();
+    if (!trimmed) return "No student essay attached.";
+    return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 3)}...` : trimmed;
+  };
+
   const shortAddress = (address) => {
     if (!address) return "No wallet";
     return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  };
+
+  const refreshCollegeWalletCard = async () => {
+    try {
+      const wallet = await getConnectedAddress();
+      const balanceWei = await getNativeBalanceWei(wallet);
+
+      if (walletBalanceEl) {
+        walletBalanceEl.textContent = `${await formatEth(balanceWei)} ETH`;
+      }
+    } catch (error) {
+      if (walletBalanceEl) {
+        walletBalanceEl.textContent = "-- ETH";
+      }
+    }
   };
 
   const applicationStatusPill = (status) => {
@@ -462,14 +417,14 @@
     if (!applicationsBody) return;
     if (!items.length) {
       applicationsBody.innerHTML =
-        '<tr><td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="7">No student applications yet.</td></tr>';
+        '<tr><td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="5">No student applications yet.</td></tr>';
       return;
     }
     applicationsBody.innerHTML = items
       .map((item) => {
         const student = item.student || {};
-        const fundingTitle = (item.title || item.message || "Untitled funding").trim();
-        const fundingDescription = (item.description || "No description provided.").trim();
+        const essay = (item.essay || item.description || item.message || "No scholarship essay provided.").trim();
+        const essayPreview = essay.length > 80 ? `${essay.slice(0, 77)}...` : essay;
 
         return `
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -481,10 +436,8 @@
                 </div>
               </div>
             </td>
-            <td class="px-6 py-4"><span class="text-sm">${student.email || "-"}</span></td>
             <td class="px-6 py-4"><span class="text-xs font-mono text-slate-500">${shortAddress(student.walletAddress)}</span></td>
-            <td class="px-6 py-4"><span class="text-sm font-medium">${fundingTitle}</span></td>
-            <td class="px-6 py-4"><span class="text-sm text-slate-500 dark:text-slate-400">${fundingDescription}</span></td>
+            <td class="px-6 py-4 max-w-xs"><span class="text-sm text-slate-500 dark:text-slate-400 truncate block">${essayPreview}</span></td>
             <td class="px-6 py-4 text-sm text-slate-500">${new Date(item.createdAt).toLocaleString()}</td>
             <td class="px-6 py-4">${applicationStatusPill(item.status)}</td>
           </tr>
@@ -495,7 +448,7 @@
 
   const loadCollegeApplications = async () => {
     try {
-      const data = await authRequest("/applications/college?limit=10");
+      const data = await authRequest("/applications/college?limit=3");
       const summary = data.summary || { total: 0, pending: 0, approved: 0 };
       if (totalApplicationsEl) totalApplicationsEl.textContent = String(summary.total || 0);
       if (pendingApplicationsEl) pendingApplicationsEl.textContent = String(summary.pending || 0);
@@ -504,7 +457,7 @@
     } catch (_error) {
       if (applicationsBody) {
         applicationsBody.innerHTML =
-          '<tr><td class="px-6 py-4 text-sm text-red-600 dark:text-red-400" colspan="7">Failed to load student applications.</td></tr>';
+          '<tr><td class="px-6 py-4 text-sm text-red-600 dark:text-red-400" colspan="6">Failed to load student applications.</td></tr>';
       }
     }
   };
@@ -522,10 +475,10 @@
             <p class="font-semibold text-sm">Proposal #${item.id}</p>
             <span class="text-xs px-2 py-1 rounded ${item.isActive ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"}">${formatRemaining(item.remainingMs)}</span>
           </div>
-          <p class="text-xs text-slate-700 dark:text-slate-300 mt-1">${item.metaTitle || "Untitled Funding"}</p>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${item.metaDescription || "No funding description provided."}</p>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Student: ${item.studentShort} | Amount: ${item.amountEth} ETH</p>
-          <p class="text-[11px] text-slate-400 mt-2">YES: ${item.votesFor || 0} | NO: ${item.votesAgainst || 0} ${item.note ? `| ${item.note}` : ""}</p>
+          <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 mt-1 uppercase tracking-wider">Student Essay</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 whitespace-pre-wrap break-words">${item.metaEssayPreview}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Student: ${item.studentShort} | School Fees: ${item.amountEth} ETH</p>
+          <p class="text-[11px] text-slate-400 mt-2">Offers: ${item.votesFor || 0} | Passes: ${item.votesAgainst || 0} ${item.note ? `| ${item.note}` : ""}</p>
           <div class="mt-2 flex justify-end">
             <button class="college-cancel-proposal text-xs px-2 py-1 rounded ${item.canCancel ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500"}" data-proposal-id="${item.id}" ${item.canCancel ? "" : "disabled"}>Cancel Proposal</button>
           </div>
@@ -542,8 +495,7 @@
         .filter((item) => (item.college || "").toLowerCase() === wallet.toLowerCase())
         .map(async (item) => ({
           ...item,
-          metaTitle: getProposalMetadata(item.id)?.title || "",
-          metaDescription: getProposalMetadata(item.id)?.description || "",
+          metaEssayPreview: previewEssay(getProposalMetadata(item.id)?.essay || ""),
           amountEth: await formatEth(item.amountWei),
           studentShort: `${item.student.slice(0, 6)}...${item.student.slice(-4)}`,
           note: item.executed ? "Executed" : item.cancelled ? "Cancelled" : "",
@@ -557,63 +509,6 @@
     }
   };
 
-  proposalForm?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const studentAddress = proposalStudentWallet?.value?.trim() || "";
-    const amountEth = proposalAmount?.value?.trim() || "";
-    const fundingTitle = proposalTitle?.value?.trim() || "";
-    const description = proposalDescription?.value?.trim() || "";
-    const durationMinutes = Number(proposalDuration?.value || 0);
-    if (!studentAddress || !amountEth || !durationMinutes || !fundingTitle || !description) {
-      setProposalStatus("Fill student wallet, amount, funding title, funding description, and duration.", true);
-      return;
-    }
-    if (fundingTitle.length < 4) {
-      setProposalStatus("Funding title must be at least 4 characters.", true);
-      return;
-    }
-    if (description.length < 10) {
-      setProposalStatus("Funding description must be at least 10 characters.", true);
-      return;
-    }
-    try {
-      const connectedWallet = await getConnectedAddress();
-      const registered = await isCollegeRegisteredOnChain(connectedWallet);
-      if (!registered) {
-        setOnChainStatus(false, connectedWallet);
-        setProposalStatus("Your connected wallet is not registered on-chain as a college. Ask admin (contract owner) to register this wallet first.", true);
-        return;
-      }
-      const studentRegistered = await isStudentRegisteredOnChain(studentAddress);
-      if (!studentRegistered) {
-        setProposalStatus("Selected student wallet is not registered on-chain. Ask admin to register this student first.", true);
-        return;
-      }
-      setProposalStatus("Publishing on-chain proposal...");
-      const result = await submitScholarshipProposalOnChain({
-        studentAddress,
-        amountEth,
-        votingDurationSeconds: Math.floor(durationMinutes * 60),
-      });
-      if (result?.proposalId) {
-        saveProposalMetadata({
-          proposalId: result.proposalId,
-          title: fundingTitle,
-          description,
-        });
-      }
-      setProposalStatus(`Proposal created on-chain. Tx: ${result.txHash.slice(0, 10)}...`);
-      if (proposalStudentWallet) proposalStudentWallet.value = "";
-      if (proposalAmount) proposalAmount.value = "";
-      if (proposalTitle) proposalTitle.value = "";
-      if (proposalDescription) proposalDescription.value = "";
-      await refreshOnChainStatus();
-      await loadMyProposals();
-    } catch (error) {
-      setProposalStatus(error.message || "Failed to create on-chain proposal.", true);
-    }
-  });
-
   proposalList?.addEventListener("click", async (event) => {
     const button = event.target.closest(".college-cancel-proposal");
     if (!button) return;
@@ -622,15 +517,15 @@
     if (!window.confirm("Cancel this on-chain proposal?")) return;
     try {
       await cancelProposalOnChain(proposalId);
-      setProposalStatus("Proposal cancelled on-chain.");
+      window.alert("Proposal cancelled on-chain.");
       await loadMyProposals();
     } catch (error) {
-      setProposalStatus(error.message || "Failed to cancel proposal.", true);
+      window.alert(error.message || "Failed to cancel proposal.");
     }
   });
 
-  consumeApprovedPrefill();
   refreshOnChainStatus();
+  refreshCollegeWalletCard();
   loadMyProposals();
   loadCollegeApplications();
 </script></body></html>

@@ -3,7 +3,7 @@
 <script type="module" src="../js/authGuard.js"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Student Dashboard | CTS Project Funding Platform</title>
+<title>Student Dashboard | CTS Scholarship Platform</title>
 <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
 <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
@@ -86,7 +86,7 @@
 <span class="material-icons-outlined">school</span> Colleges
             </a>
 <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-governance.html">
-<span class="material-icons-outlined">gavel</span> Governance
+<span class="material-icons-outlined">gavel</span> Offers
             </a>
 <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all" href="student-applications.html">
 <span class="material-icons-outlined">history</span> History
@@ -108,7 +108,7 @@
 <div class="flex items-center flex-1 max-w-xl">
 <div class="relative w-full">
 <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-<input id="student-dashboard-search" class="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary text-sm transition-all" placeholder="Search colleges, projects..." type="text"/>
+<input id="student-dashboard-search" class="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-900 border-none rounded-xl focus:ring-2 focus:ring-primary text-sm transition-all" placeholder="Search colleges, scholarships..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -130,14 +130,13 @@
 <div class="bg-primary p-6 rounded-2xl text-white relative overflow-hidden shadow-xl shadow-primary/20">
 <div class="relative z-10 flex flex-col h-full justify-between">
 <div>
-<p class="text-primary-100 text-sm opacity-80 mb-1 uppercase tracking-wider font-semibold">Wallet Balance</p>
-<h2 class="text-3xl font-bold flex items-center gap-2">
-                                4,250.00 <span class="text-lg font-medium opacity-80">ETH</span>
+<p class="text-primary-100 text-sm opacity-80 mb-1 uppercase tracking-wider font-semibold">Claimable Funds</p>
+<h2 class="text-3xl font-bold flex items-center gap-2" id="student-wallet-balance">
+                                -- <span class="text-lg font-medium opacity-80">ETH</span>
 </h2>
-<p class="text-xs mt-1 text-slate-300">Approx. 4,250.00 ETH</p>
 </div>
 <div class="mt-6 flex gap-2">
-<button id="withdraw-btn" class="w-full bg-white/20 hover:bg-white/30 backdrop-blur-md py-2 rounded-lg text-sm font-medium transition-all">Withdraw</button>
+<button id="withdraw-btn" class="w-full bg-white/20 hover:bg-white/30 backdrop-blur-md py-2 rounded-lg text-sm font-medium transition-all">Withdraw Claimable Funds</button>
 </div>
 <p id="withdraw-status" class="text-xs mt-2 text-slate-200 min-h-4"></p>
 </div>
@@ -150,8 +149,8 @@
 </div>
 <div>
 <p class="text-slate-500 dark:text-slate-400 text-sm">Active Applications</p>
-<h3 class="text-2xl font-bold">04</h3>
-<p class="text-xs text-green-500 font-medium mt-1">+1 since last week</p>
+<h3 class="text-2xl font-bold" id="student-active-applications">0</h3>
+<p class="text-xs text-green-500 font-medium mt-1" id="student-active-applications-note">No active applications</p>
 </div>
 </div>
 <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 shadow-sm">
@@ -159,9 +158,9 @@
 <span class="material-icons-outlined text-3xl">verified</span>
 </div>
 <div>
-<p class="text-slate-500 dark:text-slate-400 text-sm">Total Projects Funded</p>
-<h3 class="text-2xl font-bold">02</h3>
-<p class="text-xs text-slate-400 mt-1">Total 12,500 ETH value</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Scholarships Funded</p>
+<h3 class="text-2xl font-bold" id="student-funded-count">0</h3>
+<p class="text-xs text-slate-400 mt-1" id="student-funded-amount-note">Total student share: 0.0000 ETH</p>
 </div>
 </div>
 </div>
@@ -185,7 +184,7 @@
 <table class="w-full text-left">
 <thead class="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
 <tr>
-<th class="px-6 py-4">Funding Title</th>
+<th class="px-6 py-4">Scholarship Essay</th>
 <th class="px-6 py-4">College</th>
 <th class="px-6 py-4">Applied Date</th>
 <th class="px-6 py-4">Status</th>
@@ -217,7 +216,7 @@
 <div class="bg-surface-light dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
 <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
 <h2 class="font-bold">DAO Offers</h2>
-<a class="text-xs bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" href="student-governance.html">Open Governance</a>
+<a class="text-xs bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" href="student-governance.html">Review Offers</a>
 </div>
 <p class="px-6 pt-4 text-sm min-h-5" id="dao-offers-status"></p>
 <div class="overflow-x-auto">
@@ -253,14 +252,17 @@
 <script type="module">
   import { API_BASE_URL } from "../js/config.js";
   import {
+    claimFundsOnChain,
     chooseDaoOfferOnChain,
     formatEth,
     getConnectedAddress,
+    parseEth,
     getProposalMetadata,
     listDaoOffersOnChain,
     listProposalsOnChain,
+    resolveApplicationDisplayStatus,
   } from "../js/cts-contract.js";
-  import { getConnectedWallet, openContractOnExplorer, sendEth } from "../js/web3.js";
+  import { openContractOnExplorer } from "../js/web3.js";
   import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
   requireSession({ roles: ["student"] });
 
@@ -274,9 +276,16 @@
   const withdrawBtn = document.getElementById("withdraw-btn");
   const withdrawStatusEl = document.getElementById("withdraw-status");
   const explorerBtn = document.getElementById("ledger-explorer-btn");
+  const walletBalanceEl = document.getElementById("student-wallet-balance");
+  const activeApplicationsEl = document.getElementById("student-active-applications");
+  const activeApplicationsNoteEl = document.getElementById("student-active-applications-note");
+  const fundedCountEl = document.getElementById("student-funded-count");
+  const fundedAmountNoteEl = document.getElementById("student-funded-amount-note");
   const sessionUser = JSON.parse(localStorage.getItem("cts_user") || "null");
   let allCollegesCache = [];
   let allApplicationsCache = [];
+  let studentProposalsCache = [];
+  let claimablePayoutsCache = [];
   let searchQuery = "";
 
   if (topNameEl) topNameEl.textContent = sessionUser?.username || "Student";
@@ -298,6 +307,16 @@
     return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
   };
 
+  const getEssayText = (item = {}) => {
+    return String(item?.essay || item?.message || item?.description || item?.title || "").trim();
+  };
+
+  const getEssayPreview = (item, maxLength = 90, fallback = "Scholarship essay not provided") => {
+    const essay = getEssayText(item);
+    if (!essay) return fallback;
+    return essay.length > maxLength ? `${essay.slice(0, maxLength - 3)}...` : essay;
+  };
+
   const getTargetWallet = () => {
     const fromProfile = (sessionUser?.walletAddress || "").trim();
     if (fromProfile) return fromProfile;
@@ -305,26 +324,202 @@
     return fromSession;
   };
 
+  const resolveStudentWallet = async () => {
+    const targetWallet = getTargetWallet();
+    if (targetWallet) return targetWallet;
+    return getConnectedAddress();
+  };
+
+  const loadStudentProposals = async (walletAddress = "") => {
+    const studentWallet = String(walletAddress || "").trim() || await resolveStudentWallet();
+    const proposals = await listProposalsOnChain({ maxItems: 150, viewerAddress: studentWallet });
+    studentProposalsCache = proposals.filter(
+      (proposal) => String(proposal.student || "").toLowerCase() === studentWallet.toLowerCase(),
+    );
+    return studentProposalsCache;
+  };
+
+  const updateStudentSummaryCards = async () => {
+    const activeStatuses = new Set([
+      "pending",
+      "approved",
+      "offer_window_open",
+      "offers_received",
+      "awaiting_funding",
+      "funded",
+    ]);
+    const activeCount = allApplicationsCache.filter((item) => {
+      const statusKey = String(item?.displayStatus?.key || item?.status || "pending").toLowerCase();
+      return activeStatuses.has(statusKey);
+    }).length;
+
+    if (activeApplicationsEl) {
+      activeApplicationsEl.textContent = String(activeCount);
+    }
+    if (activeApplicationsNoteEl) {
+      activeApplicationsNoteEl.textContent = activeCount
+        ? `${activeCount} application${activeCount === 1 ? "" : "s"} still in motion`
+        : "No active applications";
+      activeApplicationsNoteEl.className = `text-xs font-medium mt-1 ${
+        activeCount ? "text-green-500" : "text-slate-400"
+      }`;
+    }
+
+    const fundedProposals = studentProposalsCache.filter((item) => Boolean(item.isFunded));
+    let totalStudentShareWei = 0n;
+    for (const proposal of fundedProposals) {
+      const selectedAmountWei = BigInt(proposal.selectedAmountWei || 0n);
+      const schoolFeesWei = BigInt(proposal.schoolFeesWei || proposal.amountWei || 0n);
+      if (selectedAmountWei > schoolFeesWei) {
+        totalStudentShareWei += selectedAmountWei - schoolFeesWei;
+      }
+    }
+
+    if (fundedCountEl) {
+      fundedCountEl.textContent = String(fundedProposals.length);
+    }
+    if (fundedAmountNoteEl) {
+      const totalStudentShareEth = await formatEth(totalStudentShareWei);
+      fundedAmountNoteEl.textContent = `Total student share: ${totalStudentShareEth} ETH`;
+    }
+  };
+
+  const refreshStudentFundsCard = async () => {
+    try {
+      const studentWallet = await resolveStudentWallet();
+      const proposals = await loadStudentProposals(studentWallet);
+      let totalClaimableWei = 0n;
+      claimablePayoutsCache = [];
+
+      for (const proposal of proposals) {
+        const pendingWei = BigInt(proposal.pendingPayoutWei || 0n);
+        if (proposal.isFunded && pendingWei > 0n) {
+          totalClaimableWei += pendingWei;
+          claimablePayoutsCache.push({
+            proposalId: proposal.id,
+            amountWei: pendingWei,
+          });
+        }
+      }
+
+      if (walletBalanceEl) {
+        walletBalanceEl.innerHTML = `${await formatEth(totalClaimableWei)} <span class="text-lg font-medium opacity-80">ETH</span>`;
+      }
+      if (withdrawBtn) {
+        const canWithdraw = claimablePayoutsCache.length > 0;
+        withdrawBtn.disabled = !canWithdraw;
+        withdrawBtn.className = `w-full backdrop-blur-md py-2 rounded-lg text-sm font-medium transition-all ${
+          canWithdraw
+            ? "bg-white/20 hover:bg-white/30"
+            : "bg-white/10 text-slate-300 cursor-not-allowed"
+        }`;
+        withdrawBtn.textContent = canWithdraw ? "Withdraw Claimable Funds" : "No Claimable Funds";
+      }
+
+      await updateStudentSummaryCards();
+    } catch (error) {
+      if (walletBalanceEl) {
+        walletBalanceEl.innerHTML = `-- <span class="text-lg font-medium opacity-80">ETH</span>`;
+      }
+      if (withdrawBtn) {
+        withdrawBtn.disabled = true;
+        withdrawBtn.className = "w-full bg-white/10 backdrop-blur-md py-2 rounded-lg text-sm font-medium text-slate-300 cursor-not-allowed";
+        withdrawBtn.textContent = "Wallet Required";
+      }
+    }
+  };
+
+  const sumClaimableWei = (items = []) => {
+    return items.reduce((sum, item) => sum + BigInt(item.amountWei || 0n), 0n);
+  };
+
+  const findWithdrawSelection = (targetWei, items = []) => {
+    const payouts = [...items].sort((left, right) => {
+      const leftWei = BigInt(left.amountWei || 0n);
+      const rightWei = BigInt(right.amountWei || 0n);
+      if (leftWei === rightWei) return Number(left.proposalId || 0) - Number(right.proposalId || 0);
+      return leftWei > rightWei ? -1 : 1;
+    });
+
+    const suffixSums = new Array(payouts.length + 1).fill(0n);
+    for (let index = payouts.length - 1; index >= 0; index -= 1) {
+      suffixSums[index] = suffixSums[index + 1] + BigInt(payouts[index].amountWei || 0n);
+    }
+
+    const search = (index, remainingWei) => {
+      if (remainingWei === 0n) return [];
+      if (index >= payouts.length || remainingWei < 0n || suffixSums[index] < remainingWei) {
+        return null;
+      }
+
+      const current = payouts[index];
+      const currentWei = BigInt(current.amountWei || 0n);
+      if (currentWei <= remainingWei) {
+        const withCurrent = search(index + 1, remainingWei - currentWei);
+        if (withCurrent) {
+          return [current, ...withCurrent];
+        }
+      }
+
+      return search(index + 1, remainingWei);
+    };
+
+    return search(0, targetWei);
+  };
+
   withdrawBtn?.addEventListener("click", () => {
     (async () => {
       try {
-        const walletAddress = getTargetWallet();
-        if (!walletAddress) {
-          setWithdrawStatus("No wallet address linked to this account.", true);
+        if (!claimablePayoutsCache.length) {
+          setWithdrawStatus("No claimable student funds are available yet.", true);
           return;
         }
 
-        const rawAmount = window.prompt("Enter amount to withdraw (ETH):", "");
-        if (rawAmount === null) return;
-        setWithdrawStatus("Awaiting wallet confirmation...");
+        const studentWallet = await resolveStudentWallet();
+        const connectedWallet = await getConnectedAddress();
+        if (connectedWallet.toLowerCase() !== studentWallet.toLowerCase()) {
+          setWithdrawStatus("Connect the student's registered wallet to withdraw funds.", true);
+          return;
+        }
 
-        const sender = await getConnectedWallet();
-        const txHash = await sendEth({
-          from: sender,
-          to: walletAddress,
-          amountEth: rawAmount,
-        });
-        setWithdrawStatus(`Withdraw submitted: ${txHash.slice(0, 10)}...`);
+        const totalClaimableWei = sumClaimableWei(claimablePayoutsCache);
+        const totalClaimableEth = await formatEth(totalClaimableWei);
+        const requestedAmount = window.prompt(
+          `How much do you want to withdraw? Max ${totalClaimableEth} ETH`,
+          totalClaimableEth,
+        );
+        if (requestedAmount === null) return;
+
+        const requestedWei = BigInt(await parseEth(requestedAmount));
+        if (requestedWei <= 0n) {
+          setWithdrawStatus("Enter an amount greater than 0.", true);
+          return;
+        }
+        if (requestedWei > totalClaimableWei) {
+          setWithdrawStatus("That amount is more than the claimable balance.", true);
+          return;
+        }
+
+        const selectedClaims = findWithdrawSelection(requestedWei, claimablePayoutsCache);
+        if (!selectedClaims?.length) {
+          setWithdrawStatus("That exact amount is not available from the current claimable payouts.", true);
+          return;
+        }
+
+        const proposalIds = selectedClaims.map((item) => `#${item.proposalId}`).join(", ");
+        const confirmed = window.confirm(`Withdraw ${await formatEth(requestedWei)} ETH for proposal${selectedClaims.length === 1 ? "" : "s"} ${proposalIds}?`);
+        if (!confirmed) return;
+
+        setWithdrawStatus("Awaiting wallet confirmations...");
+        for (const item of selectedClaims) {
+          await claimFundsOnChain(item.proposalId);
+        }
+        setWithdrawStatus("Student funds claimed and sent to the connected wallet.");
+        await Promise.all([
+          refreshStudentFundsCard(),
+          loadFeaturedColleges(),
+          renderDaoOffersTable(),
+        ]);
       } catch (error) {
         setWithdrawStatus(error?.message || "Withdraw failed.", true);
       }
@@ -369,7 +564,7 @@
         : fallbackBlock(college.username)}
       <div class="p-4">
         <h4 class="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors">${college.username}</h4>
-        <p class="text-xs text-slate-500 mb-4 truncate">${application?.title || application?.message || "Funding title not set"}</p>
+        <p class="text-xs text-slate-500 mb-4 truncate">${getEssayPreview(application, 70)}</p>
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-400">Institution</span>
           <a class="text-primary text-sm font-bold" href="student-colleges.html">View</a>
@@ -404,9 +599,23 @@
       ]);
 
       const allColleges = collegesData.items || [];
-      const myApplications = appData.items || [];
+      let myApplications = appData.items || [];
+      try {
+        const viewerWallet = await resolveStudentWallet();
+        const proposals = await loadStudentProposals(viewerWallet);
+        myApplications = myApplications.map((item) => ({
+          ...item,
+          displayStatus: resolveApplicationDisplayStatus({ application: item, proposals, viewerWallet }),
+        }));
+      } catch (_error) {
+        myApplications = myApplications.map((item) => ({
+          ...item,
+          displayStatus: { key: item.status || "pending", label: item.status || "pending" },
+        }));
+      }
       allCollegesCache = allColleges;
       allApplicationsCache = myApplications;
+      await updateStudentSummaryCards();
       applySearch();
     } catch (error) {
       const rawMessage = error?.message || "Failed to load colleges.";
@@ -426,6 +635,12 @@
   const statusClass = (status) => {
     if (status === "approved") return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
     if (status === "rejected") return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+    if (status === "offer_window_open") return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
+    if (status === "offers_received") return "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400";
+    if (status === "awaiting_funding") return "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400";
+    if (status === "funded" || status === "funded_claimed") return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400";
+    if (status === "no_offers") return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
+    if (status === "cancelled") return "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
     return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
   };
 
@@ -437,6 +652,60 @@
         iconClass: "bg-green-100 dark:bg-green-900/30 text-green-600",
         badge: "APPROVED",
         badgeClass: "text-green-600",
+      };
+    }
+    if (status === "offer_window_open") {
+      return {
+        title: "DAO Offer Window Open",
+        icon: "schedule",
+        iconClass: "bg-blue-100 dark:bg-blue-900/30 text-blue-600",
+        badge: "OPEN",
+        badgeClass: "text-blue-600",
+      };
+    }
+    if (status === "offers_received") {
+      return {
+        title: "DAO Offers Received",
+        icon: "mail",
+        iconClass: "bg-violet-100 dark:bg-violet-900/30 text-violet-600",
+        badge: "OFFERS",
+        badgeClass: "text-violet-600",
+      };
+    }
+    if (status === "awaiting_funding") {
+      return {
+        title: "Awaiting DAO Funding",
+        icon: "hourglass_top",
+        iconClass: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600",
+        badge: "WAITING",
+        badgeClass: "text-cyan-600",
+      };
+    }
+    if (status === "funded" || status === "funded_claimed") {
+      return {
+        title: status === "funded_claimed" ? "Scholarship Claimed" : "Scholarship Funded",
+        icon: "paid",
+        iconClass: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600",
+        badge: "FUNDED",
+        badgeClass: "text-emerald-600",
+      };
+    }
+    if (status === "no_offers") {
+      return {
+        title: "No DAO Offers Received",
+        icon: "block",
+        iconClass: "bg-red-100 dark:bg-red-900/30 text-red-600",
+        badge: "NO OFFERS",
+        badgeClass: "text-red-600",
+      };
+    }
+    if (status === "cancelled") {
+      return {
+        title: "Proposal Cancelled",
+        icon: "cancel",
+        iconClass: "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300",
+        badge: "CANCELLED",
+        badgeClass: "text-slate-500 dark:text-slate-300",
       };
     }
     if (status === "rejected") {
@@ -499,11 +768,11 @@
 
     ledgerActivityList.innerHTML = items
       .map((item) => {
-        const status = (item?.status || "pending").toLowerCase();
+        const status = (item?.displayStatus?.key || item?.status || "pending").toLowerCase();
         const meta = activityMeta(status);
         const occurredAt = item.updatedAt || item.createdAt;
         const collegeName = item?.college?.username || "College";
-        const title = item?.title || item?.message || "Funding title not set";
+        const essayPreview = getEssayPreview(item, 72);
         const shortId = (item?.id || "").slice(0, 8);
         return `
           <div class="flex items-start gap-4">
@@ -512,7 +781,7 @@
             </div>
             <div class="flex-1 overflow-hidden">
               <p class="text-sm font-semibold truncate">${meta.title}</p>
-              <p class="text-xs text-slate-500 truncate">${collegeName} - ${title}</p>
+              <p class="text-xs text-slate-500 truncate">${collegeName} - ${essayPreview}</p>
               <p class="text-xs text-slate-400 mt-1">${timeAgo(occurredAt)} - Ref ${shortId}</p>
             </div>
             <div class="text-right">
@@ -532,12 +801,12 @@
     }
     applicationStatusBody.innerHTML = applications.map((row) => {
       const collegeName = row?.college?.username || "College";
-      const title = row?.title || row?.message || "Funding title not set";
+      const essayPreview = getEssayPreview(row, 88);
       const appliedAt = row?.createdAt ? new Date(row.createdAt).toLocaleDateString() : "-";
-      const status = row?.status || "pending";
+      const status = row?.displayStatus?.key || row?.status || "pending";
       return `
         <tr>
-          <td class="px-6 py-4 font-medium">${title}</td>
+          <td class="px-6 py-4 font-medium">${essayPreview}</td>
           <td class="px-6 py-4">${collegeCell(collegeName, colleges)}</td>
           <td class="px-6 py-4">${appliedAt}</td>
           <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${statusClass(status)}">${status.toUpperCase()}</span></td>
@@ -564,10 +833,11 @@
       const haystack = [
         item?.college?.username || "",
         item?.college?.email || "",
+        item?.essay || "",
         item?.title || "",
         item?.description || "",
         item?.message || "",
-        item?.status || "",
+        item?.displayStatus?.label || item?.status || "",
       ]
         .join(" ")
         .toLowerCase();
@@ -593,17 +863,17 @@
     if (!daoOffersBody) return;
     try {
       setDaoOfferStatus("");
-      const viewerWallet = await getConnectedAddress();
-      const proposals = await listProposalsOnChain({ maxItems: 150, viewerAddress: viewerWallet });
+      const viewerWallet = await resolveStudentWallet();
+      const proposals = studentProposalsCache.length ? studentProposalsCache : await loadStudentProposals(viewerWallet);
       const myProposals = proposals.filter((p) => (p.student || "").toLowerCase() === viewerWallet.toLowerCase());
       const eligible = myProposals.filter(
-        (p) => p.hasEnded && Number(p.votesFor) > Number(p.votesAgainst) && !p.cancelled && !p.executed,
+        (p) => p.hasEnded && Number(p.votesFor) > 0 && !p.cancelled && !p.executed,
       );
 
       const rows = [];
       for (const proposal of eligible) {
         const meta = getProposalMetadata(proposal.id) || {};
-        const title = meta.title || "Untitled Funding";
+        const title = meta.title || "Untitled Scholarship";
         const selectedDao = (proposal.selectedDao || "").toLowerCase();
         const selectedExists = selectedDao && selectedDao !== "0x0000000000000000000000000000000000000000";
         const offers = await listDaoOffersOnChain(proposal.id);
@@ -650,7 +920,7 @@
 
       daoOffersBody.innerHTML = rows.length
         ? rows.join("")
-        : '<tr><td class="px-6 py-4 text-slate-500" colspan="5">No completed voting offers available yet.</td></tr>';
+        : '<tr><td class="px-6 py-4 text-slate-500" colspan="5">No completed offer windows available yet.</td></tr>';
     } catch (error) {
       daoOffersBody.innerHTML = '<tr><td class="px-6 py-4 text-red-600 dark:text-red-400" colspan="5">Failed to load DAO offers.</td></tr>';
       setDaoOfferStatus(error?.message || "Failed to load DAO offers.", true);
@@ -671,7 +941,11 @@
       setDaoOfferStatus("Submitting your selection on-chain...");
       const txHash = await chooseDaoOfferOnChain({ proposalId, daoWallet });
       setDaoOfferStatus(`Offer accepted. Tx: ${txHash.slice(0, 10)}...`);
-      await renderDaoOffersTable();
+      await Promise.all([
+        refreshStudentFundsCard(),
+        loadFeaturedColleges(),
+        renderDaoOffersTable(),
+      ]);
     } catch (error) {
       button.disabled = false;
       setDaoOfferStatus(error?.message || "Failed to accept DAO offer.", true);
@@ -683,6 +957,7 @@
     applySearch();
   });
 
+  refreshStudentFundsCard();
   loadFeaturedColleges();
   renderDaoOffersTable();
 </script></body></html>

@@ -39,6 +39,20 @@ export const getConnectedWallet = async () => {
   return accounts[0];
 };
 
+export const getNativeBalanceWei = async (address) => {
+  const ethereum = requireEthereum();
+  await ensureSepoliaNetwork();
+  const walletAddress = String(address || "").trim();
+  if (!walletAddress) {
+    throw new Error("Wallet address is required.");
+  }
+  const balanceHex = await ethereum.request({
+    method: "eth_getBalance",
+    params: [walletAddress, "latest"],
+  });
+  return BigInt(balanceHex);
+};
+
 export const getChainIdHex = async () => {
   const ethereum = requireEthereum();
   return ethereum.request({ method: "eth_chainId" });

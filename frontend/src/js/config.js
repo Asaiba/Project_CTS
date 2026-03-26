@@ -9,5 +9,5 @@ export const buildPageUrl = (page) => {
   return `/${page}`;
 };
 
-export const CTS_CONTRACT_ADDRESS = "0x1d7Cd344a17A70E24779B7e7040Fb3386D5623B0";
+export const CTS_CONTRACT_ADDRESS = "0xEAf24CD54048A6CED382A1B80E2E7AE4A221913d";
 export const CTS_OWNER_ADDRESS = "0x52a176d6059b65daf15de8a047daf749ef457ec4";

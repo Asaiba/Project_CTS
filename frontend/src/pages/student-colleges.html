@@ -58,7 +58,7 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-colleges.html"><span class="material-icons-outlined">school</span>Colleges</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Offers</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">history</span>History</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
@@ -78,7 +78,7 @@
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Student Workspace</p>
     <h1 class="text-3xl font-display font-bold mt-2">Colleges</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the student dashboard flow.</p>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">Browse partner colleges and submit your scholarship essay directly from this page.</p>
   </header>
 
   <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -90,6 +90,35 @@
       <div class="text-sm text-slate-500 dark:text-slate-400">Loading institutions...</div>
     </div>
   </section>
+
+  <section id="essay-compose-section" class="hidden mt-6 bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Scholarship Essay</p>
+        <h2 class="text-xl font-bold mt-1">Write Your Application Essay</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1" id="essay-college-name">Choose a college above to start writing.</p>
+      </div>
+      <button id="essay-cancel-btn" type="button" class="self-start px-4 h-10 rounded-lg font-bold text-sm text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Close</button>
+    </div>
+    <form id="essay-form" class="space-y-4">
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="essay-textarea">Why should you receive this scholarship?</label>
+        <textarea
+          id="essay-textarea"
+          class="min-h-[260px] w-full rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary"
+          placeholder="Write your scholarship essay here. Explain your academic goals, financial need, and how this scholarship would support your education journey."
+        ></textarea>
+        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <span>Minimum 120 characters</span>
+          <span id="essay-count">0 characters</span>
+        </div>
+      </div>
+      <p id="essay-status" class="text-sm min-h-5"></p>
+      <div class="flex justify-end gap-3">
+        <button id="essay-submit-btn" type="submit" class="px-8 h-11 rounded-lg font-bold text-sm bg-primary text-white hover:bg-primary/90">Submit Essay</button>
+      </div>
+    </form>
+  </section>
 </main>
 </div>
 <script type="module">
@@ -99,6 +128,14 @@
 
   const institutionsGrid = document.getElementById("institutions-grid");
   const institutionsCount = document.getElementById("institutions-count");
+  const essaySection = document.getElementById("essay-compose-section");
+  const essayForm = document.getElementById("essay-form");
+  const essayTextarea = document.getElementById("essay-textarea");
+  const essayCount = document.getElementById("essay-count");
+  const essayStatus = document.getElementById("essay-status");
+  const essayCollegeName = document.getElementById("essay-college-name");
+  const essayCancelBtn = document.getElementById("essay-cancel-btn");
+  const essaySubmitBtn = document.getElementById("essay-submit-btn");
   const apiOrigin = (() => {
     try {
       return new URL(API_BASE_URL).origin;
@@ -130,8 +167,45 @@
     return "";
   };
 
+  let selectedCollegeId = "";
+  let selectedCollegeName = "";
+
+  const setEssayStatus = (message, isError = false) => {
+    if (!essayStatus) return;
+    essayStatus.textContent = message || "";
+    essayStatus.className = `text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+  };
+
+  const updateEssayCount = () => {
+    if (!essayCount || !essayTextarea) return;
+    essayCount.textContent = `${essayTextarea.value.trim().length} characters`;
+  };
+
+  const openEssayComposer = ({ collegeId, collegeName }) => {
+    selectedCollegeId = collegeId || "";
+    selectedCollegeName = collegeName || "this college";
+    if (essayCollegeName) {
+      essayCollegeName.textContent = `Submit your scholarship essay to ${selectedCollegeName}.`;
+    }
+    if (essayTextarea) essayTextarea.value = "";
+    updateEssayCount();
+    setEssayStatus("");
+    essaySection?.classList.remove("hidden");
+    essaySection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    essayTextarea?.focus();
+  };
+
+  const closeEssayComposer = () => {
+    selectedCollegeId = "";
+    selectedCollegeName = "";
+    if (essayTextarea) essayTextarea.value = "";
+    updateEssayCount();
+    setEssayStatus("");
+    essaySection?.classList.add("hidden");
+  };
+
   const card = (college, latestApplication, applicationCount = 0) => `
-    <article class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900/60">
+    <article class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-900/60" data-college-name="${college.username || "College"}">
       <div class="flex items-center gap-3 mb-3">
         ${college.logoUrl
           ? `<img src="${normalizeLogo(college.logoUrl)}" alt="${college.username} logo" class="w-14 h-14 rounded-xl object-cover border border-slate-200 dark:border-slate-700" onerror="this.onerror=null;this.src='../assets/l1.png';this.classList.remove('object-cover');this.classList.add('object-contain','p-1');"/>`
@@ -209,41 +283,9 @@
         button.addEventListener("click", async () => {
           const collegeId = button.getAttribute("data-college-id");
           if (!collegeId) return;
-          const previousText = button.textContent;
-          button.disabled = true;
-          button.textContent = "Submitting...";
-          try {
-            const title = (window.prompt("Enter funding title:", "") || "").trim();
-            if (!title) {
-              button.disabled = false;
-              button.textContent = previousText;
-              return;
-            }
-            const description = (window.prompt("Enter funding description:", "") || "").trim();
-            if (!description) {
-              button.disabled = false;
-              button.textContent = previousText;
-              return;
-            }
-            await authFetch("/applications", {
-              method: "POST",
-              body: JSON.stringify({
-                collegeId,
-                title,
-                description,
-                message: title,
-              }),
-            });
-            await loadInstitutions();
-          } catch (error) {
-            button.disabled = false;
-            button.textContent = previousText;
-            const rawMessage = error?.message || "Failed to apply.";
-            const friendlyMessage = rawMessage === "Failed to fetch"
-              ? "Cannot reach backend API. Ensure backend is running on port 4000."
-              : rawMessage;
-            alert(friendlyMessage);
-          }
+          const collegeCard = button.closest("[data-college-name]");
+          const collegeName = collegeCard?.getAttribute("data-college-name") || "this college";
+          openEssayComposer({ collegeId, collegeName });
         });
       });
     } catch (error) {
@@ -255,6 +297,43 @@
       institutionsCount.textContent = "Unavailable";
     }
   };
+
+  essayTextarea?.addEventListener("input", updateEssayCount);
+  essayCancelBtn?.addEventListener("click", closeEssayComposer);
+  essayForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const essay = essayTextarea?.value?.trim() || "";
+    if (!selectedCollegeId) {
+      setEssayStatus("Select a college first.", true);
+      return;
+    }
+    if (essay.length < 120) {
+      setEssayStatus("Your scholarship essay must be at least 120 characters.", true);
+      return;
+    }
+
+    try {
+      if (essaySubmitBtn) essaySubmitBtn.disabled = true;
+      setEssayStatus("Submitting your essay...");
+      await authFetch("/applications", {
+        method: "POST",
+        body: JSON.stringify({
+          collegeId: selectedCollegeId,
+          essay,
+        }),
+      });
+      closeEssayComposer();
+      await loadInstitutions();
+    } catch (error) {
+      const rawMessage = error?.message || "Failed to submit essay.";
+      const friendlyMessage = rawMessage === "Failed to fetch"
+        ? "Cannot reach backend API. Ensure backend is running on port 4000."
+        : rawMessage;
+      setEssayStatus(friendlyMessage, true);
+    } finally {
+      if (essaySubmitBtn) essaySubmitBtn.disabled = false;
+    }
+  });
 
   loadInstitutions();
 </script></body>

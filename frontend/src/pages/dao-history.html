@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <script type="module" src="../js/authGuard.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CTS | DAO History</title>
+  <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
+  <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+  <script>
+    tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#285185", secondary: "#D67940", accent: "#6F4849", "background-light": "#CCD9E2", "background-dark": "#0F172A", "surface-light": "#FFFFFF", "surface-dark": "#1E293B" }, fontFamily: { display: ["Outfit","sans-serif"], sans: ["Inter","sans-serif"] } } } };
+    function applyTheme(d){document.documentElement.classList.toggle("dark",d);}
+    function toggleDarkMode(){const d=!document.documentElement.classList.contains("dark");applyTheme(d);localStorage.setItem("theme",d?"dark":"light");}
+    document.addEventListener("DOMContentLoaded",()=>{const s=localStorage.getItem("theme");const p=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;applyTheme(s?s==="dark":p);});
+  </script>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-72 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 p-6 hidden lg:flex flex-col">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-lg overflow-hidden bg-transparent flex items-center justify-center"><img alt="CTS Logo" class="w-10 h-10 object-contain" src="../assets/cts_logo.png"/></div>
+      <span class="text-xl font-display font-bold text-primary dark:text-white"><a href="../../index.html">CTS</a> DAO</span>
+    </div>
+    <nav class="space-y-1 flex-1">
+      <a href="dao-dashboard.html"    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
+      <a href="dao-proposals.html"    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">gavel</span>Proposals</a>
+      <a href="dao-institutions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">school</span>Institutions</a>
+      <a href="dao-history.html"      class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium"><span class="material-icons-outlined">history</span>History</a>
+    </nav>
+    <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
+      <button type="button" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
+        <span class="material-icons-outlined dark:hidden">dark_mode</span>
+        <span class="material-icons-outlined hidden dark:block">light_mode</span>
+        <span>Appearance</span>
+      </button>
+      <a href="login.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <span class="material-icons-outlined">logout</span><span>Log Out</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+    <header class="mb-8">
+      <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Record</p>
+      <h1 class="text-3xl font-display font-bold mt-2">History</h1>
+      <p class="text-slate-600 dark:text-slate-400 mt-2">Completed, funded, rejected, and cancelled scholarship proposals.</p>
+    </header>
+
+    <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+
+      <!-- Category filter tabs -->
+      <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">
+        <button type="button" data-filter="all"       class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-primary text-white transition-all">All <span id="count-all"       class="ml-1 opacity-70"></span></button>
+        <button type="button" data-filter="funded"    class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all">Funded <span id="count-funded"    class="ml-1 opacity-70"></span></button>
+        <button type="button" data-filter="claimed"   class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all">Claimed <span id="count-claimed"   class="ml-1 opacity-70"></span></button>
+        <button type="button" data-filter="rejected"  class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all">Rejected <span id="count-rejected"  class="ml-1 opacity-70"></span></button>
+        <button type="button" data-filter="cancelled" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all">Cancelled <span id="count-cancelled" class="ml-1 opacity-70"></span></button>
+      </div>
+
+      <div class="space-y-3 text-sm" id="history-list">
+        <div class="text-sm text-slate-500 dark:text-slate-400">Loading history...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+  import { formatEth, getConnectedAddress, getProposalMetadata, isDaoMemberOnChain, listProposalsOnChain } from "../js/cts-contract.js";
+  import { requireSession } from "../js/session.js";
+  requireSession({ roles: ["dao", "admin"] });
+
+  let historyProposals = [];
+  let currentFilter = "all";
+
+  /* ── Classify each proposal into a history category ── */
+  const categoryOf = (p, viewerAddress) => {
+    if (p.cancelled)  return "cancelled";
+    if (p.executed)   return "claimed";
+    if (p.isFunded)   return "funded";
+    // no offer submitted, or viewer passed on the proposal after the offer window ended
+    if (p.hasEnded && (p.votesFor === 0 || (p.hasVoted && !p.viewerVoteSupport))) return "rejected";
+    return null; // still active / passed — not history
+  };
+
+  const isHistory = (p, viewerAddress) => categoryOf(p, viewerAddress) !== null;
+
+  /* ── Badge colours per category ── */
+  const badge = (cat) => {
+    const map = {
+      funded:    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+      claimed:   "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+      rejected:  "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+      cancelled: "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400",
+    };
+    return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${map[cat] || ""}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</span>`;
+  };
+
+  const previewEssay = (essay = "", maxLength = 150) => {
+    const trimmed = String(essay || "").trim();
+    if (!trimmed) return "No student essay attached.";
+    return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 3)}...` : trimmed;
+  };
+
+  /* ── Render a single history card (read-only) ── */
+  const renderCard = (p, cat) => `
+    <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+        <div class="flex items-center gap-2">
+          <p class="font-semibold">Proposal #${p.id}</p>
+          ${badge(cat)}
+        </div>
+        <span class="text-xs text-slate-400">${p.deadlineAt ? new Date(p.deadlineAt).toLocaleDateString() : ""}</span>
+      </div>
+      <p class="text-slate-700 dark:text-slate-300 font-medium">${p.metaEssayPreview}</p>
+      <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+        <span>College: ${p.collegeShort}</span>
+        <span>Student: ${p.studentShort}</span>
+        <span>School Fees: ${p.amountEth} ETH</span>
+        <span>Offers: ${p.votesFor} | Passes: ${p.votesAgainst}</span>
+        ${p.selectedAmountEth && p.selectedAmountEth !== "-" ? `<span>Selected offer: ${p.selectedAmountEth}</span>` : ""}
+      </div>
+    </div>`;
+
+  /* ── Update filter tab counts ── */
+  const updateCounts = (items, viewer) => {
+    const counts = { all: items.length, funded: 0, claimed: 0, rejected: 0, cancelled: 0 };
+    items.forEach((p) => { const cat = categoryOf(p, viewer); if (cat) counts[cat]++; });
+    Object.entries(counts).forEach(([key, val]) => {
+      const el = document.getElementById(`count-${key}`);
+      if (el) el.textContent = `(${val})`;
+    });
+  };
+
+  /* ── Apply filter and re-render list ── */
+  const applyFilter = (filter, viewer) => {
+    currentFilter = filter;
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      const active = btn.dataset.filter === filter;
+      btn.className = active
+        ? "filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-primary text-white transition-all"
+        : "filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all";
+    });
+
+    const filtered = filter === "all"
+      ? historyProposals
+      : historyProposals.filter((p) => categoryOf(p, viewer) === filter);
+
+    const listEl = document.getElementById("history-list");
+    listEl.innerHTML = filtered.length
+      ? filtered.map((p) => renderCard(p, categoryOf(p, viewer))).join("")
+      : `<p class="text-sm text-slate-500 dark:text-slate-400">No ${filter === "all" ? "" : filter + " "}proposals in history.</p>`;
+  };
+
+  /* ── Load on-chain proposals and extract history ── */
+  const load = async () => {
+    const listEl = document.getElementById("history-list");
+    try {
+      const viewer = await getConnectedAddress().catch(() => "");
+      const raw = await listProposalsOnChain({ maxItems: 100, viewerAddress: viewer });
+
+      const enriched = await Promise.all(
+        raw
+          .filter((p) => isHistory(p, viewer))
+          .map(async (p) => ({
+            ...p,
+            metaEssayPreview: previewEssay(getProposalMetadata(p.id)?.essay || ""),
+            amountEth:        await formatEth(p.amountWei),
+            selectedAmountEth: p.selectedAmountWei && BigInt(p.selectedAmountWei) > 0n
+              ? `${await formatEth(p.selectedAmountWei)} ETH` : "-",
+            collegeShort: `${p.college.slice(0, 6)}...${p.college.slice(-4)}`,
+            studentShort: `${p.student.slice(0, 6)}...${p.student.slice(-4)}`,
+          }))
+      );
+
+      historyProposals = enriched;
+      updateCounts(enriched, viewer);
+      applyFilter(currentFilter, viewer);
+
+      // Wire up filter buttons now that data is loaded
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => applyFilter(btn.dataset.filter, viewer));
+      });
+
+    } catch {
+      listEl.innerHTML = '<div class="text-sm text-red-600 dark:text-red-400">Failed to load history. Connect MetaMask and try again.</div>';
+    }
+  };
+
+  load();
+</script>
+</body>
+</html>

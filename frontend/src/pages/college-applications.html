@@ -58,9 +58,8 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="college-applications.html"><span class="material-icons-outlined">assignment_ind</span>Student Applications</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span>Create Project Funding</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-proposals.html"><span class="material-icons-outlined">account_tree</span>DAO Proposals</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-reports.html"><span class="material-icons-outlined">analytics</span>Reports</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span>Create Proposal</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-reports.html"><span class="material-icons-outlined">analytics</span>Funding Reports</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
     <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
@@ -79,7 +78,7 @@
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">College Admin Workspace</p>
     <h1 class="text-3xl font-display font-bold mt-2">Student Applications</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">Review applicants and approve to pre-fill funding details for DAO proposal publishing.</p>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">Review scholarship essays and approve students for proposal creation.</p>
   </header>
 
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -100,7 +99,7 @@
   <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-bold">Applications List</h2>
-      <a class="text-sm text-primary font-semibold hover:underline" href="college-dashboard.html">Go to DAO Publish Form</a>
+      <a class="text-sm text-primary font-semibold hover:underline" href="college-create-scholarship.html">Create Proposal</a>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full text-left">
@@ -109,15 +108,14 @@
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Student</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Email</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Wallet</th>
-            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Funding Title</th>
-            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Funding Description</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Scholarship Essay</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Applied</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Status</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider text-right">Action</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="applications-table-body">
-          <tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="8">Loading applications...</td></tr>
+          <tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="7">Loading applications...</td></tr>
         </tbody>
       </table>
     </div>
@@ -188,35 +186,33 @@
     localStorage.setItem(approvedPrefillKey, JSON.stringify({
       applicationId: item.id,
       studentWallet: item.student?.walletAddress || "",
-      title: item.title || item.message || "",
-      description: item.description || "",
+      essay: item.essay || item.description || item.message || "",
     }));
-    window.location.href = "college-dashboard.html#proposal";
+    window.location.href = "college-create-scholarship.html";
   };
 
   const renderTable = (items = []) => {
     if (!items.length) {
-      tableBody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="8">No applications found.</td></tr>';
+      tableBody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="7">No applications found.</td></tr>';
       return;
     }
     tableBody.innerHTML = items.map((item) => {
       const student = item.student || {};
-      const title = (item.title || item.message || "Untitled funding").trim();
-      const description = (item.description || "No description provided.").trim();
+      const essay = (item.essay || item.description || item.message || "No scholarship essay provided.").trim();
+      const essayPreview = essay.length > 220 ? `${essay.slice(0, 217)}...` : essay;
       const canApprove = item.status === "pending";
       return `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
           <td class="px-4 py-4 text-sm font-semibold">${student.username || "-"}</td>
           <td class="px-4 py-4 text-sm text-slate-500">${student.email || "-"}</td>
           <td class="px-4 py-4 text-xs font-mono text-slate-500">${shortAddress(student.walletAddress)}</td>
-          <td class="px-4 py-4 text-sm font-medium">${title}</td>
-          <td class="px-4 py-4 text-sm text-slate-500">${description}</td>
+          <td class="px-4 py-4 text-sm text-slate-500 max-w-xl whitespace-pre-wrap break-words">${essayPreview}</td>
           <td class="px-4 py-4 text-sm text-slate-500">${new Date(item.createdAt).toLocaleString()}</td>
           <td class="px-4 py-4">${statusPill(item.status)}</td>
           <td class="px-4 py-4 text-right">
             <div class="inline-flex items-center gap-2">
               <button class="approve-prefill-btn px-3 py-1.5 rounded text-xs font-semibold ${canApprove ? "bg-emerald-600 text-white hover:bg-emerald-500" : "bg-slate-300 text-slate-600 cursor-not-allowed"}" data-app-id="${item.id}" ${canApprove ? "" : "disabled"}>
-                ${canApprove ? "Approve -> DAO" : "Approved"}
+                ${canApprove ? "Approve -> Create Proposal" : "Approved"}
               </button>
               <button class="deny-application-btn px-3 py-1.5 rounded text-xs font-semibold ${canApprove ? "bg-red-600 text-white hover:bg-red-500" : "bg-slate-300 text-slate-600 cursor-not-allowed"}" data-app-id="${item.id}" ${canApprove ? "" : "disabled"}>
                 ${canApprove ? "Deny" : (item.status === "rejected" ? "Denied" : "Deny")}
@@ -275,7 +271,7 @@
         });
       });
     } catch (error) {
-      tableBody.innerHTML = `<tr><td class="px-4 py-4 text-sm text-red-600 dark:text-red-400" colspan="8">${error.message || "Failed to load applications."}</td></tr>`;
+      tableBody.innerHTML = `<tr><td class="px-4 py-4 text-sm text-red-600 dark:text-red-400" colspan="7">${error.message || "Failed to load applications."}</td></tr>`;
     }
   };
 

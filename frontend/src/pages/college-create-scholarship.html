@@ -2,8 +2,9 @@
 <html class="scroll-smooth" lang="en">
 <head>
 <meta charset="utf-8"/>
+<script type="module" src="../js/authGuard.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CTS | College Admin | Create Project Funding</title>
+<title>CTS | College Admin | Create Proposal</title>
 <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
 <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
@@ -50,76 +51,345 @@
 </head>
 <body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
 <div class="flex min-h-screen">
-<aside class="w-72 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 p-6 hidden lg:flex flex-col">
-  <div class="flex items-center gap-3 mb-8">
+<aside class="w-72 bg-primary text-white flex-shrink-0 flex-col hidden lg:flex">
+  <div class="p-6 flex items-center gap-3">
     <div class="w-10 h-10 rounded-lg overflow-hidden bg-transparent flex items-center justify-center"><img alt="CTS Logo" class="w-10 h-10 object-contain" src="../assets/cts_logo.png"/></div>
-    <span class="text-xl font-display font-bold text-primary dark:text-white"><a href="../../index.html">CTS</a> <span id="college-sidebar-name">College</span></span>
+    <span class="text-xl font-display font-bold tracking-tight"><a href="../../index.html">CTS</a> <span id="college-sidebar-name">College</span></span>
   </div>
-  <nav class="space-y-1 flex-1">
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-applications.html"><span class="material-icons-outlined">assignment_ind</span>Student Applications</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span>Create Project Funding</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-proposals.html"><span class="material-icons-outlined">account_tree</span>DAO Proposals</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-reports.html"><span class="material-icons-outlined">analytics</span>Reports</a>
+  <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+    <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-dashboard.html"><span class="material-icons-outlined">dashboard</span><span class="font-medium">Dashboard</span></a>
+    <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-applications.html"><span class="material-icons-outlined">assignment_ind</span><span class="font-medium">Student Applications</span></a>
+    <a class="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg transition-colors" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span><span class="font-medium">Create Proposal</span></a>
+    <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="college-reports.html"><span class="material-icons-outlined">analytics</span><span class="font-medium">Funding Reports</span></a>
   </nav>
-  <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
-    <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
+  <div class="p-4 mt-auto border-t border-white/10">
+    <button type="button" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" onclick="toggleDarkMode()">
       <span class="material-icons-outlined dark:hidden">dark_mode</span>
       <span class="material-icons-outlined hidden dark:block">light_mode</span>
-      <span>Appearance</span>
+      <span class="font-medium">Appearance</span>
     </button>
-    <a class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="login.html">
+    <a class="w-full flex items-center gap-3 px-4 py-3 mt-2 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="login.html">
       <span class="material-icons-outlined">logout</span>
-      <span>Log Out</span>
+      <span class="font-medium">Log Out</span>
     </a>
+    <div class="flex items-center gap-3 px-4 py-3 mt-2">
+      <div id="college-user-initials" class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-bold">--</div>
+      <div class="overflow-hidden">
+        <p id="college-user-name" class="text-sm font-semibold truncate">College Admin</p>
+        <p class="text-xs text-white/50 truncate">College Admin</p>
+      </div>
+    </div>
   </div>
 </aside>
 
-<main class="flex-1 p-6 lg:p-10">
+<main class="flex-1 p-6 lg:p-10 overflow-y-auto">
   <header class="mb-8">
-    <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">College Admin Workspace</p>
-    <h1 class="text-3xl font-display font-bold mt-2">Create Project Funding</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the college admin dashboard flow.</p>
+    <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">College Admin</p>
+    <h1 class="text-3xl font-display font-bold mt-2">Create Proposal</h1>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">Publish a DAO proposal for an approved student. Set only the school fees request; any additional DAO offer goes to the student.</p>
   </header>
 
-  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</p>
-      <p class="text-2xl font-bold mt-2">Active</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Live static page with aligned navigation.</p>
-    </article>
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Updated</p>
-      <p class="text-2xl font-bold mt-2">Feb 23, 2026</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Prepared for complete dashboard routing.</p>
-    </article>
-    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Next Action</p>
-      <p class="text-2xl font-bold mt-2">Connect Data</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Hook forms and blockchain calls per module.</p>
-    </article>
-  </section>
+  <!-- Prefill banner (hidden by default) -->
+  <div id="prefill-banner" class="hidden mb-6 flex items-start gap-3 p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+    <span class="material-icons-outlined text-emerald-600 dark:text-emerald-400 mt-0.5">check_circle</span>
+    <div>
+      <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-400">Student approved - essay prefilled</p>
+      <p class="text-xs text-emerald-600 dark:text-emerald-500 mt-0.5">Review the student essay, set the school fees request, and publish the proposal to the DAO.</p>
+    </div>
+  </div>
 
-  <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-    <h2 class="text-xl font-bold mb-4">Module Notes</h2>
-    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Sidebar navigation now links to real pages for this role.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Theme toggle and global visual language are consistent with existing dashboards.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Ready for incremental feature implementation without broken routes.</span></li>
-    </ul>
-  </section>
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <!-- Proposal form -->
+    <div class="xl:col-span-2 bg-surface-light dark:bg-surface-dark p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+        <span class="material-icons-outlined text-primary">add_circle_outline</span>
+        New Proposal
+      </h2>
+      <form class="space-y-5" id="proposal-form">
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Student Wallet Address</label>
+          <input id="proposal-student-wallet" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="0x..." type="text"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">School Fees Requested (ETH)</label>
+          <input id="proposal-amount" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="e.g. 1.5" type="number" min="0.0001" step="0.0001"/>
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">This is the minimum the selected DAO member must fund. Any offer above this goes to the student.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Student Essay</label>
+          <textarea id="proposal-student-essay" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" rows="6" placeholder="The approved student's essay will appear here. If needed, paste it in so DAO members can review the student's context."></textarea>
+          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">This essay is stored locally for proposal context in the app. The on-chain contract only stores the wallet, school fees, and offer window.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Offer Window (Minutes)</label>
+          <input id="proposal-duration" title="Offer window in minutes" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent" value="60" min="1" max="43200" type="number" placeholder="e.g. 60"/>
+        </div>
+        <button class="w-full bg-primary text-white py-3 rounded-lg font-bold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.98]" type="submit">
+          Publish Proposal to DAO
+        </button>
+        <p class="text-sm min-h-5" id="proposal-status"></p>
+      </form>
+    </div>
+
+    <!-- Right panel: network status -->
+    <div class="space-y-6">
+      <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h2 class="text-lg font-bold mb-4">Network Status</h2>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">Connected Network</span>
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <span class="text-sm font-medium">Mainnet v2</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">On-chain College Status</span>
+            <span class="text-xs font-semibold px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500" id="college-onchain-status">Checking...</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-500">GAS Price</span>
+            <span class="text-sm font-mono font-medium">18 Gwei</span>
+          </div>
+          <div class="p-3 bg-accent/5 border border-accent/20 rounded-lg">
+            <p class="text-xs text-accent font-medium leading-relaxed">
+              <span class="material-icons-outlined text-[14px] align-middle mr-1">info</span>
+              Your wallet must be registered on-chain as a college before publishing.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h2 class="text-lg font-bold mb-4">My Active Proposals</h2>
+        <div class="space-y-3" id="college-proposals-list">
+          <p class="text-sm text-slate-500 dark:text-slate-400">Loading proposals...</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 </div>
+
 <script type="module">
+  import {
+    cancelProposalOnChain,
+    formatEth,
+    getConnectedAddress,
+    getProposalMetadata,
+    isCollegeRegisteredOnChain,
+    isStudentRegisteredOnChain,
+    listProposalsOnChain,
+    saveProposalMetadata,
+    submitProposalOnChain,
+  } from "../js/cts-contract.js";
   import { requireSession } from "../js/session.js";
   requireSession({ roles: ["college"] });
-  const _user = JSON.parse(localStorage.getItem("cts_user") || "null");
-  const _sidebarEl = document.getElementById("college-sidebar-name");
-  if (_sidebarEl && _user?.username) _sidebarEl.textContent = _user.username;
-</script></body>
+
+  const user = JSON.parse(localStorage.getItem("cts_user") || "null");
+  const sidebarNameEl = document.getElementById("college-sidebar-name");
+  const nameEl = document.getElementById("college-user-name");
+  const initialsEl = document.getElementById("college-user-initials");
+  if (sidebarNameEl && user?.username) sidebarNameEl.textContent = user.username;
+  if (nameEl && user?.username) nameEl.textContent = user.username;
+  if (initialsEl && user?.username) initialsEl.textContent = user.username.slice(0, 2).toUpperCase();
+
+  const proposalForm = document.getElementById("proposal-form");
+  const walletInput = document.getElementById("proposal-student-wallet");
+  const amountInput = document.getElementById("proposal-amount");
+  const essayInput = document.getElementById("proposal-student-essay");
+  const durationInput = document.getElementById("proposal-duration");
+  const statusEl = document.getElementById("proposal-status");
+  const proposalList = document.getElementById("college-proposals-list");
+  const onChainStatusEl = document.getElementById("college-onchain-status");
+  const prefillBanner = document.getElementById("prefill-banner");
+  const approvedPrefillKey = "cts_college_approved_application_prefill";
+  let currentPrefill = null;
+
+  const setStatus = (message, isError = false) => {
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.className = `text-sm min-h-5 ${isError ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`;
+  };
+
+  const setOnChainStatus = (registered, wallet = "") => {
+    if (!onChainStatusEl) return;
+    if (registered) {
+      onChainStatusEl.className = "text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400";
+      onChainStatusEl.textContent = `Registered (${wallet ? `${wallet.slice(0, 6)}...${wallet.slice(-4)}` : "wallet"})`;
+      return;
+    }
+    onChainStatusEl.className = "text-xs font-semibold px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400";
+    onChainStatusEl.textContent = "Not Registered";
+  };
+
+  const refreshOnChainStatus = async () => {
+    if (!onChainStatusEl) return;
+    try {
+      onChainStatusEl.className = "text-xs font-semibold px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500";
+      onChainStatusEl.textContent = "Checking...";
+      const connectedWallet = await getConnectedAddress();
+      const registered = await isCollegeRegisteredOnChain(connectedWallet);
+      setOnChainStatus(registered, connectedWallet);
+    } catch (_error) {
+      onChainStatusEl.className = "text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400";
+      onChainStatusEl.textContent = "Wallet Not Connected";
+    }
+  };
+
+  const formatRemaining = (ms) => {
+    if (ms <= 0) return "Offer window closed";
+    const totalMinutes = Math.floor(ms / 60000);
+    const days = Math.floor(totalMinutes / (60 * 24));
+    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+    const minutes = totalMinutes % 60;
+    if (days > 0) return `${days}d ${hours}h left`;
+    if (hours > 0) return `${hours}h ${minutes}m left`;
+    return `${minutes}m left`;
+  };
+
+  const previewEssay = (essay = "", maxLength = 180) => {
+    const trimmed = String(essay || "").trim();
+    if (!trimmed) return "No student essay attached.";
+    return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 3)}...` : trimmed;
+  };
+
+  const renderMyProposals = (items) => {
+    if (!proposalList) return;
+    if (!items.length) {
+      proposalList.innerHTML = '<p class="text-sm text-slate-500 dark:text-slate-400">No proposals yet.</p>';
+      return;
+    }
+    proposalList.innerHTML = items.map((item) => `
+      <div class="p-3 border border-slate-200 dark:border-slate-700 rounded-lg">
+        <div class="flex items-center justify-between gap-3">
+          <p class="font-semibold text-sm">Proposal #${item.id}</p>
+          <span class="text-xs px-2 py-1 rounded ${item.isActive ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"}">${formatRemaining(item.remainingMs)}</span>
+        </div>
+        <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 mt-1 uppercase tracking-wider">Student Essay</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 whitespace-pre-wrap break-words">${item.metaEssayPreview}</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Student: ${item.studentShort} | School Fees: ${item.amountEth} ETH</p>
+        <p class="text-[11px] text-slate-400 mt-2">Offers: ${item.votesFor || 0} | Passes: ${item.votesAgainst || 0} ${item.note ? `| ${item.note}` : ""}</p>
+        <div class="mt-2 flex justify-end">
+          <button class="college-cancel-proposal text-xs px-2 py-1 rounded ${item.canCancel ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500"}" data-proposal-id="${item.id}" ${item.canCancel ? "" : "disabled"}>Cancel Proposal</button>
+        </div>
+      </div>
+    `).join("");
+  };
+
+  const loadMyProposals = async () => {
+    try {
+      const wallet = await getConnectedAddress();
+      const chainItems = await listProposalsOnChain({ maxItems: 100, viewerAddress: wallet });
+      const mine = chainItems
+        .filter((item) => (item.college || "").toLowerCase() === wallet.toLowerCase())
+        .map(async (item) => ({
+          ...item,
+          metaEssayPreview: previewEssay(getProposalMetadata(item.id)?.essay || ""),
+          amountEth: await formatEth(item.amountWei),
+          studentShort: `${item.student.slice(0, 6)}...${item.student.slice(-4)}`,
+          note: item.executed ? "Executed" : item.cancelled ? "Cancelled" : "",
+          canCancel: item.isActive,
+        }));
+      renderMyProposals(await Promise.all(mine));
+    } catch (_error) {
+      if (proposalList) {
+        proposalList.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400">Failed to load on-chain proposals.</p>';
+      }
+    }
+  };
+
+  // Consume prefill from approved application
+  const consumePrefill = () => {
+    const raw = localStorage.getItem(approvedPrefillKey) || "";
+    if (!raw) return;
+    try {
+      const payload = JSON.parse(raw);
+      currentPrefill = payload;
+      if (walletInput && payload.studentWallet) walletInput.value = payload.studentWallet;
+      if (essayInput && payload.essay) essayInput.value = payload.essay;
+      if (prefillBanner) prefillBanner.classList.remove("hidden");
+    } catch (_error) {
+      // ignore malformed payload
+    } finally {
+      localStorage.removeItem(approvedPrefillKey);
+    }
+  };
+
+  proposalForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const studentAddress = walletInput?.value?.trim() || "";
+    const schoolFeesEth = amountInput?.value?.trim() || "";
+    const studentEssay = essayInput?.value?.trim() || "";
+    const durationMinutes = Number(durationInput?.value || 0);
+
+    if (!studentAddress || !schoolFeesEth || !durationMinutes || !studentEssay) {
+      setStatus("Fill student wallet, school fees, student essay, and offer window.", true);
+      return;
+    }
+    if (studentEssay.length < 120) {
+      setStatus("Student essay must be at least 120 characters.", true);
+      return;
+    }
+    try {
+      const connectedWallet = await getConnectedAddress();
+      const registered = await isCollegeRegisteredOnChain(connectedWallet);
+      if (!registered) {
+        setOnChainStatus(false, connectedWallet);
+        setStatus("Your connected wallet is not registered on-chain as a college. Ask admin to register this wallet first.", true);
+        return;
+      }
+      const studentRegistered = await isStudentRegisteredOnChain(studentAddress);
+      if (!studentRegistered) {
+        setStatus("Selected student wallet is not registered on-chain. Ask admin to register this student first.", true);
+        return;
+      }
+      setStatus("Publishing on-chain proposal...");
+      const result = await submitProposalOnChain({
+        studentAddress,
+        schoolFeesEth,
+        offerWindowSeconds: Math.floor(durationMinutes * 60),
+      });
+      if (result?.proposalId) {
+        saveProposalMetadata({
+          proposalId: result.proposalId,
+          essay: studentEssay,
+          applicationId: currentPrefill?.applicationId || "",
+          studentWallet: studentAddress,
+          collegeWallet: connectedWallet,
+        });
+      }
+      setStatus(`Proposal created on-chain. Tx: ${result.txHash.slice(0, 10)}...`);
+      walletInput.value = "";
+      amountInput.value = "";
+      if (essayInput) essayInput.value = "";
+      if (prefillBanner) prefillBanner.classList.add("hidden");
+      currentPrefill = null;
+      await refreshOnChainStatus();
+      await loadMyProposals();
+    } catch (error) {
+      setStatus(error.message || "Failed to create on-chain proposal.", true);
+    }
+  });
+
+  proposalList?.addEventListener("click", async (event) => {
+    const button = event.target.closest(".college-cancel-proposal");
+    if (!button) return;
+    const proposalId = button.getAttribute("data-proposal-id");
+    if (!proposalId) return;
+    if (!window.confirm("Cancel this on-chain proposal?")) return;
+    try {
+      await cancelProposalOnChain(proposalId);
+      setStatus("Proposal cancelled on-chain.");
+      await loadMyProposals();
+    } catch (error) {
+      setStatus(error.message || "Failed to cancel proposal.", true);
+    }
+  });
+
+  consumePrefill();
+  refreshOnChainStatus();
+  loadMyProposals();
+</script>
+</body>
 </html>
-
-
-
-
-

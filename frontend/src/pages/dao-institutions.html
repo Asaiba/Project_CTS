@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <script type="module" src="../js/authGuard.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CTS | DAO Institutions</title>
+  <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
+  <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+  <script>
+    tailwind.config = { darkMode: "class", theme: { extend: { colors: { primary: "#285185", secondary: "#D67940", accent: "#6F4849", "background-light": "#CCD9E2", "background-dark": "#0F172A", "surface-light": "#FFFFFF", "surface-dark": "#1E293B" }, fontFamily: { display: ["Outfit","sans-serif"], sans: ["Inter","sans-serif"] } } } };
+    function applyTheme(d){document.documentElement.classList.toggle("dark",d);}
+    function toggleDarkMode(){const d=!document.documentElement.classList.contains("dark");applyTheme(d);localStorage.setItem("theme",d?"dark":"light");}
+    document.addEventListener("DOMContentLoaded",()=>{const s=localStorage.getItem("theme");const p=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;applyTheme(s?s==="dark":p);});
+  </script>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<div class="flex min-h-screen">
+  <aside class="w-72 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 p-6 hidden lg:flex flex-col">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-lg overflow-hidden bg-transparent flex items-center justify-center"><img alt="CTS Logo" class="w-10 h-10 object-contain" src="../assets/cts_logo.png"/></div>
+      <span class="text-xl font-display font-bold text-primary dark:text-white"><a href="../../index.html">CTS</a> DAO</span>
+    </div>
+    <nav class="space-y-1 flex-1">
+      <a href="dao-dashboard.html"    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
+      <a href="dao-proposals.html"    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">gavel</span>Proposals</a>
+      <a href="dao-institutions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium"><span class="material-icons-outlined">school</span>Institutions</a>
+      <a href="dao-history.html"      class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><span class="material-icons-outlined">history</span>History</a>
+    </nav>
+    <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
+      <button type="button" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
+        <span class="material-icons-outlined dark:hidden">dark_mode</span>
+        <span class="material-icons-outlined hidden dark:block">light_mode</span>
+        <span>Appearance</span>
+      </button>
+      <a href="login.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+        <span class="material-icons-outlined">logout</span><span>Log Out</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+    <header class="mb-8">
+      <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Network</p>
+      <h1 class="text-3xl font-display font-bold mt-2">Institutions</h1>
+      <p class="text-slate-600 dark:text-slate-400 mt-2">All colleges and institutions registered in the CTS network.</p>
+    </header>
+    <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold">Registered Institutions</h2>
+        <span class="text-xs text-slate-500 dark:text-slate-400" id="institutions-count">Loading...</span>
+      </div>
+      <div id="institutions-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div class="text-sm text-slate-500 dark:text-slate-400">Loading institutions...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+  import { API_BASE_URL } from "../js/config.js";
+  import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
+  requireSession({ roles: ["dao", "admin"] });
+
+  const callWithAuth = async (path) => {
+    let token = localStorage.getItem("cts_access_token") || "";
+    let res = await fetch(`${API_BASE_URL}${path}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
+    if (res.status === 401) {
+      token = await refreshSessionToken();
+      if (!token) { logoutAndRedirect("login.html"); return null; }
+      res = await fetch(`${API_BASE_URL}${path}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
+    }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.message || "Request failed");
+    return data;
+  };
+
+  const load = async () => {
+    const grid = document.getElementById("institutions-grid");
+    const countEl = document.getElementById("institutions-count");
+    try {
+      const data = await callWithAuth("/users/colleges");
+      const items = data?.items || [];
+      countEl.textContent = `${items.length} institution${items.length !== 1 ? "s" : ""}`;
+      grid.innerHTML = items.length
+        ? items.map((c) => {
+            const initials = (c.username || "C").slice(0, 2).toUpperCase();
+            const wallet = c.walletAddress ? `${c.walletAddress.slice(0,6)}...${c.walletAddress.slice(-4)}` : "No wallet";
+            return `
+              <article class="rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary font-bold flex items-center justify-center text-sm">${initials}</div>
+                  <div class="min-w-0">
+                    <p class="font-semibold truncate">${c.username}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${c.email}</p>
+                  </div>
+                </div>
+                <p class="text-xs font-mono text-slate-400 truncate">${wallet}</p>
+              </article>`;
+          }).join("")
+        : '<div class="text-sm text-slate-500 dark:text-slate-400">No institutions registered yet.</div>';
+    } catch {
+      grid.innerHTML = '<div class="text-sm text-red-600 dark:text-red-400">Failed to load institutions.</div>';
+      countEl.textContent = "Unavailable";
+    }
+  };
+  load();
+</script>
+</body>
+</html>

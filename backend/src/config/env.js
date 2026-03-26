@@ -41,6 +41,11 @@ export const env = {
   smtpUser: process.env.SMTP_USER || "",
   smtpPass: process.env.SMTP_PASS || "",
   smtpFrom: process.env.SMTP_FROM || "no-reply@cts.local",
+  appBaseUrl:
+    process.env.APP_BASE_URL ||
+    process.env.PUBLIC_APP_URL ||
+    configuredOrigins[0] ||
+    localDevOrigins[0],
   ethRpcUrl: process.env.ETH_RPC_URL || "",
   ctsContractAddress: process.env.CTS_CONTRACT_ADDRESS || "",
   ctsOwnerPrivateKey: process.env.CTS_OWNER_PRIVATE_KEY || "",

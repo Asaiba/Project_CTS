@@ -7,25 +7,24 @@ const CTS_ABI = [
   "function students(address) view returns (string username, address wallet, bool isRegistered)",
   "function daoMembers(address) view returns (bool)",
   "function proposalCount() view returns (uint256)",
-  "function proposals(uint256) view returns (uint256 id, address college, address student, uint256 amount, uint256 votesFor, uint256 votesAgainst, uint256 deadline, bool executed, bool cancelled)",
+  "function proposals(uint256) view returns (uint256 id, address college, address student, uint256 schoolFees, uint256 votesFor, uint256 votesAgainst, uint256 deadline, bool funded, bool claimed, bool cancelled)",
   "function hasVoted(uint256,address) view returns (bool)",
   "function voteSupport(uint256,address) view returns (bool)",
   "function daoOfferAmount(uint256,address) view returns (uint256)",
   "function selectedDaoOffer(uint256) view returns (address)",
   "function selectedOfferAmount(uint256) view returns (uint256)",
   "function offerFunded(uint256) view returns (bool)",
-  "function pendingPayoutByProposal(uint256) view returns (uint256)",
+  "function pendingStudentPayout(uint256) view returns (uint256)",
   "function getDaoOffers(uint256) view returns (address[] daoWallets, uint256[] offerAmounts, bool[] isSelected)",
   "function registerCollege(address _wallet, string _name)",
   "function registerStudent(address _wallet, string _username)",
   "function addDaoMember(address _member)",
-  "function submitScholarshipProposal(address _student, uint256 _amount, uint256 _votingDuration)",
-  "function voteOnProposal(uint256 _proposalId, bool _support)",
-  "function voteOnProposalWithOffer(uint256 _proposalId, bool _support, uint256 _offerAmount)",
+  "function submitProposal(address _student, uint256 _schoolFees, uint256 _votingDuration)",
+  "function voteWithOffer(uint256 _proposalId, uint256 _offerAmount)",
+  "function voteAgainst(uint256 _proposalId)",
   "function chooseDaoOffer(uint256 _proposalId, address _daoMember)",
-  "function fundSelectedOffer(uint256 _proposalId) payable",
-  "function withdrawScholarship(uint256 _proposalId)",
-  "function executeProposal(uint256 _proposalId)",
+  "function fundOffer(uint256 _proposalId) payable",
+  "function claimFunds(uint256 _proposalId)",
   "function cancelProposal(uint256 _proposalId)",
 ];
 
@@ -123,31 +122,46 @@ export const addDaoMemberOnChain = async (walletAddress) => {
   return tx.hash;
 };
 
-export const submitScholarshipProposalOnChain = async ({ studentAddress, amountEth, votingDurationSeconds }) => {
+/**
+ * College submits a proposal for a student.
+ * @param {string} studentAddress - Student's wallet address.
+ * @param {string} schoolFeesEth  - Fixed school fees in ETH (floor for DAO offers).
+ * @param {number} offerWindowSeconds - Seconds DAO members have to respond with an offer or pass.
+ */
+export const submitProposalOnChain = async ({
+  studentAddress,
+  schoolFeesEth,
+  offerWindowSeconds,
+  votingDurationSeconds,
+}) => {
   const { contract } = await getSignerContract();
-  const amountWei = await parseEth(amountEth);
-  const tx = await contract.submitScholarshipProposal(studentAddress, amountWei, BigInt(votingDurationSeconds));
+  const schoolFeesWei = await parseEth(schoolFeesEth);
+  const windowSeconds = offerWindowSeconds ?? votingDurationSeconds;
+  if (windowSeconds == null) {
+    throw new Error("Offer window duration is required.");
+  }
+  const tx = await contract.submitProposal(studentAddress, schoolFeesWei, BigInt(windowSeconds));
   await tx.wait();
   const proposalId = Number(await contract.proposalCount());
   return { txHash: tx.hash, proposalId };
 };
 
+/**
+ * DAO member records a response by submitting an offer or passing.
+ * Legacy vote naming is kept here to match the contract ABI.
+ * @param {string|number} proposalId
+ * @param {boolean} support
+ * @param {string} [offerAmountEth] - Required when support=true; must be >= schoolFees.
+ */
 export const voteProposalOnChain = async ({ proposalId, support, offerAmountEth = "" }) => {
   const { contract } = await getSignerContract();
   let tx;
   if (Boolean(support)) {
-    const offerAmountWei = await parseEth(offerAmountEth);
-    tx = await contract.voteOnProposalWithOffer(BigInt(proposalId), true, offerAmountWei);
+    const offerWei = await parseEth(offerAmountEth);
+    tx = await contract.voteWithOffer(BigInt(proposalId), offerWei);
   } else {
-    tx = await contract.voteOnProposal(BigInt(proposalId), false);
+    tx = await contract.voteAgainst(BigInt(proposalId));
   }
-  await tx.wait();
-  return tx.hash;
-};
-
-export const executeProposalOnChain = async (proposalId) => {
-  const { contract } = await getSignerContract();
-  const tx = await contract.executeProposal(BigInt(proposalId));
   await tx.wait();
   return tx.hash;
 };
@@ -166,16 +180,23 @@ export const chooseDaoOfferOnChain = async ({ proposalId, daoWallet }) => {
   return tx.hash;
 };
 
+/**
+ * Selected DAO member sends exactly their offer amount to fund the proposal.
+ * School fees are auto-forwarded to the college; the rest is held for the student.
+ */
 export const fundSelectedOfferOnChain = async ({ proposalId, amountWei }) => {
   const { contract } = await getSignerContract();
-  const tx = await contract.fundSelectedOffer(BigInt(proposalId), { value: amountWei });
+  const tx = await contract.fundOffer(BigInt(proposalId), { value: amountWei });
   await tx.wait();
   return tx.hash;
 };
 
-export const withdrawScholarshipOnChain = async (proposalId) => {
+/**
+ * Student claims their share (offer amount minus school fees).
+ */
+export const claimFundsOnChain = async (proposalId) => {
   const { contract } = await getSignerContract();
-  const tx = await contract.withdrawScholarship(BigInt(proposalId));
+  const tx = await contract.claimFunds(BigInt(proposalId));
   await tx.wait();
   return tx.hash;
 };
@@ -203,11 +224,11 @@ export const listProposalsOnChain = async ({ maxItems = 100, viewerAddress = "" 
     const votesAgainst = Number(proposal.votesAgainst);
     const deadlineSec = Number(proposal.deadline);
     const hasEnded = deadlineSec <= now;
-    const isActive = !proposal.executed && !proposal.cancelled && !hasEnded;
+    const isActive = !proposal.funded && !proposal.cancelled && !hasEnded;
     const selectedDao = await contract.selectedDaoOffer(BigInt(id));
     const selectedAmountWei = await contract.selectedOfferAmount(BigInt(id));
-    const isFunded = await contract.offerFunded(BigInt(id));
-    const pendingPayoutWei = await contract.pendingPayoutByProposal(BigInt(id));
+    const isFunded = Boolean(proposal.funded);
+    const pendingPayoutWei = await contract.pendingStudentPayout(BigInt(id));
     let hasVoted = false;
     let viewerVoteSupport = false;
     let viewerOfferAmountWei = 0n;
@@ -222,13 +243,16 @@ export const listProposalsOnChain = async ({ maxItems = 100, viewerAddress = "" 
       id,
       college: proposal.college,
       student: proposal.student,
-      amountWei: proposal.amount,
+      amountWei: proposal.schoolFees,   // schoolFees is the "amount" for display purposes
+      schoolFeesWei: proposal.schoolFees,
       votesFor,
       votesAgainst,
       deadlineSec,
       deadlineAt: new Date(deadlineSec * 1000).toISOString(),
-      executed: proposal.executed,
-      cancelled: proposal.cancelled,
+      executed: isFunded,               // kept for backwards compat with history page
+      claimed: Boolean(proposal.claimed),
+      cancelled: Boolean(proposal.cancelled),
+      isFunded,
       isActive,
       hasEnded,
       remainingMs: Math.max(0, deadlineSec * 1000 - Date.now()),
@@ -237,7 +261,6 @@ export const listProposalsOnChain = async ({ maxItems = 100, viewerAddress = "" 
       viewerOfferAmountWei,
       selectedDao,
       selectedAmountWei,
-      isFunded,
       pendingPayoutWei,
     });
   }
@@ -245,6 +268,8 @@ export const listProposalsOnChain = async ({ maxItems = 100, viewerAddress = "" 
 };
 
 const proposalMetaKey = "cts_proposal_meta";
+const normalizeAddress = (value = "") => String(value || "").trim().toLowerCase();
+const normalizeText = (value = "") => String(value || "").trim().replace(/\s+/g, " ");
 
 const readMetaStore = () => {
   try {
@@ -254,12 +279,26 @@ const readMetaStore = () => {
   }
 };
 
-export const saveProposalMetadata = ({ proposalId, title = "", description = "" }) => {
+export const saveProposalMetadata = ({
+  proposalId,
+  title = "",
+  description = "",
+  essay = "",
+  applicationId = "",
+  studentWallet = "",
+  collegeWallet = "",
+}) => {
   if (!proposalId) return;
+  const trimmedDescription = String(description || "").trim();
+  const trimmedEssay = String(essay || trimmedDescription).trim();
   const store = readMetaStore();
   store[String(proposalId)] = {
     title: String(title || "").trim(),
-    description: String(description || "").trim(),
+    description: trimmedDescription,
+    essay: trimmedEssay,
+    applicationId: String(applicationId || "").trim(),
+    studentWallet: String(studentWallet || "").trim(),
+    collegeWallet: String(collegeWallet || "").trim(),
     updatedAt: new Date().toISOString(),
   };
   localStorage.setItem(proposalMetaKey, JSON.stringify(store));
@@ -267,5 +306,92 @@ export const saveProposalMetadata = ({ proposalId, title = "", description = "" 
 
 export const getProposalMetadata = (proposalId) => {
   const store = readMetaStore();
-  return store[String(proposalId)] || null;
+  const entry = store[String(proposalId)] || null;
+  if (!entry) return null;
+  return {
+    ...entry,
+    essay: String(entry.essay || entry.description || "").trim(),
+  };
+};
+
+const applicationStatusLabel = (statusKey = "") => {
+  const labels = {
+    pending: "Pending",
+    approved: "Approved",
+    rejected: "Rejected",
+    offer_window_open: "Offer Window Open",
+    offers_received: "Offers Received",
+    awaiting_funding: "Awaiting Funding",
+    funded: "Funded",
+    funded_claimed: "Funded / Claimed",
+    no_offers: "No DAO Offers",
+    cancelled: "Cancelled",
+  };
+  return labels[statusKey] || "Pending";
+};
+
+const proposalMatchesApplication = ({ proposal, application, viewerWallet = "" }) => {
+  const metadata = getProposalMetadata(proposal.id) || {};
+  const applicationId = String(application?.id || "").trim();
+  if (applicationId && metadata.applicationId && String(metadata.applicationId) === applicationId) {
+    return true;
+  }
+
+  const proposalStudent = normalizeAddress(proposal.student);
+  const proposalCollege = normalizeAddress(proposal.college);
+  const appStudent = normalizeAddress(viewerWallet || metadata.studentWallet);
+  const appCollege = normalizeAddress(application?.college?.walletAddress || metadata.collegeWallet);
+  if (!proposalStudent || !proposalCollege || !appStudent || !appCollege) {
+    return false;
+  }
+  if (proposalStudent !== appStudent || proposalCollege !== appCollege) {
+    return false;
+  }
+
+  const appEssay = normalizeText(application?.essay || application?.message || application?.description || application?.title || "");
+  const proposalEssay = normalizeText(metadata.essay || "");
+  if (appEssay && proposalEssay) {
+    return appEssay === proposalEssay;
+  }
+
+  return true;
+};
+
+export const resolveApplicationDisplayStatus = ({ application, proposals = [], viewerWallet = "" }) => {
+  const baseStatus = String(application?.status || "pending").toLowerCase();
+  const matched = proposals
+    .filter((proposal) => proposalMatchesApplication({ proposal, application, viewerWallet }))
+    .sort((left, right) => Number(right.id || 0) - Number(left.id || 0));
+
+  const proposal = matched[0];
+  if (!proposal) {
+    return {
+      key: baseStatus,
+      label: applicationStatusLabel(baseStatus),
+      proposalId: null,
+      source: "application",
+    };
+  }
+
+  let key = baseStatus;
+  if (proposal.cancelled) {
+    key = "cancelled";
+  } else if (proposal.isFunded) {
+    key = proposal.claimed ? "funded_claimed" : "funded";
+  } else if (proposal.hasEnded && Number(proposal.votesFor || 0) === 0) {
+    key = "no_offers";
+  } else if (proposal.selectedDao) {
+    key = "awaiting_funding";
+  } else if (proposal.hasEnded && Number(proposal.votesFor || 0) > 0) {
+    key = "offers_received";
+  } else if (proposal.isActive) {
+    key = "offer_window_open";
+  }
+
+  return {
+    key,
+    label: applicationStatusLabel(key),
+    proposalId: proposal.id,
+    source: "proposal",
+  };
 };

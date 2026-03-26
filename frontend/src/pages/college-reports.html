@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CTS | College Admin | Reports</title>
+<title>CTS | College Admin | Funding Reports</title>
 <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
 <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
@@ -56,11 +56,10 @@
     <span class="text-xl font-display font-bold text-primary dark:text-white"><a href="../../index.html">CTS</a> <span id="college-sidebar-name">College</span></span>
   </div>
   <nav class="space-y-1 flex-1">
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-applications.html"><span class="material-icons-outlined">assignment_ind</span>Student Applications</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span>Create Project Funding</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-proposals.html"><span class="material-icons-outlined">account_tree</span>DAO Proposals</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="college-reports.html"><span class="material-icons-outlined">analytics</span>Reports</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-applications.html"><span class="material-icons-outlined">assignment_ind</span>Student Applications</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="college-create-scholarship.html"><span class="material-icons-outlined">add_chart</span>Create Proposal</a>
+    <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="college-reports.html"><span class="material-icons-outlined">analytics</span>Funding Reports</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
     <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleDarkMode()">
@@ -78,48 +77,298 @@
 <main class="flex-1 p-6 lg:p-10">
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">College Admin Workspace</p>
-    <h1 class="text-3xl font-display font-bold mt-2">Reports</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">This page is now available as part of the college admin dashboard flow.</p>
+    <h1 class="text-3xl font-display font-bold mt-2">Funding Reports</h1>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">Track which DAO member funded each proposal, the full DAO offer amount, and the exact school-fee amount your college received on-chain.</p>
   </header>
 
-  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Status</p>
-      <p class="text-2xl font-bold mt-2">Active</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Live static page with aligned navigation.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">My Proposals</p>
+      <p class="text-3xl font-bold mt-2" id="reports-total-proposals">0</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Total proposals created by this college wallet.</p>
     </article>
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Last Updated</p>
-      <p class="text-2xl font-bold mt-2">Feb 23, 2026</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Prepared for complete dashboard routing.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Funded Proposals</p>
+      <p class="text-3xl font-bold mt-2" id="reports-funded-proposals">0</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Proposals already funded by a selected DAO member.</p>
     </article>
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Next Action</p>
-      <p class="text-2xl font-bold mt-2">Connect Data</p>
-      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Hook forms and blockchain calls per module.</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">College Received</p>
+      <p class="text-3xl font-bold mt-2" id="reports-college-received">0.0000 ETH</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Total school fees automatically received by the college.</p>
+    </article>
+    <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">DAO Funders</p>
+      <p class="text-3xl font-bold mt-2" id="reports-dao-funders">0</p>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Unique DAO members who have funded your proposals.</p>
     </article>
   </section>
 
-  <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-    <h2 class="text-xl font-bold mb-4">Module Notes</h2>
-    <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Sidebar navigation now links to real pages for this role.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Theme toggle and global visual language are consistent with existing dashboards.</span></li>
-      <li class="flex items-start gap-2"><span class="material-icons-outlined text-primary text-base">check_circle</span><span>Ready for incremental feature implementation without broken routes.</span></li>
-    </ul>
+  <section class="bg-surface-light dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h2 class="text-xl font-bold">Proposal Funding Log</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">The college receives the school-fee amount automatically when the selected DAO member funds a proposal.</p>
+      </div>
+      <a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:opacity-90 transition-opacity" href="college-create-scholarship.html">
+        <span class="material-icons-outlined text-[18px]">add_chart</span>
+        <span>Create Proposal</span>
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-primary text-white">
+          <tr>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Proposal</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Student</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">DAO Funder</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">DAO Offer</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">College Received</th>
+            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="college-reports-table-body">
+          <tr>
+            <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="6">Loading funding data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </main>
 </div>
+
 <script type="module">
-  import { requireSession } from "../js/session.js";
+  import { API_BASE_URL } from "../js/config.js";
+  import { formatEth, getConnectedAddress, getProposalMetadata, listProposalsOnChain } from "../js/cts-contract.js";
+  import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
+
   requireSession({ roles: ["college"] });
-  const _user = JSON.parse(localStorage.getItem("cts_user") || "null");
-  const _sidebarEl = document.getElementById("college-sidebar-name");
-  if (_sidebarEl && _user?.username) _sidebarEl.textContent = _user.username;
-</script></body>
+
+  const user = JSON.parse(localStorage.getItem("cts_user") || "null");
+  const sidebarNameEl = document.getElementById("college-sidebar-name");
+  if (sidebarNameEl && user?.username) sidebarNameEl.textContent = user.username;
+
+  const totalProposalsEl = document.getElementById("reports-total-proposals");
+  const fundedProposalsEl = document.getElementById("reports-funded-proposals");
+  const collegeReceivedEl = document.getElementById("reports-college-received");
+  const daoFundersEl = document.getElementById("reports-dao-funders");
+  const tableBody = document.getElementById("college-reports-table-body");
+
+  const authRequest = async (path, options = {}, retry = true) => {
+    let token = localStorage.getItem("cts_access_token") || "";
+    let response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+      cache: "no-store",
+    });
+
+    if (response.status === 401 && retry) {
+      token = await refreshSessionToken();
+      if (!token) {
+        logoutAndRedirect("login.html");
+        throw new Error("Session expired");
+      }
+      return authRequest(path, options, false);
+    }
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data?.message || "Request failed");
+    }
+    return data;
+  };
+
+  const shortAddress = (address = "") => {
+    if (!address) return "No wallet";
+    return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+  };
+
+  const previewEssay = (essay = "", maxLength = 88) => {
+    const trimmed = String(essay || "").trim();
+    if (!trimmed) return "No student essay attached.";
+    return trimmed.length > maxLength ? `${trimmed.slice(0, maxLength - 3)}...` : trimmed;
+  };
+
+  const proposalStatus = (proposal) => {
+    if (proposal.cancelled) {
+      return {
+        label: "Cancelled",
+        className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+      };
+    }
+    if (proposal.isFunded) {
+      return {
+        label: proposal.claimed ? "Funded / Claimed" : "Funded",
+        className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+      };
+    }
+    if (proposal.selectedDao) {
+      return {
+        label: "Selected Awaiting Funding",
+        className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+      };
+    }
+    if (proposal.isActive) {
+      return {
+        label: "Awaiting DAO Responses",
+        className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+      };
+    }
+    if (proposal.hasEnded && proposal.votesFor > 0) {
+      return {
+        label: "Ready For Student Choice",
+        className: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
+      };
+    }
+    return {
+      label: "No DAO Offer",
+      className: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+    };
+  };
+
+  const setSummary = ({ totalProposals = 0, fundedProposals = 0, totalCollegeReceived = "0.0000", daoFunders = 0 }) => {
+    if (totalProposalsEl) totalProposalsEl.textContent = String(totalProposals);
+    if (fundedProposalsEl) fundedProposalsEl.textContent = String(fundedProposals);
+    if (collegeReceivedEl) collegeReceivedEl.textContent = `${totalCollegeReceived} ETH`;
+    if (daoFundersEl) daoFundersEl.textContent = String(daoFunders);
+  };
+
+  const renderRows = (rows = []) => {
+    if (!tableBody) return;
+    if (!rows.length) {
+      tableBody.innerHTML = `
+        <tr>
+          <td class="px-6 py-6 text-sm text-slate-500 dark:text-slate-400" colspan="6">
+            No proposals found for this college wallet yet.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = rows
+      .map((row) => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+          <td class="px-6 py-4 align-top">
+            <p class="font-semibold text-sm text-slate-900 dark:text-slate-100">Proposal #${row.id}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">School Fees: ${row.schoolFeesEth} ETH</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">${row.essayPreview}</p>
+          </td>
+          <td class="px-6 py-4 align-top">
+            <p class="text-sm font-medium text-slate-900 dark:text-slate-100">${row.studentLabel}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${row.studentWallet}</p>
+          </td>
+          <td class="px-6 py-4 align-top">
+            <p class="text-sm font-medium text-slate-900 dark:text-slate-100">${row.daoName}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${row.daoWallet}</p>
+          </td>
+          <td class="px-6 py-4 align-top text-sm font-medium text-slate-900 dark:text-slate-100">${row.daoOfferEth}</td>
+          <td class="px-6 py-4 align-top">
+            <p class="text-sm font-medium text-slate-900 dark:text-slate-100">${row.collegeReceivedEth}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${row.collegeReceivedNote}</p>
+          </td>
+          <td class="px-6 py-4 align-top">
+            <span class="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${row.status.className}">${row.status.label}</span>
+          </td>
+        </tr>
+      `)
+      .join("");
+  };
+
+  const loadFundingReports = async () => {
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="6">Loading funding data...</td>
+        </tr>
+      `;
+    }
+
+    try {
+      const connectedWallet = await getConnectedAddress();
+      const [proposalItems, daoDirectoryResponse] = await Promise.all([
+        listProposalsOnChain({ maxItems: 100, viewerAddress: connectedWallet }),
+        authRequest("/users/dao-members").catch(() => ({ items: [] })),
+      ]);
+
+      const daoDirectory = new Map(
+        (daoDirectoryResponse.items || [])
+          .filter((item) => item.walletAddress)
+          .map((item) => [
+            item.walletAddress.toLowerCase(),
+            {
+              username: item.username || "DAO Member",
+              walletAddress: item.walletAddress,
+            },
+          ]),
+      );
+
+      const myProposals = proposalItems.filter(
+        (item) => String(item.college || "").toLowerCase() === String(connectedWallet || "").toLowerCase(),
+      );
+
+      let totalCollegeReceivedWei = 0n;
+      const fundedDaoWallets = new Set();
+
+      const rows = await Promise.all(
+        myProposals.map(async (proposal) => {
+          const metadata = getProposalMetadata(proposal.id) || {};
+          const schoolFeesWei = proposal.amountWei ?? 0n;
+          const selectedAmountWei = proposal.selectedAmountWei ?? 0n;
+          const schoolFeesEth = await formatEth(schoolFeesWei);
+          const daoOfferEth = selectedAmountWei > 0n ? `${await formatEth(selectedAmountWei)} ETH` : "Awaiting selection";
+          const collegeReceivedEth = proposal.isFunded ? `${schoolFeesEth} ETH` : "--";
+          const daoLookup = proposal.selectedDao ? daoDirectory.get(proposal.selectedDao.toLowerCase()) : null;
+
+          if (proposal.isFunded) {
+            totalCollegeReceivedWei += schoolFeesWei;
+            if (proposal.selectedDao) fundedDaoWallets.add(proposal.selectedDao.toLowerCase());
+          }
+
+          return {
+            id: proposal.id,
+            schoolFeesEth,
+            essayPreview: previewEssay(metadata.essay || ""),
+            studentLabel: "Registered Student",
+            studentWallet: shortAddress(proposal.student),
+            daoName: proposal.selectedDao ? (daoLookup?.username || "Unnamed DAO Member") : "Not selected yet",
+            daoWallet: proposal.selectedDao ? shortAddress(proposal.selectedDao) : "Awaiting student choice",
+            daoOfferEth,
+            collegeReceivedEth,
+            collegeReceivedNote: proposal.isFunded ? "Auto-forwarded school fees" : "Not received yet",
+            status: proposalStatus(proposal),
+          };
+        }),
+      );
+
+      setSummary({
+        totalProposals: myProposals.length,
+        fundedProposals: myProposals.filter((item) => item.isFunded).length,
+        totalCollegeReceived: await formatEth(totalCollegeReceivedWei),
+        daoFunders: fundedDaoWallets.size,
+      });
+
+      renderRows(rows);
+    } catch (error) {
+      setSummary({ totalProposals: 0, fundedProposals: 0, totalCollegeReceived: "0.0000", daoFunders: 0 });
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td class="px-6 py-4 text-sm text-red-600 dark:text-red-400" colspan="6">
+              ${error.message || "Failed to load funding reports."}
+            </td>
+          </tr>
+        `;
+      }
+    }
+  };
+
+  loadFundingReports();
+</script>
+</body>
 </html>
-
-
-
-
-

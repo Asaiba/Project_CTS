@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CTS | Student | Governance</title>
+<title>CTS | Student | Offer Selection</title>
 <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
 <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
@@ -58,7 +58,7 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-colleges.html"><span class="material-icons-outlined">school</span>Colleges</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Offers</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-applications.html"><span class="material-icons-outlined">history</span>History</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
@@ -78,7 +78,7 @@
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Student Workspace</p>
     <h1 class="text-3xl font-display font-bold mt-2">DAO Offer Selection</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">After voting closes, choose the DAO offer amount and wallet you prefer to work with.</p>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">After the offer window closes, choose the DAO offer amount and wallet you prefer to work with.</p>
   </header>
 
   <section class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
@@ -96,12 +96,12 @@
 <script type="module">
   import {
     chooseDaoOfferOnChain,
+    claimFundsOnChain,
     formatEth,
     getConnectedAddress,
     getProposalMetadata,
     listDaoOffersOnChain,
     listProposalsOnChain,
-    withdrawScholarshipOnChain,
   } from "../js/cts-contract.js";
   import { requireSession } from "../js/session.js";
   requireSession({ roles: ["student"] });
@@ -142,7 +142,7 @@
         </span>
       </div>
       <p class="text-sm text-slate-500 mt-1">${proposal.description}</p>
-      <p class="text-xs text-slate-500 mt-2">Requested: ${proposal.requestedAmountEth} ETH | YES: ${proposal.votesFor} | NO: ${proposal.votesAgainst}</p>
+      <p class="text-xs text-slate-500 mt-2">Requested: ${proposal.requestedAmountEth} ETH | Offers: ${proposal.votesFor} | Passes: ${proposal.votesAgainst}</p>
       <div class="mt-3 space-y-2">
         ${(proposal.offers || []).length
           ? proposal.offers.map((offer) => renderOffer(proposal.id, offer, proposal.canChoose)).join("")
@@ -172,16 +172,16 @@
           amountEth: await formatEth(o.amountWei),
         })));
         const selectedExists = p.selectedDao && p.selectedDao !== "0x0000000000000000000000000000000000000000";
-        const passed = Number(p.votesFor) > Number(p.votesAgainst);
-        const ready = p.hasEnded && passed && !p.cancelled && !p.executed;
+        const passed = Number(p.votesFor) > 0;
+        const ready = p.hasEnded && passed && !p.cancelled && !p.isFunded;
         const canChoose = ready && !selectedExists;
         const canWithdraw = Boolean(p.isFunded) && BigInt(p.pendingPayoutWei || 0n) > 0n;
-        const isDenied = p.cancelled || (p.hasEnded && !passed);
+        const isDenied = p.cancelled || (p.hasEnded && !passed && !p.isFunded);
         const isHistory = Boolean(p.isFunded) || isDenied;
         return {
           ...p,
-          title: getProposalMetadata(p.id)?.title || "Untitled Funding",
-          description: getProposalMetadata(p.id)?.description || "No funding description provided.",
+          title: getProposalMetadata(p.id)?.title || "Untitled Scholarship",
+          description: getProposalMetadata(p.id)?.description || "No scholarship description provided.",
           requestedAmountEth: await formatEth(p.amountWei),
           offers,
           canChoose,
@@ -203,7 +203,7 @@
 
       listEl.innerHTML = active.map(renderProposal).join("");
     } catch (error) {
-      setStatus(error?.message || "Failed to load student governance.", true);
+      setStatus(error?.message || "Failed to load offer selection.", true);
       listEl.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400">Could not load proposals.</p>';
     }
   };
@@ -237,13 +237,13 @@
       if (!confirmed) return;
       try {
         withdrawBtn.disabled = true;
-        setStatus("Submitting withdrawal on-chain...");
-        const txHash = await withdrawScholarshipOnChain(proposalId);
-        setStatus(`Funds withdrawn. Tx: ${txHash.slice(0, 10)}...`);
+        setStatus("Claiming funds on-chain...");
+        const txHash = await claimFundsOnChain(proposalId);
+        setStatus(`Funds claimed. Tx: ${txHash.slice(0, 10)}...`);
         await load();
       } catch (error) {
         withdrawBtn.disabled = false;
-        setStatus(error?.message || "Failed to withdraw project funding.", true);
+        setStatus(error?.message || "Failed to withdraw scholarship funds.", true);
       }
     }
   });

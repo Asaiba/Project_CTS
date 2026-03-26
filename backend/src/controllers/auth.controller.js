@@ -9,8 +9,9 @@ import {
   revokeRefreshToken,
   rotateRefreshToken,
 } from "../services/auth.service.js";
-import { registerStudentOnChainByOwner } from "../services/onchain.service.js";
+import { registerUserOnChainByRole } from "../services/onchain.service.js";
 import { env } from "../config/env.js";
+import { buildPasswordResetLink, sendPasswordResetEmail } from "../services/mail.service.js";
 
 const publicUser = (user) => ({
   id: user.id,
@@ -25,7 +26,8 @@ export const register = async (req, res, next) => {
   try {
     const user = await registerUser(req.validated.body);
     try {
-      await registerStudentOnChainByOwner({
+      await registerUserOnChainByRole({
+        role: user.role,
         walletAddress: user.walletAddress,
         username: user.username,
       });
@@ -125,10 +127,36 @@ export const logout = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  const token = await createPasswordResetToken(req.validated.body.email);
+  const email = req.validated.body.email.trim().toLowerCase();
+  const token = await createPasswordResetToken(email);
+
+  let emailDelivery = { sent: false, reason: "not_found_or_not_requested" };
+  let resetLink = null;
+
+  if (token) {
+    resetLink = buildPasswordResetLink({ token, email, mode: "reset" });
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { username: true },
+    });
+
+    emailDelivery = await sendPasswordResetEmail({
+      toEmail: email,
+      username: user?.username || "there",
+      resetLink,
+    });
+  }
+
+  if (env.nodeEnv === "production") {
+    return res.json({
+      message: "If the account exists, a password reset link has been sent.",
+    });
+  }
+
   return res.json({
-    message: "If account exists, reset link has been generated",
-    devResetToken: token || null,
+    message: "If the account exists, a password reset link has been sent.",
+    emailDelivery,
+    resetLink,
   });
 };
 

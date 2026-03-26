@@ -58,7 +58,7 @@
   <nav class="space-y-1 flex-1">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-dashboard.html"><span class="material-icons-outlined">dashboard</span>Dashboard</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-colleges.html"><span class="material-icons-outlined">school</span>Colleges</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Governance</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="student-governance.html"><span class="material-icons-outlined">gavel</span>Offers</a>
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary dark:bg-slate-800 dark:text-white font-medium" href="student-applications.html"><span class="material-icons-outlined">history</span>History</a>
   </nav>
   <div class="mt-6 border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
@@ -78,7 +78,7 @@
   <header class="mb-8">
     <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Student Workspace</p>
     <h1 class="text-3xl font-display font-bold mt-2">History</h1>
-    <p class="text-slate-600 dark:text-slate-400 mt-2">View everything you applied for and whether it was approved, pending, or denied.</p>
+    <p class="text-slate-600 dark:text-slate-400 mt-2">View your scholarship essays, application outcomes, and on-chain proposal history.</p>
   </header>
 
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="applications-summary">
@@ -91,7 +91,7 @@
       <p class="text-2xl font-bold mt-2 text-amber-600 dark:text-amber-400" id="summary-pending">0</p>
     </article>
     <article class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Approved</p>
+      <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Approved / Active</p>
       <p class="text-2xl font-bold mt-2 text-emerald-600 dark:text-emerald-400" id="summary-approved">0</p>
     </article>
   </section>
@@ -113,14 +113,13 @@
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">College</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Email</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Wallet</th>
-            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Funding Title</th>
-            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Funding Description</th>
+            <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Scholarship Essay</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Status</th>
             <th class="px-4 py-3 text-xs font-bold uppercase tracking-wider">Applied</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="applications-table-body">
-          <tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="7">Loading applications...</td></tr>
+          <tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="6">Loading applications...</td></tr>
         </tbody>
       </table>
     </div>
@@ -130,7 +129,7 @@
 <script type="module">
   import { API_BASE_URL } from "../js/config.js";
   import { logoutAndRedirect, refreshSessionToken, requireSession } from "../js/session.js";
-  import { formatEth, getConnectedAddress, getProposalMetadata, listDaoOffersOnChain, listProposalsOnChain } from "../js/cts-contract.js";
+  import { formatEth, getConnectedAddress, listDaoOffersOnChain, listProposalsOnChain, resolveApplicationDisplayStatus } from "../js/cts-contract.js";
   requireSession({ roles: ["student"] });
 
   const onchainList = document.getElementById("onchain-history-list");
@@ -143,7 +142,7 @@
       const mine = all.filter((p) => (p.student || "").toLowerCase() === wallet.toLowerCase());
 
       const hydrated = await Promise.all(mine.map(async (p) => {
-        const passed = Number(p.votesFor) > Number(p.votesAgainst);
+        const passed = Number(p.votesFor) > 0;
         const isDenied = p.cancelled || (p.hasEnded && !passed);
         const isFunded = Boolean(p.isFunded);
         if (!isDenied && !isFunded) return null;
@@ -154,10 +153,11 @@
 
         return {
           id: p.id,
-          title: getProposalMetadata(p.id)?.title || "Untitled Funding",
+          title: `Proposal #${p.id}`,
           amountEth: await formatEth(p.amountWei),
           isDenied,
           isFunded,
+          denialLabel: p.cancelled ? "CANCELLED" : "NO DAO OFFERS",
           selectedDaoWallet: selected?.daoWallet || null,
           selectedAmount: selected?.amountEth || null,
         };
@@ -173,12 +173,12 @@
       onchainList.innerHTML = history.map((p) => `
         <div class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-700">
           <div>
-            <p class="font-semibold text-sm">Proposal #${p.id} — ${p.title}</p>
-            <p class="text-xs text-slate-500 mt-1">Requested: ${p.amountEth} ETH${p.selectedDaoWallet ? ` · DAO: ${short(p.selectedDaoWallet)} (${p.selectedAmount} ETH)` : ""}</p>
+            <p class="font-semibold text-sm">${p.title}</p>
+            <p class="text-xs text-slate-500 mt-1">School Fees: ${p.amountEth} ETH${p.selectedDaoWallet ? ` | DAO: ${short(p.selectedDaoWallet)} (${p.selectedAmount} ETH)` : ""}</p>
           </div>
           ${p.isFunded
             ? '<span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-bold">FUNDED</span>'
-            : '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 font-bold">DENIED</span>'}
+            : `<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 font-bold">${p.denialLabel}</span>`}
         </div>
       `).join("");
     } catch (e) {
@@ -198,9 +198,22 @@
     return address.length > 12 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
   };
 
+  const getEssayPreview = (item, maxLength = 180) => {
+    const essay = String(item?.essay || item?.message || item?.description || item?.title || "").trim();
+    if (!essay) return "No scholarship essay provided.";
+    return essay.length > maxLength ? `${essay.slice(0, maxLength - 3)}...` : essay;
+  };
+
   const statusPill = (status) => {
     if (status === "approved") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">APPROVED</span>';
     if (status === "rejected") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">REJECTED</span>';
+    if (status === "offer_window_open") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">OFFER WINDOW OPEN</span>';
+    if (status === "offers_received") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">OFFERS RECEIVED</span>';
+    if (status === "awaiting_funding") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400">AWAITING FUNDING</span>';
+    if (status === "funded") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">FUNDED</span>';
+    if (status === "funded_claimed") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">FUNDED / CLAIMED</span>';
+    if (status === "no_offers") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">NO DAO OFFERS</span>';
+    if (status === "cancelled") return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300">CANCELLED</span>';
     return '<span class="px-2 py-1 text-[11px] font-bold rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">PENDING</span>';
   };
 
@@ -231,33 +244,48 @@
     try {
       const data = await authFetch("/applications/mine");
       const items = data.items || [];
-      const pending = items.filter((item) => item.status === "pending").length;
-      const approved = items.filter((item) => item.status === "approved").length;
+      let viewerWallet = "";
+      let proposals = [];
+      try {
+        viewerWallet = await getConnectedAddress();
+        proposals = await listProposalsOnChain({ maxItems: 150, viewerAddress: viewerWallet });
+      } catch (_error) {
+        viewerWallet = "";
+        proposals = [];
+      }
 
-      summaryTotal.textContent = String(items.length);
+      const enrichedItems = items.map((item) => ({
+        ...item,
+        displayStatus: resolveApplicationDisplayStatus({ application: item, proposals, viewerWallet }),
+      }));
+      const pending = enrichedItems.filter((item) => item.displayStatus?.key === "pending").length;
+      const approved = enrichedItems.filter((item) =>
+        ["approved", "offer_window_open", "offers_received", "awaiting_funding"].includes(item.displayStatus?.key || ""),
+      ).length;
+
+      summaryTotal.textContent = String(enrichedItems.length);
       summaryPending.textContent = String(pending);
       summaryApproved.textContent = String(approved);
 
-      if (!items.length) {
-        tableBody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="7">No applications yet. Go to Colleges and apply.</td></tr>';
+      if (!enrichedItems.length) {
+        tableBody.innerHTML = '<tr><td class="px-4 py-4 text-sm text-slate-500 dark:text-slate-400" colspan="6">No applications yet. Go to Colleges and submit your scholarship essay.</td></tr>';
         return;
       }
 
-      tableBody.innerHTML = items
+      tableBody.innerHTML = enrichedItems
         .map((item) => `
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
             <td class="px-4 py-4 text-sm font-semibold">${item.college?.username || "-"}</td>
             <td class="px-4 py-4 text-sm text-slate-500">${item.college?.email || "-"}</td>
             <td class="px-4 py-4 text-sm font-mono text-slate-500">${shortAddress(item.college?.walletAddress)}</td>
-            <td class="px-4 py-4 text-sm">${item.title || item.message || "Untitled funding"}</td>
-            <td class="px-4 py-4 text-sm text-slate-500">${item.description || "-"}</td>
-            <td class="px-4 py-4">${statusPill(item.status)}</td>
+            <td class="px-4 py-4 text-sm text-slate-500 max-w-xl whitespace-pre-wrap break-words">${getEssayPreview(item)}</td>
+            <td class="px-4 py-4">${statusPill(item.displayStatus?.key || item.status)}</td>
             <td class="px-4 py-4 text-sm text-slate-500">${new Date(item.createdAt).toLocaleString()}</td>
           </tr>
         `)
         .join("");
     } catch (error) {
-      tableBody.innerHTML = `<tr><td class="px-4 py-4 text-sm text-red-600 dark:text-red-400" colspan="7">${error.message || "Failed to load applications."}</td></tr>`;
+      tableBody.innerHTML = `<tr><td class="px-4 py-4 text-sm text-red-600 dark:text-red-400" colspan="6">${error.message || "Failed to load applications."}</td></tr>`;
     }
   };
 

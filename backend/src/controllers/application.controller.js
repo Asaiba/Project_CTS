@@ -2,29 +2,31 @@ import { prisma } from "../lib/prisma.js";
 
 const APP_MESSAGE_PREFIX = "CTS_APP_V1:";
 
-const encodeApplicationMessage = ({ title = "", description = "", message = "" }) => {
+const encodeApplicationMessage = ({ title = "", description = "", essay = "", message = "" }) => {
   const payload = {
     title: String(title || "").trim(),
     description: String(description || "").trim(),
-    message: String(message || "").trim(),
+    essay: String(essay || "").trim(),
+    message: String(message || essay || "").trim(),
   };
   return `${APP_MESSAGE_PREFIX}${JSON.stringify(payload)}`;
 };
 
 const decodeApplicationMessage = (rawMessage) => {
   const raw = String(rawMessage || "");
-  if (!raw) return { title: "", description: "", message: "" };
+  if (!raw) return { title: "", description: "", essay: "", message: "" };
   if (!raw.startsWith(APP_MESSAGE_PREFIX)) {
-    return { title: raw, description: "", message: raw };
+    return { title: "", description: "", essay: raw, message: raw };
   }
   try {
     const parsed = JSON.parse(raw.slice(APP_MESSAGE_PREFIX.length));
     const title = String(parsed?.title || "").trim();
     const description = String(parsed?.description || "").trim();
+    const essay = String(parsed?.essay || description || parsed?.message || title).trim();
     const message = String(parsed?.message || "").trim();
-    return { title, description, message: message || title };
+    return { title, description, essay, message: message || essay || title };
   } catch (_error) {
-    return { title: raw, description: "", message: raw };
+    return { title: "", description: "", essay: raw, message: raw };
   }
 };
 
@@ -36,6 +38,7 @@ const toPublicApplication = (application) => {
   message: decoded.message,
   title: decoded.title,
   description: decoded.description,
+  essay: decoded.essay,
   createdAt: application.createdAt,
   updatedAt: application.updatedAt,
   student: application.student
@@ -60,7 +63,8 @@ const toPublicApplication = (application) => {
 };
 
 export const createApplication = async (req, res) => {
-  const { collegeId, title, description, message } = req.validated.body;
+  const { collegeId, essay, title, description, message } = req.validated.body;
+  const normalizedEssay = String(essay || description || message || title || "").trim();
 
   const college = await prisma.user.findFirst({
     where: { id: collegeId, role: "college", isActive: true },
@@ -74,7 +78,7 @@ export const createApplication = async (req, res) => {
     data: {
       studentId: req.user.id,
       collegeId,
-      message: encodeApplicationMessage({ title, description, message }),
+      message: encodeApplicationMessage({ title, description, essay: normalizedEssay, message }),
       status: "pending",
     },
     include: {

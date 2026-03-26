@@ -72,13 +72,13 @@
               <span class="material-icons-outlined">how_to_vote</span>
               <span class="font-medium">DAO</span>
             </a>
-            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="project-funding" href="admin-dashboard.html#project-funding">
-              <span class="material-icons-outlined">workspace_premium</span>
-              <span class="font-medium">Project Funding</span>
+            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="management" href="admin-dashboard.html#management">
+              <span class="material-icons-outlined">manage_accounts</span>
+              <span class="font-medium">Management</span>
             </a>
-            <a class="admin-tab-link flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" data-tab="settings" href="admin-dashboard.html#settings">
-              <span class="material-icons-outlined">settings</span>
-              <span class="font-medium">Settings</span>
+            <a class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg transition-colors text-white/70 hover:text-white" href="admin-users.html">
+              <span class="material-icons-outlined">groups</span>
+              <span class="font-medium">Users</span>
             </a>
           </nav>
           <div class="p-4 mt-auto border-t border-white/10">
@@ -113,7 +113,7 @@
                 <input
                   id="admin-search"
                   class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 focus:border-none h-full placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-                  placeholder="Search institutions..."
+                  placeholder="Search users, colleges, and DAO members..."
                   value=""
                 />
               </div>
@@ -172,17 +172,20 @@
                   <p class="text-emerald-500 text-xs font-semibold">+2% this month</p>
                 </div>
               </div>
-              <div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+              <a
+                class="group flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg"
+                href="admin-users.html"
+              >
                 <div class="flex items-center justify-between">
                   <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Users</p>
-                  <span class="material-icons-outlined text-primary">person</span>
+                  <span class="material-icons-outlined text-primary transition-transform group-hover:translate-x-0.5">person</span>
                 </div>
                 <p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight" id="total-users-count">0</p>
                 <div class="flex items-center gap-1 text-slate-400">
-                  <span class="material-icons-outlined text-sm">schedule</span>
-                  <p class="text-xs font-semibold">Live system count</p>
+                  <span class="material-icons-outlined text-sm">open_in_new</span>
+                  <p class="text-xs font-semibold">Open full user management</p>
                 </div>
-              </div>
+              </a>
             </div>
             <section class="mb-12" id="institutions">
               <div class="flex items-center justify-between mb-6">
@@ -238,7 +241,7 @@
                 </div>
               </div>
             </section>
-            <section class="mb-12" id="settings">
+            <section class="mb-12" id="management">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight border-l-4 border-primary pl-4">Access Management</h3>
               </div>
@@ -265,7 +268,7 @@
                 <p class="text-sm min-h-5 mt-3" id="promote-status"></p>
               </div>
             </section>
-            <div class="bg-slate-900/5 dark:bg-slate-900/40 rounded-2xl p-8 border-2 border-dashed border-slate-200 dark:border-slate-800" id="project-funding">
+            <div class="bg-slate-900/5 dark:bg-slate-900/40 rounded-2xl p-8 border-2 border-dashed border-slate-200 dark:border-slate-800" id="quick-add-account">
               <div class="max-w-xl mx-auto text-center mb-8">
                 <span class="material-icons-outlined text-4xl text-primary/40 mb-2">add_business</span>
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white">Quick Add Account</h3>
@@ -273,7 +276,7 @@
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
                 <div class="flex flex-col gap-2">
-                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Institution Name</label>
+                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Display Name</label>
                   <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-name" placeholder="e.g. Oxford University" type="text" />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -294,8 +297,8 @@
                   <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono text-sm focus:ring-primary focus:border-primary" id="new-school-wallet" placeholder="0x..." type="text" />
                 </div>
                 <div class="flex flex-col gap-2 md:col-span-2">
-                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Temporary Password (Optional)</label>
-                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-password" placeholder="Leave blank to auto-generate" type="text" />
+                  <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Password (Optional)</label>
+                  <input class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" id="new-school-password" placeholder="Leave blank to send a setup link" type="text" />
                 </div>
                 <div class="md:col-span-2 flex justify-end gap-3 pt-4">
                   <button class="px-6 h-11 rounded-lg font-bold text-sm text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" id="new-school-cancel-btn" type="button">Cancel</button>
@@ -314,7 +317,7 @@
                 </div>
                 <form id="edit-user-form" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex flex-col gap-2">
-                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="edit-username">Institution Name</label>
+                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400" for="edit-username">Display Name</label>
                     <input id="edit-username" type="text" class="h-12 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary" />
                   </div>
                   <div class="flex flex-col gap-2">
@@ -345,7 +348,7 @@
           </div>
         </main>
         <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 px-10 text-center">
-          <p class="text-slate-500 text-sm">&copy; 2024 CTS Project Funding Management. All transactions are secured via CTS Blockchain Mainnet.</p>
+          <p class="text-slate-500 text-sm">&copy; 2024 CTS Scholarship Management. All transactions are secured via CTS Blockchain Mainnet.</p>
         </footer>
         </div>
       </div>
@@ -386,7 +389,8 @@
       };
 
       const syncTabFromHash = () => {
-        const tab = (window.location.hash || "#dashboard").replace("#", "");
+        const hash = (window.location.hash || "#dashboard").replace("#", "");
+        const tab = hash === "quick-add-account" ? "management" : hash;
         setActiveTab(tab);
       };
 
@@ -413,14 +417,6 @@
           Authorization: `Bearer ${token || ""}`,
         };
       };
-      const apiOrigin = (() => {
-        try {
-          return new URL(API_BASE_URL).origin;
-        } catch (_error) {
-          return "http://localhost:4000";
-        }
-      })();
-
       const tryRefreshOrLogout = async () => {
         const nextToken = await refreshSessionToken();
         if (!nextToken) {
@@ -629,10 +625,11 @@
         ]);
 
         const allUsers = lookupData.items || [];
-        usersByEmail = new Map(allUsers.map((u) => [u.email.toLowerCase(), u]));
-        usersById = new Map(allUsers.map((u) => [u.id, u]));
         const institutions = institutionsData.items || [];
         const daoUsers = daoData.items || [];
+        const indexableUsers = [...allUsers, ...institutions, ...daoUsers];
+        usersByEmail = new Map(indexableUsers.map((u) => [u.email.toLowerCase(), u]));
+        usersById = new Map(indexableUsers.map((u) => [u.id, u]));
 
         if (institutionsTbody) {
           institutionsTbody.innerHTML = institutions.length
@@ -646,7 +643,6 @@
 
         if (institutionsPrevBtn) institutionsPrevBtn.disabled = page <= 1;
         if (institutionsNextBtn) institutionsNextBtn.disabled = (page * limit) >= (institutionsData.total || 0);
-
         if (totalInstitutionsCount) totalInstitutionsCount.textContent = `${institutionsData.total || 0}`;
         if (activeDaoCount) activeDaoCount.textContent = `${activeDaoData.total || 0}`;
         if (totalUsersCount) totalUsersCount.textContent = `${usersTotalData.total || 0}`;
@@ -853,14 +849,15 @@
       });
 
       addSchoolBtn?.addEventListener("click", () => {
-        window.location.hash = "#project-funding";
+        window.location.hash = "#quick-add-account";
         newSchoolName?.focus();
       });
 
       grantDaoBtn?.addEventListener("click", () => {
-        window.location.hash = "#settings";
+        window.location.hash = "#quick-add-account";
         if (promoteRoleInput) promoteRoleInput.value = "dao";
-        promoteEmailInput?.focus();
+        if (newSchoolRole) newSchoolRole.value = "dao";
+        newSchoolEmail?.focus();
       });
 
       editUserCloseBtn?.addEventListener("click", closeEditModal);
@@ -881,7 +878,7 @@
         const walletAddress = editWalletInput?.value?.trim() || "";
 
         if (!username) {
-          setEditStatus("Institution name is required.", true);
+          setEditStatus("Display name is required.", true);
           return;
         }
         if (!email) {
@@ -936,7 +933,7 @@
         const walletAddress = newSchoolWallet?.value?.trim() || "";
         const password = newSchoolPassword?.value?.trim() || "";
         if (!username) {
-          setStatus(newSchoolStatus, "Institution name is required.", true);
+          setStatus(newSchoolStatus, "Display name is required.", true);
           return;
         }
         if (!email) {
@@ -944,19 +941,21 @@
           return;
         }
         if (password && password.length < 8) {
-          setStatus(newSchoolStatus, "Temporary password must be at least 8 characters.", true);
+          setStatus(newSchoolStatus, "Password must be at least 8 characters.", true);
           return;
         }
         try {
           const created = await createAdminUser({ username, email, role, walletAddress, password });
-          const emailInfo = created.tempPasswordEmail || {};
-          const passwordMessage = created.generatedPassword
-            ? (emailInfo.sent
-              ? "Temporary password was sent by email."
-              : (emailInfo.reason === "smtp_not_configured"
-                ? `SMTP not configured. Temporary password: ${created.generatedPassword}`
-                : `Email send failed. Temporary password: ${created.generatedPassword}`))
-            : "User created with provided password.";
+          const setupEmail = created.passwordSetupEmail || {};
+          let passwordMessage = created.usedProvidedPassword
+            ? "User created with the provided password."
+            : (setupEmail.sent
+              ? "Password setup email sent."
+              : "Password setup link generated for development.");
+          if (!created.usedProvidedPassword && created.passwordSetupLink && !setupEmail.sent) {
+            window.open(created.passwordSetupLink, "_blank", "noopener,noreferrer");
+            passwordMessage = "Password setup email was not sent, so the development setup link was opened in a new tab.";
+          }
           let chainMessage = "";
           if (role === "college" && created?.user?.walletAddress) {
             try {

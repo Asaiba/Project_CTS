@@ -59,10 +59,11 @@ SMTP_SECURE=false
 SMTP_USER=apikey
 SMTP_PASS=SG.your_sendgrid_api_key
 SMTP_FROM=noreply@yourdomain.com
+APP_BASE_URL=http://localhost:5173
 
 # Blockchain (Sepolia)
 ETH_RPC_URL=https://sepolia.infura.io/v3/your_key
-CTS_CONTRACT_ADDRESS=0x1d7Cd344a17A70E24779B7e7040Fb3386D5623B0
+CTS_CONTRACT_ADDRESS=0xEAf24CD54048A6CED382A1B80E2E7AE4A221913d
 CTS_OWNER_PRIVATE_KEY=your_owner_private_key
 ```
 
@@ -86,6 +87,34 @@ CTS_OWNER_PRIVATE_KEY=your_owner_private_key
    ```bash
    npm run dev
    ```
+
+## Render Setup
+
+Backend service settings:
+- Root directory: `backend`
+- Build command: `npm install && npx prisma generate && npx prisma migrate deploy`
+- Start command: `npm start`
+
+Required production environment variables:
+- `DATABASE_URL`
+- `JWT_ACCESS_SECRET`
+- `JWT_REFRESH_SECRET`
+- `FRONTEND_ORIGIN=https://your-frontend.onrender.com`
+- `APP_BASE_URL=https://your-frontend.onrender.com`
+- `SMTP_HOST=smtp.sendgrid.net`
+- `SMTP_PORT=587`
+- `SMTP_SECURE=false`
+- `SMTP_USER=apikey`
+- `SMTP_PASS=<your SendGrid API key>`
+- `SMTP_FROM=<your verified sender address>`
+- `ETH_RPC_URL`
+- `CTS_CONTRACT_ADDRESS=0xEAf24CD54048A6CED382A1B80E2E7AE4A221913d`
+- `CTS_OWNER_PRIVATE_KEY`
+
+Notes:
+- `APP_BASE_URL` is what invite and reset emails use to build links like `/reset-password.html`.
+- If SMTP is not configured in production, admin-created accounts without a provided password will be rolled back instead of being created with no way to log in.
+- The frontend static site should set `VITE_API_BASE_URL=https://your-backend.onrender.com` at build time.
 
 ## Deployed API Base
 - `https://project-cts.onrender.com/api`
