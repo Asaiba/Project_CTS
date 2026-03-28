@@ -136,9 +136,7 @@ For the password setup flow to work in production:
 
 ## Default Seed Admin
 - Email: `admin@cts.local`
-- Password: `Admin@12345`
-
-Change this password after first login.
+- Password: `*******`
 
 ## Local Notes
 - If `npm run dev` fails on Windows with `spawn EPERM`, keep using `node src/server.js` for the backend.
