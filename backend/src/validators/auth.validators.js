@@ -9,6 +9,9 @@ export const registerSchema = z.object({
     password: z.string().min(8).max(120),
     role: roleSchema.default("student"),
     walletAddress: z.string().trim().min(4).max(120),
+    acceptedLegal: z.boolean().refine((value) => value === true, {
+      message: "You must accept the EULA and Privacy Policy before registering",
+    }),
   }),
   query: z.object({}).optional(),
   params: z.object({}).optional(),

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CTS EULA</title>
+  <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
+  <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#285185",
+            secondary: "#D67940",
+            accent: "#6F4849",
+            "background-light": "#CCD9E2",
+            "background-dark": "#0F172A",
+            "card-light": "#FFFFFF",
+            "card-dark": "#1E293B",
+            "border-light": "#E2E8F0",
+            "border-dark": "#334155",
+          },
+          fontFamily: {
+            display: ["Outfit", "sans-serif"],
+            sans: ["Inter", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+  <button aria-label="Toggle dark mode" class="fixed top-5 right-4 z-[60] bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-100 p-2 rounded-full hover:opacity-90 transition-all flex items-center justify-center" id="theme-toggle" title="Toggle dark mode">
+    <span class="material-icons" id="theme-toggle-icon">dark_mode</span>
+  </button>
+
+  <header class="border-b border-border-light dark:border-border-dark bg-white/90 dark:bg-slate-950/90 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img alt="CTS Logo" class="w-10 h-10 object-contain" src="../assets/cts_logo.png"/>
+        <div>
+          <a class="text-2xl font-display font-bold text-primary dark:text-white" href="../../index.html">CTS</a>
+          <p class="text-xs uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">Legal</p>
+        </div>
+      </div>
+      <nav class="flex items-center gap-3 text-sm font-medium">
+        <a class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" href="privacy-policy.html">Privacy Policy</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" href="register.html">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12">
+    <div class="grid lg:grid-cols-[260px,minmax(0,1fr)] gap-8">
+      <aside class="lg:sticky lg:top-24 self-start bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-2xl p-5">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 mb-3">Contents</p>
+        <nav class="space-y-2 text-sm">
+          <a class="block hover:text-primary" href="#overview">Overview</a>
+          <a class="block hover:text-primary" href="#clause-1">Clause 1: Acceptance</a>
+          <a class="block hover:text-primary" href="#clause-2">Clause 2: Licence Grant</a>
+          <a class="block hover:text-primary" href="#clause-3">Clause 3: Blockchain Interactions</a>
+          <a class="block hover:text-primary" href="#clause-4">Clause 4: Wallet Address</a>
+          <a class="block hover:text-primary" href="#clause-5">Clause 5: Prohibited Uses</a>
+          <a class="block hover:text-primary" href="#clause-6">Clause 6: Limitation of Liability</a>
+          <a class="block hover:text-primary" href="#clause-7">Clause 7: Termination</a>
+          <a class="block hover:text-primary" href="#clause-8">Clause 8: Governing Law</a>
+        </nav>
+      </aside>
+
+      <article class="bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-3xl p-8 md:p-12 shadow-sm">
+        <div id="overview" class="mb-10">
+          <span class="inline-flex items-center rounded-full bg-primary/10 dark:bg-primary/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-primary dark:text-blue-200">Version March 2026</span>
+          <h1 class="mt-4 text-4xl font-display font-bold">End User Licence Agreement (EULA)</h1>
+          <p class="mt-4 text-slate-600 dark:text-slate-300 leading-8">
+            This End User Licence Agreement is a legal agreement between you and SAIBA Aubin, developer of the College Tokenized System ("CTS" or the "Platform"). It governs access to the CTS web application, its APIs, and the associated smart contracts deployed on the Ethereum Sepolia test network.
+          </p>
+          <div class="mt-6 rounded-2xl border border-amber-300/60 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10 p-5">
+            <p class="font-semibold text-amber-900 dark:text-amber-100">Important notice</p>
+            <p class="mt-2 text-sm leading-7 text-amber-800 dark:text-amber-100/90">
+              CTS uses blockchain transactions for proposal creation, DAO offers, offer selection, funding, and withdrawals. Once a blockchain transaction is confirmed, CTS cannot reverse it.
+            </p>
+          </div>
+        </div>
+
+        <section id="clause-1" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 1: Acceptance</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            By registering an account, connecting a wallet, submitting a scholarship essay or application, creating a proposal, sending a DAO offer or pass response, selecting a DAO offer, funding a proposal, withdrawing funds, or otherwise using CTS, you confirm that you have read, understood, and agree to be bound by this Agreement. If you do not agree, you must not use the Platform.
+          </p>
+          <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+            Why this matters: informed consent is required before CTS processes personal data or initiates irreversible blockchain interactions on your behalf.
+          </p>
+        </section>
+
+        <section id="clause-2" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 2: Licence Grant</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            Subject to this Agreement, CTS grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Platform only for the following purposes:
+          </p>
+          <ul class="mt-4 space-y-3 list-disc pl-6 text-slate-700 dark:text-slate-300 leading-8">
+            <li>submitting student scholarship essays and applications;</li>
+            <li>reviewing student applications and creating school-fee proposals as a registered college user;</li>
+            <li>participating as a DAO member by submitting an offer or recording a pass response;</li>
+            <li>selecting offers, funding proposals, and withdrawing claimable funds as permitted by the Platform; and</li>
+            <li>managing the system as an authorised administrator.</li>
+          </ul>
+          <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+            No other use is permitted, including scraping platform data, automating wallet actions without authorisation, or using CTS APIs outside the scholarship lifecycle.
+          </p>
+        </section>
+
+        <section id="clause-3" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 3: Blockchain Interactions and Irreversibility</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            You acknowledge that certain actions on CTS trigger blockchain transactions on the Ethereum Sepolia test network and may, in future production versions, trigger transactions on Ethereum mainnet or another Ethereum-compatible network. Once confirmed on-chain, these transactions are irreversible. CTS cannot reverse, modify, or cancel a confirmed blockchain transaction.
+          </p>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            This includes, without limitation, wallet registration, proposal creation, DAO offer responses, student offer selection, funding disbursements, and fund withdrawals.
+          </p>
+          <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+            Why this matters: blockchain immutability is one of the core ethical and operational risks of the Platform and must be understood before any on-chain action is taken.
+          </p>
+        </section>
+
+        <section id="clause-4" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 4: Wallet Address and Blockchain Identity</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            By registering on CTS, you acknowledge that your Ethereum wallet address may be stored in the CTS off-chain PostgreSQL database and may also be registered as an on-chain identifier in the CTS smart contract. CTS does not publish your name, email address, or institutional affiliation on-chain, but your wallet address and transaction history may still be publicly visible through blockchain explorers.
+          </p>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            While a wallet's current registration status in the contract may later be updated by authorised owner actions, the historical on-chain record of your blockchain activity remains permanent and immutable.
+          </p>
+          <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+            Why this matters: a wallet address is a pseudonymous public identifier, and linking it to your real-world identity inside CTS creates a persistent audit trail.
+          </p>
+        </section>
+
+        <section id="clause-5" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 5: Prohibited Uses</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            You agree not to:
+          </p>
+          <ul class="mt-4 space-y-3 list-disc pl-6 text-slate-700 dark:text-slate-300 leading-8">
+            <li>create multiple accounts or wallets to obtain unfair influence or platform access;</li>
+            <li>submit fraudulent, misleading, or misrepresentative scholarship essays, applications, or institutional records;</li>
+            <li>use bots, scripts, or automated tooling to interact with the Platform or smart contract without express permission;</li>
+            <li>attempt to exploit, manipulate, or circumvent the contract logic or the off-chain application controls; or</li>
+            <li>use CTS for any purpose that violates applicable law, including Rwanda's Law No. 058/2021 on data protection.</li>
+          </ul>
+        </section>
+
+        <section id="clause-6" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 6: Limitation of Liability</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            To the maximum extent permitted by applicable law, CTS and its developer shall not be liable for loss of funds resulting from smart contract vulnerabilities, blockchain network failures, user wallet compromise, private key mishandling, service interruptions, or third-party infrastructure failure. The Platform is provided on an "as is" basis for educational and research purposes.
+          </p>
+          <p class="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
+            Why this matters: CTS is currently a research and demonstration platform operating on test infrastructure and should not be presented as a formally audited production financial system.
+          </p>
+        </section>
+
+        <section id="clause-7" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 7: Termination</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            CTS may suspend or terminate your account if you violate this Agreement, including by creating multiple accounts, submitting fraudulent information, or attempting to manipulate the Platform or smart contract. Termination affects your off-chain access to CTS but does not erase the immutable on-chain record of earlier transactions.
+          </p>
+        </section>
+
+        <section id="clause-8" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 8: Governing Law</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            This Agreement is governed by the laws of the Republic of Rwanda. Any disputes arising from this Agreement shall be subject to the jurisdiction of the courts of Rwanda.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
+    const icon = document.getElementById("theme-toggle-icon");
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    const applyTheme = (isDark) => {
+      root.classList.toggle("dark", isDark);
+      if (icon) icon.textContent = isDark ? "light_mode" : "dark_mode";
+      if (toggle) {
+        toggle.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
+        toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      }
+    };
+
+    applyTheme(savedTheme ? savedTheme === "dark" : prefersDark);
+    toggle?.addEventListener("click", () => {
+      const nextDark = !root.classList.contains("dark");
+      applyTheme(nextDark);
+      localStorage.setItem("theme", nextDark ? "dark" : "light");
+    });
+  </script>
+</body>
+</html>

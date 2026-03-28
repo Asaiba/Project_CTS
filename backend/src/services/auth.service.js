@@ -4,6 +4,7 @@ import { hashPassword, verifyPassword } from "../utils/password.js";
 import { randomToken, sha256 } from "../utils/crypto.js";
 import { OAuth2Client } from "google-auth-library";
 import { env } from "../config/env.js";
+import { CURRENT_LEGAL_VERSION } from "../config/legal.js";
 
 const normalizeWallet = (walletAddress) => (walletAddress ? walletAddress.trim().toLowerCase() : null);
 const googleClient = new OAuth2Client();
@@ -25,9 +26,16 @@ export const issueAuthTokens = async (user) => {
   return { accessToken, refreshToken };
 };
 
-export const registerUser = async ({ email, username, password, role, walletAddress }) => {
+export const registerUser = async ({ email, username, password, role, walletAddress, acceptedLegal }) => {
+  if (!acceptedLegal) {
+    const error = new Error("You must accept the EULA and Privacy Policy before registering");
+    error.statusCode = 400;
+    throw error;
+  }
+
   const enforcedRole = "student";
   const passwordHash = await hashPassword(password);
+  const acceptedAt = new Date();
 
   return prisma.user.create({
     data: {
@@ -36,6 +44,9 @@ export const registerUser = async ({ email, username, password, role, walletAddr
       passwordHash,
       role: enforcedRole,
       walletAddress: normalizeWallet(walletAddress),
+      eulaAcceptedAt: acceptedAt,
+      privacyAcceptedAt: acceptedAt,
+      legalVersionAccepted: CURRENT_LEGAL_VERSION,
     },
   });
 };

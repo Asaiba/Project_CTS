@@ -155,6 +155,16 @@
 </button>
 </div>
 </div>
+<label class="flex items-start gap-3 rounded-xl border border-border-light dark:border-border-dark bg-slate-50 dark:bg-slate-900 px-4 py-3 text-sm text-slate-600 dark:text-slate-300">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" id="legal-consent" required="" type="checkbox"/>
+<span>
+I have read and agree to the
+<a class="font-semibold text-primary underline underline-offset-2" href="terms.html" rel="noopener noreferrer" target="_blank">End User Licence Agreement</a>
+and
+<a class="font-semibold text-primary underline underline-offset-2" href="privacy-policy.html" rel="noopener noreferrer" target="_blank">Privacy Policy</a>,
+including wallet registration and irreversible blockchain transactions.
+</span>
+</label>
 <div class="pt-4">
 <button class="w-full bg-secondary hover:bg-[#c46e3a] text-white font-bold py-4 rounded-lg shadow-lg shadow-secondary/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0" id="register-submit-btn" type="submit">
                                     Create Account
@@ -191,7 +201,7 @@
 </div>
 </div>
 <p class="mt-8 text-center text-slate-500 dark:text-slate-500 text-sm">
-                By registering, you agree to our <a class="underline" href="#">Terms of Service</a> and <a class="underline" href="#">Privacy Policy</a>.
+                By registering, you agree to our <a class="underline" href="terms.html">End User Licence Agreement</a> and <a class="underline" href="privacy-policy.html">Privacy Policy</a>.
                 <br/>
                 CTS is powered by blockchain technology for maximum transparency.
             </p>
@@ -205,6 +215,8 @@
 <div class="flex gap-4">
 <a class="hover:text-primary transition-colors" href="#">Support</a>
 <a class="hover:text-primary transition-colors" href="#">FAQ</a>
+<a class="hover:text-primary transition-colors" href="terms.html">EULA</a>
+<a class="hover:text-primary transition-colors" href="privacy-policy.html">Privacy Policy</a>
 </div>
 </div>
 <div class="flex items-center gap-6">
@@ -228,6 +240,7 @@
         const submitBtn = document.getElementById("register-submit-btn");
         const passwordInput = document.getElementById("password");
         const confirmPasswordInput = document.getElementById("confirm-password");
+        const legalConsentInput = document.getElementById("legal-consent");
         const togglePasswordBtn = document.getElementById("toggle-password");
         const toggleConfirmPasswordBtn = document.getElementById("toggle-confirm-password");
 
@@ -256,6 +269,10 @@
             }
             if (password !== confirmPassword) {
                 setStatus("Passwords do not match.", true);
+                return;
+            }
+            if (!legalConsentInput?.checked) {
+                setStatus("You must accept the EULA and Privacy Policy before registering.", true);
                 return;
             }
 
@@ -288,6 +305,7 @@
                     password,
                     role,
                     walletAddress: finalWallet,
+                    acceptedLegal: true,
                 });
                 saveAuthSession(data);
                 setStatus("Account created. Redirecting to login...");

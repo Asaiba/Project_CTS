@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CTS Privacy Policy</title>
+  <link rel="icon" type="image/png" href="/cts_logo.png?v=2"/>
+  <link rel="apple-touch-icon" href="/cts_logo.png?v=2"/>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#285185",
+            secondary: "#D67940",
+            accent: "#6F4849",
+            "background-light": "#CCD9E2",
+            "background-dark": "#0F172A",
+            "card-light": "#FFFFFF",
+            "card-dark": "#1E293B",
+            "border-light": "#E2E8F0",
+            "border-dark": "#334155",
+          },
+          fontFamily: {
+            display: ["Outfit", "sans-serif"],
+            sans: ["Inter", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="font-sans antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+  <button aria-label="Toggle dark mode" class="fixed top-5 right-4 z-[60] bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-100 p-2 rounded-full hover:opacity-90 transition-all flex items-center justify-center" id="theme-toggle" title="Toggle dark mode">
+    <span class="material-icons" id="theme-toggle-icon">dark_mode</span>
+  </button>
+
+  <header class="border-b border-border-light dark:border-border-dark bg-white/90 dark:bg-slate-950/90 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img alt="CTS Logo" class="w-10 h-10 object-contain" src="../assets/cts_logo.png"/>
+        <div>
+          <a class="text-2xl font-display font-bold text-primary dark:text-white" href="../../index.html">CTS</a>
+          <p class="text-xs uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">Privacy</p>
+        </div>
+      </div>
+      <nav class="flex items-center gap-3 text-sm font-medium">
+        <a class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" href="terms.html">EULA</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" href="register.html">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12">
+    <div class="grid lg:grid-cols-[260px,minmax(0,1fr)] gap-8">
+      <aside class="lg:sticky lg:top-24 self-start bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-2xl p-5">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 mb-3">Contents</p>
+        <nav class="space-y-2 text-sm">
+          <a class="block hover:text-primary" href="#overview">Overview</a>
+          <a class="block hover:text-primary" href="#clause-9">Clause 9: Data We Collect</a>
+          <a class="block hover:text-primary" href="#clause-10">Clause 10: Why We Collect It</a>
+          <a class="block hover:text-primary" href="#clause-11">Clause 11: Retention</a>
+          <a class="block hover:text-primary" href="#clause-12">Clause 12: Sharing</a>
+          <a class="block hover:text-primary" href="#clause-13">Clause 13: Your Rights</a>
+          <a class="block hover:text-primary" href="#clause-14">Clause 14: Security Measures</a>
+          <a class="block hover:text-primary" href="#clause-15">Clause 15: Defence Walkthrough Note</a>
+        </nav>
+      </aside>
+
+      <article class="bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-3xl p-8 md:p-12 shadow-sm">
+        <div id="overview" class="mb-10">
+          <span class="inline-flex items-center rounded-full bg-primary/10 dark:bg-primary/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-primary dark:text-blue-200">Version March 2026</span>
+          <h1 class="mt-4 text-4xl font-display font-bold">Privacy Policy</h1>
+          <p class="mt-4 text-slate-600 dark:text-slate-300 leading-8">
+            This Privacy Policy explains how CTS collects, uses, stores, shares, and protects personal data. It is designed to support compliance with Rwanda's Law No. 058/2021 Relating to the Protection of Personal Data and Privacy, together with GDPR-aligned privacy principles.
+          </p>
+        </div>
+
+        <section id="clause-9" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 9: Data We Collect</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">CTS may collect the following categories of personal data:</p>
+          <ul class="mt-4 space-y-3 list-disc pl-6 text-slate-700 dark:text-slate-300 leading-8">
+            <li><strong>Account data:</strong> username, email address, password hash, role, account status, and timestamps collected during registration and account administration.</li>
+            <li><strong>Wallet data:</strong> your Ethereum wallet address, linked to your account and used for wallet login and on-chain role registration.</li>
+            <li><strong>Application data:</strong> scholarship essay or application content, selected college, workflow status, and related review notes.</li>
+            <li><strong>Proposal and transaction data:</strong> school-fee proposal amounts, deadlines, DAO offer responses, selected DAO offers, transaction hashes, and timestamps created through platform use.</li>
+            <li><strong>Audit log data:</strong> a record of significant platform actions, including actor, action type, timestamp, and any associated blockchain transaction hash.</li>
+          </ul>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            CTS does not collect payment card data, government identity numbers, or biometric information.
+          </p>
+        </section>
+
+        <section id="clause-10" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 10: Why We Collect It (Legal Basis and Purpose)</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            Account data is processed on the basis of contractual necessity because it is required to create, authenticate, and manage your CTS account. Wallet data is processed on the basis of contractual necessity and explicit consent at registration because wallet registration can trigger public blockchain processing. Application, proposal, and transaction data are processed on the basis of contractual necessity because they form the operational core of the scholarship workflow. Audit log data is processed on the basis of CTS's legitimate interest in security, accountability, and fraud prevention.
+          </p>
+        </section>
+
+        <section id="clause-11" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 11: How Long We Keep It</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            Account data and scholarship application data are retained while your account remains active and for up to 24 months after account closure, after which they may be deleted from the off-chain database. Wallet data stored off-chain may be deleted when an account is removed, which severs the direct database link between identity and wallet. Audit logs and transaction-supporting records may be retained for up to 36 months to support accountability and institutional review.
+          </p>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            On-chain data, including wallet addresses, transaction hashes, offer activity, funding events, and claims, cannot be deleted because of the underlying properties of blockchain technology.
+          </p>
+        </section>
+
+        <section id="clause-12" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 12: Who We Share It With</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            CTS does not sell personal data. Wallet addresses and transaction history become visible to the public through Ethereum Sepolia and compatible blockchain explorers. In the operational flow of the Platform, relevant application and proposal information may be visible to authorised colleges, administrators, or DAO participants where required to process scholarship decisions. CTS may also disclose data where required by applicable Rwandan law or a lawful request from competent authorities.
+          </p>
+        </section>
+
+        <section id="clause-13" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 13: Your Rights</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            Subject to applicable law, you may request access to the personal data CTS holds about you, request correction of inaccurate information, request deletion of off-chain personal data, withdraw consent for off-chain wallet processing, and lodge a complaint with the Rwanda Data Protection Authority. Where a wallet address has already been used on-chain, withdrawal of consent cannot erase the public blockchain history that already exists.
+          </p>
+        </section>
+
+        <section id="clause-14" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 14: Security Measures</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            CTS implements a set of technical and organisational controls, including bcrypt password hashing, short-lived JWT access tokens, rotating refresh tokens, role-based API protection, server-side storage of the contract owner private key, audit logging for key account and blockchain operations, and TLS-protected database and hosting infrastructure where supported by the deployment provider.
+          </p>
+        </section>
+
+        <section id="clause-15" class="scroll-mt-24 border-t border-border-light dark:border-border-dark pt-8 mt-8">
+          <h2 class="text-2xl font-display font-bold">Clause 15: Defence Walkthrough Note</h2>
+          <p class="mt-3 leading-8 text-slate-700 dark:text-slate-300">
+            During the academic project defence, the developer may navigate to the CTS registration page and these legal pages to explain the major clauses of the EULA and Privacy Policy. This walkthrough is intended to highlight the informed-consent warning for public wallet registration, the irreversibility of blockchain transactions, the retention and deletion limits of on-chain data, and the rights available to users under Rwanda's data protection framework.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
+    const icon = document.getElementById("theme-toggle-icon");
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    const applyTheme = (isDark) => {
+      root.classList.toggle("dark", isDark);
+      if (icon) icon.textContent = isDark ? "light_mode" : "dark_mode";
+      if (toggle) {
+        toggle.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
+        toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      }
+    };
+
+    applyTheme(savedTheme ? savedTheme === "dark" : prefersDark);
+    toggle?.addEventListener("click", () => {
+      const nextDark = !root.classList.contains("dark");
+      applyTheme(nextDark);
+      localStorage.setItem("theme", nextDark ? "dark" : "light");
+    });
+  </script>
+</body>
+</html>
